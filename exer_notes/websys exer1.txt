@@ -1,0 +1,59 @@
+Exer1 requirements
+
+1. Login and Register buttons in navbar (!)
+2. Clicking login brings to login php page (!)
+3. Clicking register brings to register php page (!)
+4. Register page must have duplicate check for email address
+5. Login page must let user enter if correct credentials, not enter if not correct credentials
+6. Register form must have userid, email, contact, custname, address, user type, user date, user ip)
+7. PUT php code into the start of the html for easier debugging
+8. If there is a duplicate for registration email, use echo to insert a string to an html and add to url=index.php?registered=(up to you, could be true or false) to indicate a user has already registered and then add a notification/message that a user is already registered
+NOTE: index.php?sample_variables=true are the variables passed into another site
+9. Check for field validations
+
+9. After a successful registration, redirect user to login page 
+10. Use html id and bookmark for php website redirection to immediately jump to certain HTML ids (useful when you register and refresh without having to scroll back down again.
+11. You can also use anchor tag href to have exact php site with variables and custom bookmarks directly from html tag.
+12. You can use hidden input type to add into the URL to pass as a variable to other php files.
+13. .$_REQUEST takes the variables from URL so you can use it for if statements, and other variable manipulations
+14. Logging successfully should remove login and register navbar, to be replaced with "welcome"
+// CREATE CORRECT TABLE
+CREATE TABLE user(userid INT (4) NOT NULL AUTO_INCREMENT, email TEXT,paswrd TEXT, contact TEXT, custname TEXT, address TEXT, usertype TEXT, user_date TEXT, user_ip TEXT, PRIMARY KEY (userid));
+
+In order to make sure that you allow prof to check work, go to wampserver, find apache and click httpd conf. Change line 204, "Order Deny, Allow", "Allow from all", "Allow from 127.0.0.1" then click "Restart all services
+// verify if 
+<?php
+$hostname="localhost";
+$database="Shopee";
+$db_login="root";
+$db_pass="";
+
+$dlink = mysql_connect($hostname, $db_login, $db_pass) or die("Could not connect");
+mysql_select_db($database) or die("Could not select database");
+
+if($_REQUEST['uname'] !=""){
+   $query="insert into user(custname,address) values('".$_REQUEST['uname']."','".$_REQUEST['address']."')";
+   $result = mysql_query($query) or die(mysql_error());
+}
+?>
+<form action=register.php method=post>
+Enter Name<input type=text name=uname><br>
+Enter Address<input type=text name=address><br>
+<input type=submit value=submit>
+</form>
+
+
+// verify if user is already existing, if yes, then redirect to other sites/pass variables to other sites
+
+if($_REQUEST['uname'] !=""){
+   $query = "select * from user where custname='".$_REQUEST['uname']."'";
+   $result = mysql_query($query) or die(mysql_error());
+   $num_results = mysql_num_rows($result); 
+    if ($num_results==0)  { 
+      $query="insert into user(custname,address) values('".$_REQUEST['uname']."','".$_REQUEST['address']."')";
+      $result = mysql_query($query) or die(mysql_error());
+      echo "<meta http-equiv='refresh' content='0;url=index.php?login=try&#login'>";
+    }else{
+     echo "<meta http-equiv='refresh' content='0;url=index.php?registred=user&register=true&#register'>";
+    }
+}

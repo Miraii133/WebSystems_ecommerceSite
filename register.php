@@ -58,15 +58,39 @@ function verifyInputsIfDuplicate($dlink){
     return true;
 }
 
+// assigns user type on inserted user
+// first ever registered = admin
+// rest of registered = user
+function assignUserType($dlink){
+    $query = "
+    SELECT * FROM user
+    ";
+    try {
+       $result = mysqli_query($dlink, $query);
+
+
+    } catch (Exception $ex){
+        echo "<script> console.log('{$ex}');</script>";
+}
+    if (mysqli_num_rows($result) == 0) { 
+        return "admin";
+    } else {
+        return "user";
+    }
+}
+
 // Inserts inputs to DB
 function insertInputsToDB($dlink){
+
+    $userType = assignUserType($dlink);
     $query="
     INSERT INTO user(
-    email, paswrd, contact, custname, address)
+    email, paswrd, contact, custname, 
+    address, usertype)
     VALUES (
     '{$_REQUEST['email']}' , '{$_REQUEST['paswrd']}',
     '{$_REQUEST['contact']}' , '{$_REQUEST['custname']}',
-    '{$_REQUEST['address']}' 
+    '{$_REQUEST['address']}' , '{$userType}' 
     )";
     //echo "<script> console.log('hello'); </script>";
     //echo "<script> console.log('{$query}');</script>";

@@ -1,0 +1,4 @@
+exer2
+
+PHP cookies
+setcookie() function to create a cookie
