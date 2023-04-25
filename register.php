@@ -79,18 +79,20 @@ function assignUserType($dlink){
     }
 }
 
+
 // Inserts inputs to DB
 function insertInputsToDB($dlink){
-
+    $mydate=getdate(date("U"));
     $userType = assignUserType($dlink);
     $query="
     INSERT INTO user(
     email, paswrd, contact, custname, 
-    address, usertype)
+    address, usertype, user_date, userip)
     VALUES (
     '{$_REQUEST['email']}' , '{$_REQUEST['paswrd']}',
     '{$_REQUEST['contact']}' , '{$_REQUEST['custname']}',
-    '{$_REQUEST['address']}' , '{$userType}' 
+    '{$_REQUEST['address']}' , '{$userType}',
+    '{$mydate}', '{$_SERVER['REMOTE_ADDR']}'
     )";
     //echo "<script> console.log('hello'); </script>";
     //echo "<script> console.log('{$query}');</script>";
