@@ -39,23 +39,25 @@ function verifyInputsIfEmpty(){
 
 // checks if email field is a duplicate of an existing records
 function verifyInputsIfDuplicate($dlink){
-    $query = "SELECT * FROM user WHERE email='{$_REQUEST['email']}'";
+        $query = "SELECT * FROM user WHERE email='{$_REQUEST['email']}'";
+    
+       
     try {
         $result = mysqli_query($dlink, $query);
         while ($row = mysqli_fetch_row($result)) {
             echo "<script>  console.log('$row[1]'); </script>";
         }
-    } catch (Exception $ex) {
-        echo "<script> console.log('${ex}'); </script>";
-    }    
-
-  //  echo "<script> console.log('{$_REQUEST['email']}');</script>";
-    // if results are not empty, then there is a duplicate
+         // if results are not empty, then there is a duplicate
     if (mysqli_num_rows($result) != 0){
         echo "<script> alert('Account already exists!');</script>";
         return false;
     }
     return true;
+    } catch (Exception $ex) {
+        echo "<script> console.log('${ex}'); </script>";
+      
+} 
+
 }
 
 // assigns user type on inserted user
@@ -82,23 +84,25 @@ function assignUserType($dlink){
 
 // Inserts inputs to DB
 function insertInputsToDB($dlink){
-    $mydate=getdate(date("U"));
+    $today_date=date("Y/m/d");
     $userType = assignUserType($dlink);
     $query="
-    INSERT INTO user(
-    email, paswrd, contact, custname, 
-    address, usertype, user_date, userip)
+    INSERT INTO user
+    (
+    email, paswrd,
+    contact, custname, 
+    address, usertype, 
+    user_date, user_ip
+    )
     VALUES (
     '{$_REQUEST['email']}' , '{$_REQUEST['paswrd']}',
     '{$_REQUEST['contact']}' , '{$_REQUEST['custname']}',
     '{$_REQUEST['address']}' , '{$userType}',
-    '{$mydate}', '{$_SERVER['REMOTE_ADDR']}'
+    '{$today_date}', '{$_SERVER['REMOTE_ADDR']}'
     )";
-    //echo "<script> console.log('hello'); </script>";
-    //echo "<script> console.log('{$query}');</script>";
     try {
         mysqli_query($dlink, $query);
-    } catch (Exception $ex){
+    } catch (Exception $ex){ 
         echo "<script> console.log('{$ex}');</script>";
     }
     
