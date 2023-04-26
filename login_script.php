@@ -18,7 +18,7 @@ function connectToDB(){
     return $dlink;
 }
 
-function verifyInputsIfEmpty(){
+function verifyInputsIfNotEmpty(){
     // loops through every single _POST values
     foreach((array) $_POST as $fieldValues) {
         if(empty($fieldValues)) {
@@ -31,6 +31,32 @@ function verifyInputsIfEmpty(){
     return true;
 }
 
+function verifyUserIsRegistered(){
+    // SELECT * FROM user WHERE email='6' AND paswrd='a';
+    $query="
+    INSERT INTO user
+    (
+    email, paswrd,
+    contact, custname, 
+    address, usertype, 
+    user_date, user_ip
+    )
+    VALUES (
+    '{$_REQUEST['email']}' , '{$_REQUEST['paswrd']}',
+    '{$_REQUEST['contact']}' , '{$_REQUEST['custname']}',
+    '{$_REQUEST['address']}' , '{$userType}',
+    '{$today_date}', '{$_SERVER['REMOTE_ADDR']}'
+    )";
+    try {
+        mysqli_query($dlink, $query);
+    } catch (Exception $ex){ 
+        echo "<script> console.log('{$ex}');</script>";
+    }
+    if ($_POST['email'] == && $_POST['paswrd']) {
+        
+    }
+}
+
 function redirectUserUponFailure(){
     echo '<meta http-equiv="refresh" content="0; url=register.php">';
 }
@@ -38,16 +64,15 @@ function redirectUserUponSuccess(){
     echo '<meta http-equiv="refresh" content="0; url=login.php">';
 }
 
-if($_POST['submit'])
+if($_POST['login_button'])
 {
     $dlink = connectToDB();
     // inserts inputs to DB if fields are not empty, and email is not a duplicate of
     // existing record.
-    if (verifyInputsIfEmpty() && verifyInputsIfDuplicate($dlink)) {   
-        insertInputsToDB($dlink);
+    if (verifyInputsIfNotEmpty()) {   
         redirectUserUponSuccess();
     }
-} 
+}
 
 
 
