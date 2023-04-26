@@ -22,7 +22,7 @@ function connectToDB(){
 
 // checks if inputs are empty by scanning
 // all values from array retrieved by _POST
-function verifyInputsIfEmpty(){
+function verifyInputsIfNotEmpty(){
     // loops through every single _POST values
     foreach((array) $_POST as $fieldValues) {
         if(empty($fieldValues)) {
@@ -36,7 +36,7 @@ function verifyInputsIfEmpty(){
 }
 
 // checks if email field is a duplicate of an existing records
-function verifyInputsIfDuplicate($dlink){
+function verifyInputsIfNotDuplicate($dlink){
         $query = "SELECT * FROM user WHERE email='{$_REQUEST['email']}'";
     try {
         $result = mysqli_query($dlink, $query);
@@ -120,7 +120,7 @@ if($_POST['submit'])
     $dlink = connectToDB();
     // inserts inputs to DB if fields are not empty, and email is not a duplicate of
     // existing record.
-    if (verifyInputsIfEmpty() && verifyInputsIfDuplicate($dlink)) {   
+    if (verifyInputsIfNotEmpty() && verifyInputsIfNotDuplicate($dlink)) {   
         insertInputsToDB($dlink);
         redirectUserUponSuccess();
     }
