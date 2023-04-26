@@ -2,7 +2,8 @@
 <html lang="en">
 
 <?php
-include_once 'registration_script.php';
+require "registration_script.php";
+//require __DIR__ . "/php_scripts/registration_script.php";
 ?>
 
 <head>
@@ -102,13 +103,13 @@ include_once 'registration_script.php';
     //Table must contain:
     // userid, email, passwrd, contact, custname, address, usertype, user_ip -->
     <h1>Register</h1>
-    <form action=/registration_script.php method=POST>
+    <form action=registration_script.php method=POST>
     Enter Email<input type=text name=email><br>
     Enter Password<input type=text name=paswrd><br>
     Enter contact<input type=text name=contact><br>
     Enter custname<input type=text name=custname><br>
     Enter address<input type=text name=address><br>
-    <input type=submit value=submit>
+    <input type=submit value="click" name="submit">
     </form>
 
 
