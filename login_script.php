@@ -31,37 +31,44 @@ function verifyInputsIfNotEmpty(){
     return true;
 }
 
-function verifyUserIsRegistered(){
-    // SELECT * FROM user WHERE email='6' AND paswrd='a';
+function verifyUserIsRegistered($dlink){
     $query="
-    INSERT INTO user
-    (
-    email, paswrd,
-    contact, custname, 
-    address, usertype, 
-    user_date, user_ip
-    )
-    VALUES (
-    '{$_REQUEST['email']}' , '{$_REQUEST['paswrd']}',
-    '{$_REQUEST['contact']}' , '{$_REQUEST['custname']}',
-    '{$_REQUEST['address']}' , '{$userType}',
-    '{$today_date}', '{$_SERVER['REMOTE_ADDR']}'
-    )";
+    SELECT email, paswrd FROM user 
+    WHERE email='{$_REQUEST['email']}' AND paswrd='{$_REQUEST['paswrd']}' ";
     try {
-        mysqli_query($dlink, $query);
+       $result =  mysqli_query($dlink, $query);
+       if (mysqli_num_rows($result) != 0){
+        echo "<script> alert('Successful Login');</script>";
+        redirectUserUponSuccess($dlink);
+        return true;
+    } else {
+        echo "<script> alert('Account does not exist!');</script>";
+        redirectUserUponFailure();
+        return false;
+
+    }
     } catch (Exception $ex){ 
         echo "<script> console.log('{$ex}');</script>";
     }
-    if ($_POST['email'] == && $_POST['paswrd']) {
-        
+}
+
+function getUserType($dlink){
+    $query="
+    SELECT * FROM user 
+    WHERE email='{$_REQUEST['email']}' AND paswrd='{$_REQUEST['paswrd']}' ";
+    $result =  mysqli_query($dlink, $query);
+    while ($row = mysqli_fetch_row($result)) {
+        return $row[6];
     }
 }
 
 function redirectUserUponFailure(){
     echo '<meta http-equiv="refresh" content="0; url=register.php">';
 }
-function redirectUserUponSuccess(){
-    echo '<meta http-equiv="refresh" content="0; url=login.php">';
+function redirectUserUponSuccess($dlink){
+    $userType = getUserType($dlink);
+    echo "<script>  console.log('usert ype$userType'); </script>";
+    echo "<meta http-equiv='refresh' content=0; url=logged_in_page.php?usertype=$userType>";
 }
 
 if($_POST['login_button'])
@@ -69,8 +76,8 @@ if($_POST['login_button'])
     $dlink = connectToDB();
     // inserts inputs to DB if fields are not empty, and email is not a duplicate of
     // existing record.
-    if (verifyInputsIfNotEmpty()) {   
-        redirectUserUponSuccess();
+    if (verifyInputsIfNotEmpty() && verifyUserIsRegistered($dlink)) {   
+        redirectUserUponSuccess($dlink);
     }
 }
 
