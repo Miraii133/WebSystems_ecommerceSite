@@ -84,6 +84,7 @@ require "registration_script.php";
                 <a href="about.html" class="nav-item nav-link">About</a>
                 <a href="service.html" class="nav-item nav-link">Service</a>
                 <a href="product.html" class="nav-item nav-link active">Product</a>
+                <a href="login.php" class="nav-item nav-link">Logout</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu m-0">
@@ -95,15 +96,15 @@ require "registration_script.php";
                     </div>
                 </div>
                 <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact <i class="bi bi-arrow-right"></i></a>
+            
             </div>
         </div>
     </nav>
     <!-- Navbar End -->
-    <!-- 
-    //Table must contain:
-    // userid, email, passwrd, contact, custname, address, usertype, user_ip -->
     <?php 
-    echo "<h1>Welcome ${userType} </h1>"
+    $userType = $_GET['userType'];
+    $userName = $_GET['userName'];
+    echo "<h1>Welcome ${userType}, ${userName} </h1>";
     ?>
 
 

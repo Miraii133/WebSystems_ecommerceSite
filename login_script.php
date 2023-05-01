@@ -39,13 +39,11 @@ function verifyUserIsRegistered($dlink){
        $result =  mysqli_query($dlink, $query);
        if (mysqli_num_rows($result) != 0){
         echo "<script> alert('Successful Login');</script>";
-        redirectUserUponSuccess($dlink);
         return true;
     } else {
         echo "<script> alert('Account does not exist!');</script>";
         redirectUserUponFailure();
         return false;
-
     }
     } catch (Exception $ex){ 
         echo "<script> console.log('{$ex}');</script>";
@@ -62,17 +60,31 @@ function getUserType($dlink){
     }
 }
 
+// can be refactored to be combined with getUserType
+// but that will come later
+function getUserName($dlink){
+    $query="
+    SELECT * FROM user 
+    WHERE email='{$_REQUEST['email']}' AND paswrd='{$_REQUEST['paswrd']}' ";
+    $result =  mysqli_query($dlink, $query);
+    while ($row = mysqli_fetch_row($result)) {
+        return $row[4];
+    }
+}
+
 function redirectUserUponFailure(){
     echo '<meta http-equiv="refresh" content="0; url=register.php">';
 }
 function redirectUserUponSuccess($dlink){
     $userType = getUserType($dlink);
-    echo "<script>  console.log('usert ype$userType'); </script>";
-    echo "<meta http-equiv='refresh' content=0; url=logged_in_page.php?usertype=$userType>";
+    $userName = getUserName($dlink);
+    header("Location: logged_in_page.php?userType={$userType}&userName={$userName}");
 }
 
-if($_POST['login_button'])
-{
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get the name from the form data
+    
     $dlink = connectToDB();
     // inserts inputs to DB if fields are not empty, and email is not a duplicate of
     // existing record.
