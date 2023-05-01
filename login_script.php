@@ -82,6 +82,7 @@ function redirectUserUponSuccess($dlink){
 }
 
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the name from the form data
     
@@ -90,8 +91,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // existing record.
     if (verifyInputsIfNotEmpty() && verifyUserIsRegistered($dlink)) {   
         redirectUserUponSuccess($dlink);
+        destroyLoginCookies();
     }
 }
+
 
 
 

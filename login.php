@@ -3,8 +3,15 @@
 
 <?php
 require "login_script.php";
-//require __DIR__ . "/php_scripts/registration_script.php";
+
+
+// destroy login cookies if the user is already logged in
+// when the logout button is pressed in login_script.
+if (isset($_COOKIE['loggedIn'])){
+    destroyLoginCookies();
+}
 ?>
+
 
 <head>
     <meta charset="utf-8">

@@ -105,6 +105,13 @@ require "registration_script.php";
     $userType = $_GET['userType'];
     $userName = $_GET['userName'];
     echo "<h1>Welcome ${userType}, ${userName} </h1>";
+
+    // retrieves calendar.php file and outputs it.
+    if ($userType == "admin") {
+       echo include ('calendar.php');
+    }
+
+
     ?>
 
 
