@@ -1,4 +1,6 @@
 <?php 
+
+require "login_cookies.php";
 function connectToDB(){
     $hostname="localhost";
     $database="Shopee";
@@ -62,13 +64,13 @@ function getUserType($dlink){
 
 // can be refactored to be combined with getUserType
 // but that will come later
-function getUserName($dlink){
+function getUserEmail($dlink){
     $query="
     SELECT * FROM user 
     WHERE email='{$_REQUEST['email']}' AND paswrd='{$_REQUEST['paswrd']}' ";
     $result =  mysqli_query($dlink, $query);
     while ($row = mysqli_fetch_row($result)) {
-        return $row[4];
+        return $row[1];
     }
 }
 
@@ -77,8 +79,9 @@ function redirectUserUponFailure(){
 }
 function redirectUserUponSuccess($dlink){
     $userType = getUserType($dlink);
-    $userName = getUserName($dlink);
-    header("Location: logged_in_page.php?userType={$userType}&userName={$userName}");
+    $userEmail = getUserEmail($dlink);
+    header("Location: logged_in_page.php?userType={$userType}&userEmail={$userEmail}");
+    createLoginCookies($userEmail, $userType);
 }
 
 
@@ -91,7 +94,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // existing record.
     if (verifyInputsIfNotEmpty() && verifyUserIsRegistered($dlink)) {   
         redirectUserUponSuccess($dlink);
-        destroyLoginCookies();
     }
 }
 

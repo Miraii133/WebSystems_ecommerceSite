@@ -84,7 +84,10 @@ require "registration_script.php";
                 <a href="about.html" class="nav-item nav-link">About</a>
                 <a href="service.html" class="nav-item nav-link">Service</a>
                 <a href="product.html" class="nav-item nav-link active">Product</a>
+
+                <!-- goes back to login page when logged out -->
                 <a href="login.php" class="nav-item nav-link">Logout</a>
+
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu m-0">
@@ -102,9 +105,11 @@ require "registration_script.php";
     </nav>
     <!-- Navbar End -->
     <?php 
-    $userType = $_GET['userType'];
-    $userName = $_GET['userName'];
-    echo "<h1>Welcome ${userType}, ${userName} </h1>";
+    //$userType = $_GET['userType'];
+    //$userName = $_GET['userName'];
+    $email = $_COOKIE['email'];
+    $userType = $_COOKIE['userType'];
+    echo "<h1>Welcome ${userType}, ${email} </h1>";
 
     // retrieves calendar.php file and outputs it.
     if ($userType == "admin") {

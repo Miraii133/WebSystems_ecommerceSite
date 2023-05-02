@@ -1,9 +1,11 @@
 <?php 
-    function createLoginCookies(){
-        setcookie("loggedIn", "true", time()+3600);
+    function createLoginCookies($email, $userType){
+        setcookie("email", $email, time()+3600);
+        setcookie("userType", $userType, time()+3600);
     }
 
     function destroyLoginCookies(){
-        setcookie("loggedIn","false",time()-1);
+        setcookie("email", "", -1);
+        setcookie("userType", "", -1);
     }
 ?>

@@ -7,7 +7,7 @@ require "login_script.php";
 
 // destroy login cookies if the user is already logged in
 // when the logout button is pressed in login_script.
-if (isset($_COOKIE['loggedIn'])){
+if (isset($_COOKIE['email'])){
     destroyLoginCookies();
 }
 ?>
@@ -122,7 +122,7 @@ if (isset($_COOKIE['loggedIn'])){
         <div class="container">
             <div class="border-start border-5 border-primary ps-5 mb-5" style="max-width: 600px;">
                 <h6 class="text-primary text-uppercase">Products</h6>
-                <h1 class="display-5 text-uppercase mb-0">Products For Your Best Friends</h1>
+                <h1 class="display-5 text-uppercase mb-0">For your pets!</h1>
             </div>
             <div class="owl-carousel product-carousel">
                 <div class="pb-5">
