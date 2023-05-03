@@ -3,7 +3,7 @@
 
 <?php
 require "login_cookies.php";
-require "product_display.php";
+require "product_display_script.php";
 ?>
 
 <head>
