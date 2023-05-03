@@ -5,11 +5,6 @@
 require "login_script.php";
 
 
-// destroy login cookies if the user is already logged in
-// when the logout button is pressed in login_script.
-if (isset($_COOKIE['email'])){
-    destroyLoginCookies();
-}
 ?>
 
 

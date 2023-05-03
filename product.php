@@ -76,9 +76,11 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
             <?php 
+                if (isset($_COOKIE['email'])){
                 $email = $_COOKIE['email'];
                 $userType = $_COOKIE['userType'];
                 echo "<h4 class='py-4 ' >Welcome ${userType}, ${email} </h4>";
+                }
             ?>
                 <a href="index.php" class="nav-item nav-link">Home</a>
                 <a href="product.php" class="nav-item nav-link active">Product</a>
@@ -92,8 +94,12 @@
                         <a href="detail.html" class="dropdown-item">Blog Detail</a>
                     </div>
                 </div>-->
-                <a href="register.php" class="nav-item nav-link">Register</a>
-                <a href="login.php" class="nav-item nav-link">Login</a>
+                <?php 
+                if (!isset($_COOKIE['email'])){
+                    echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
+                    echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
+                }
+                ?>
                 <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact <i class="bi bi-arrow-right"></i></a>
             </div>
         </div>

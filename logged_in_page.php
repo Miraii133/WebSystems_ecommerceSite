@@ -4,7 +4,7 @@
 <?php
 require "registration_script.php";
 //require __DIR__ . "/php_scripts/registration_script.php";
-if ()
+//if ()
 ?>
 
 <head>
@@ -90,6 +90,7 @@ if ()
                 echo include ('calendar.php');
                 }
                               -->
+ 
                 <a href="product.php" class="nav-item nav-link active">Product</a>
                 <a href="cart.php" class="nav-item nav-link">Cart</a>
                 <!-- goes back to login page when logged out -->

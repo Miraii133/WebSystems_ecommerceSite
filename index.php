@@ -97,6 +97,10 @@ if (isset($_COOKIE['email'])){
                 if (!isset($_COOKIE['email'])){
                     echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
                     echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
+                } else {
+                    echo "<a href='cart.php' class='nav-item nav-link'>Cart</a>";
+                    //<!-- goes back to login page when logged out -->
+                    echo "<a href='login.php' class='nav-item nav-link'>Logout</a>";
                 }
                 
                 ?>
