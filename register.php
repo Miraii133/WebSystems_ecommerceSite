@@ -81,10 +81,8 @@ require "registration_script.php";
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <a href="index.php" class="nav-item nav-link">Home</a>
-                <a href="about.html" class="nav-item nav-link">About</a>
-                <a href="service.html" class="nav-item nav-link">Service</a>
-                <a href="product.html" class="nav-item nav-link active">Product</a>
-                <div class="nav-item dropdown">
+                <a href="product.php" class="nav-item nav-link active">Product</a>
+                <!--<div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu m-0">
                         <a href="price.html" class="dropdown-item">Pricing Plan</a>
@@ -93,7 +91,7 @@ require "registration_script.php";
                         <a href="blog.html" class="dropdown-item">Blog Grid</a>
                         <a href="detail.html" class="dropdown-item">Blog Detail</a>
                     </div>
-                </div>
+                </div>-->
                 <a href="register.php" class="nav-item nav-link">Register</a>
                 <a href="login.php" class="nav-item nav-link">Login</a>
                 <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact <i class="bi bi-arrow-right"></i></a>
