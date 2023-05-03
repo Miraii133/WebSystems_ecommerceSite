@@ -6,9 +6,4 @@ function createLoginCookies($email, $userType)
 }
 
 
-/*function getCookies(){
-$email = $_COOKIE['email'];
-$userType = $_COOKIE['userType'];
-return array($email, $userType);
-}*/
 ?>
