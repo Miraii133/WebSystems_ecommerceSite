@@ -3,6 +3,7 @@
 
 <?php
 require "login_cookies.php";
+require "product_display.php";
 ?>
 
 <head>
@@ -228,94 +229,124 @@ require "login_cookies.php";
     <!-- Products End -->
 
     <!-- Product Category Start -->
-    <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
-        <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
-        <h6 class="text-uppercase">Quality Pet Foods</h6>
-        <h5 class="text-primary mb-0">$199.00</h5>
-        <div class="btn-action d-flex justify-content-center">
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+    <h1 class="text-center">BRUH</h1>
+    <div class="mx-auto">
+        <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
+            <h6 class="text-uppercase">
+                <?php
+                include "product_display.php";
+                ?>
+
+            </h6>
+            <h5 class="text-primary mb-0">$199.00</h5>
+            <div class="btn-action d-flex justify-content-center">
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
+        </div>
+        <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
+            <h6 class="text-uppercase">Quality Pet Foods</h6>
+            <h5 class="text-primary mb-0">$199.00</h5>
+            <div class="btn-action d-flex justify-content-center">
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
+        </div>
+        <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
+            <h6 class="text-uppercase">Quality Pet Foods</h6>
+            <h5 class="text-primary mb-0">$199.00</h5>
+            <div class="btn-action d-flex justify-content-center">
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
+        </div>
+        <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
+            <h6 class="text-uppercase">Quality Pet Foods</h6>
+            <h5 class="text-primary mb-0">$199.00</h5>
+            <div class="btn-action d-flex justify-content-center">
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
+        </div>
+        <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
+            <h6 class="text-uppercase">Quality Pet Foods</h6>
+            <h5 class="text-primary mb-0">$199.00</h5>
+            <div class="btn-action d-flex justify-content-center">
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
+        </div>
+        <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
+            <h6 class="text-uppercase">Quality Pet Foods</h6>
+            <h5 class="text-primary mb-0">$199.00</h5>
+            <div class="btn-action d-flex justify-content-center">
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
         </div>
     </div>
-    <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
-        <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
-        <h6 class="text-uppercase">Quality Pet Foods</h6>
-        <h5 class="text-primary mb-0">$199.00</h5>
-        <div class="btn-action d-flex justify-content-center">
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+    <h1 class="text-center">FOOD</h1>
+
+    <div class="pt-4">
+        <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
+            <h6 class="text-uppercase">Quality Pet Foods</h6>
+            <h5 class="text-primary mb-0">$199.00</h5>
+            <div class="btn-action d-flex justify-content-center">
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
         </div>
-    </div>
-    <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
-        <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
-        <h6 class="text-uppercase">Quality Pet Foods</h6>
-        <h5 class="text-primary mb-0">$199.00</h5>
-        <div class="btn-action d-flex justify-content-center">
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+        <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
+            <h6 class="text-uppercase">Quality Pet Foods</h6>
+            <h5 class="text-primary mb-0">$199.00</h5>
+            <div class="btn-action d-flex justify-content-center">
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
         </div>
-    </div>
-    <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
-        <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
-        <h6 class="text-uppercase">Quality Pet Foods</h6>
-        <h5 class="text-primary mb-0">$199.00</h5>
-        <div class="btn-action d-flex justify-content-center">
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+        <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
+            <h6 class="text-uppercase">Quality Pet Foods</h6>
+            <h5 class="text-primary mb-0">$199.00</h5>
+            <div class="btn-action d-flex justify-content-center">
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
         </div>
-    </div>
-    <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
-        <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
-        <h6 class="text-uppercase">Quality Pet Foods</h6>
-        <h5 class="text-primary mb-0">$199.00</h5>
-        <div class="btn-action d-flex justify-content-center">
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+        <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
+            <h6 class="text-uppercase">Quality Pet Foods</h6>
+            <h5 class="text-primary mb-0">$199.00</h5>
+            <div class="btn-action d-flex justify-content-center">
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
         </div>
-    </div>
-    <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
-        <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
-        <h6 class="text-uppercase">Quality Pet Foods</h6>
-        <h5 class="text-primary mb-0">$199.00</h5>
-        <div class="btn-action d-flex justify-content-center">
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+        <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
+            <h6 class="text-uppercase">Quality Pet Foods</h6>
+            <h5 class="text-primary mb-0">$199.00</h5>
+            <div class="btn-action d-flex justify-content-center">
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
         </div>
-    </div>
-    <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
-        <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
-        <h6 class="text-uppercase">Quality Pet Foods</h6>
-        <h5 class="text-primary mb-0">$199.00</h5>
-        <div class="btn-action d-flex justify-content-center">
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
-        </div>
-    </div>
-    <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
-        <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
-        <h6 class="text-uppercase">Quality Pet Foods</h6>
-        <h5 class="text-primary mb-0">$199.00</h5>
-        <div class="btn-action d-flex justify-content-center">
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
-        </div>
-    </div>
-    <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
-        <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
-        <h6 class="text-uppercase">Quality Pet Foods</h6>
-        <h5 class="text-primary mb-0">$199.00</h5>
-        <div class="btn-action d-flex justify-content-center">
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
-        </div>
-    </div>
-    <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
-        <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
-        <h6 class="text-uppercase">Quality Pet Foods</h6>
-        <h5 class="text-primary mb-0">$199.00</h5>
-        <div class="btn-action d-flex justify-content-center">
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
-            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+        <div class="product-item position-relative bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
+            <h6 class="text-uppercase">Quality Pet Foods</h6>
+            <h5 class="text-primary mb-0">$199.00</h5>
+            <div class="btn-action d-flex justify-content-center">
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
         </div>
     </div>
 
@@ -485,8 +516,8 @@ require "login_cookies.php";
 
 
     <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></scrip >
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
