@@ -3,6 +3,7 @@
 
 <?php
 require "registration_script.php";
+require "login_cookies.php";
 //require __DIR__ . "/php_scripts/registration_script.php";
 //if ()
 ?>
@@ -81,7 +82,13 @@ require "registration_script.php";
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
-          
+                <?php
+                 if (isset($_COOKIE['email'])){
+                    $email = $_COOKIE['email'];
+                    $userType = $_COOKIE['userType'];
+                    echo "<h4 class='py-4 ' >Welcome ${userType}, ${email} </h4>";
+                    }
+                ?>
                 <a href="index.php" class="nav-item nav-link">Home</a>
                 
                 

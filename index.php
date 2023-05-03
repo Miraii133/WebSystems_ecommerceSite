@@ -3,9 +3,6 @@
 
 <?php 
 require "login_script.php";
-if (isset($_COOKIE['email'])){
-    destroyLoginCookies();
-}
 ?>
 <head>
     <meta charset="utf-8">

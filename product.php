@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<?php 
+require "login_cookies.php";
+?>
 <head>
     <meta charset="utf-8">
     <title>PET SHOP - Pet Shop Website Template</title>
@@ -100,6 +103,7 @@
                     echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
                 }
                 ?>
+                 <a href="logout_script.php"  class="nav-item nav-link">Logout</a>
                 <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact <i class="bi bi-arrow-right"></i></a>
             </div>
         </div>

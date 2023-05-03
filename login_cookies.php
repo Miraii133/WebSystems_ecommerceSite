@@ -4,10 +4,6 @@
         setcookie("userType", $userType, time()+3600);
     }
 
-    function destroyLoginCookies(){
-        setcookie("email", "", -1);
-        setcookie("userType", "", -1);
-    }
 
     /*function getCookies(){
         $email = $_COOKIE['email'];
