@@ -20,7 +20,7 @@ require "login_script.php";
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@700&display=swap" rel="stylesheet">  
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@700&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -82,9 +82,9 @@ require "login_script.php";
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
-           
+
                 <a href="index.php" class="nav-item nav-link">Home</a>
-                <a href="product.php" class="nav-item nav-link active">Product</a>
+                <a href="product.php" class="nav-item nav-link ">Product</a>
                 <!-- <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu m-0">
@@ -95,10 +95,11 @@ require "login_script.php";
                         <a href="detail.html" class="dropdown-item">Blog Detail</a>
                     </div>
                 </div> -->
-                
+
                 <a href="register.php" class="nav-item nav-link">Register</a>
-                <a href="login.php" class="nav-item nav-link">Login</a>
-                <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact <i class="bi bi-arrow-right"></i></a>
+                <a href="login.php" class="nav-item nav-link active">Login</a>
+                <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact
+                    <i class="bi bi-arrow-right"></i></a>
             </div>
         </div>
     </nav>
@@ -108,9 +109,9 @@ require "login_script.php";
     // userid, email, passwrd, contact, custname, address, usertype, user_ip -->
     <h1>Login</h1>
     <form action=login_script.php method=POST>
-    Enter Email<input type=text name=email><br>
-    Enter Password<input type=text name=paswrd><br>
-    <input type=submit value="click" name="login_button">
+        Enter Email<input type=text name=email><br>
+        Enter Password<input type=text name=paswrd><br>
+        <input type=submit value="click" name="login_button">
     </form>
 
 
@@ -192,7 +193,9 @@ require "login_script.php";
                         <h6 class="text-dark text-uppercase">Special Offer</h6>
                         <h1 class="display-5 text-uppercase text-white mb-0">Save 50% on all items your first order</h1>
                     </div>
-                    <p class="text-white mb-4">Eirmod sed tempor lorem ut dolores sit kasd ipsum. Dolor ea et dolore et at sea ea at dolor justo ipsum duo rebum sea. Eos vero eos vero ea et dolore eirmod et. Dolores diam duo lorem. Elitr ut dolores magna sit. Sea dolore sed et.</p>
+                    <p class="text-white mb-4">Eirmod sed tempor lorem ut dolores sit kasd ipsum. Dolor ea et dolore et
+                        at sea ea at dolor justo ipsum duo rebum sea. Eos vero eos vero ea et dolore eirmod et. Dolores
+                        diam duo lorem. Elitr ut dolores magna sit. Sea dolore sed et.</p>
                     <a href="" class="btn btn-light py-md-3 px-md-5 me-3">Shop Now</a>
                     <a href="" class="btn btn-outline-light py-md-3 px-md-5">Read More</a>
                 </div>
@@ -216,8 +219,7 @@ require "login_script.php";
                         <h6 class="text-body mb-5">The Best Choice</h6>
                         <div class="text-center bg-primary p-4 mb-2">
                             <h1 class="display-4 text-white mb-0">
-                                <small class="align-top"
-                                    style="font-size: 22px; line-height: 45px;">$</small>49<small
+                                <small class="align-top" style="font-size: 22px; line-height: 45px;">$</small>49<small
                                     class="align-bottom" style="font-size: 16px; line-height: 40px;">/
                                     Mo</small>
                             </h1>
@@ -249,8 +251,7 @@ require "login_script.php";
                         <h6 class="text-body mb-5">The Best Choice</h6>
                         <div class="text-center bg-dark p-4 mb-2">
                             <h1 class="display-4 text-white mb-0">
-                                <small class="align-top"
-                                    style="font-size: 22px; line-height: 45px;">$</small>99<small
+                                <small class="align-top" style="font-size: 22px; line-height: 45px;">$</small>99<small
                                     class="align-bottom" style="font-size: 16px; line-height: 40px;">/
                                     Mo</small>
                             </h1>
@@ -282,8 +283,7 @@ require "login_script.php";
                         <h6 class="text-body mb-5">The Best Choice</h6>
                         <div class="text-center bg-primary p-4 mb-2">
                             <h1 class="display-4 text-white mb-0">
-                                <small class="align-top"
-                                    style="font-size: 22px; line-height: 45px;">$</small>149<small
+                                <small class="align-top" style="font-size: 22px; line-height: 45px;">$</small>149<small
                                     class="align-bottom" style="font-size: 16px; line-height: 40px;">/
                                     Mo</small>
                             </h1>
@@ -313,7 +313,7 @@ require "login_script.php";
         </div>
     </div>
     <!-- Pricing Plan End -->
-    
+
 
     <!-- Footer Start -->
     <div class="container-fluid bg-light mt-5 py-5">
@@ -321,7 +321,8 @@ require "login_script.php";
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
                     <h5 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Get In Touch</h5>
-                    <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed dolor</p>
+                    <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed
+                        dolor</p>
                     <p class="mb-2"><i class="bi bi-geo-alt text-primary me-2"></i>123 Street, New York, USA</p>
                     <p class="mb-2"><i class="bi bi-envelope-open text-primary me-2"></i>info@example.com</p>
                     <p class="mb-0"><i class="bi bi-telephone text-primary me-2"></i>+012 345 67890</p>
@@ -330,10 +331,14 @@ require "login_script.php";
                     <h5 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Quick Links</h5>
                     <div class="d-flex flex-column justify-content-start">
                         <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About
+                            Us</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our
+                            Services</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The
+                            Team</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest
+                            Blog</a>
                         <a class="text-body" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
                     </div>
                 </div>
@@ -341,10 +346,14 @@ require "login_script.php";
                     <h5 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Popular Links</h5>
                     <div class="d-flex flex-column justify-content-start">
                         <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About
+                            Us</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our
+                            Services</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The
+                            Team</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest
+                            Blog</a>
                         <a class="text-body" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
                     </div>
                 </div>
@@ -384,7 +393,8 @@ require "login_script.php";
         <div class="container">
             <div class="row g-5">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-md-0">&copy; <a class="text-white" href="#">Your Site Name</a>. All Rights Reserved.</p>
+                    <p class="mb-md-0">&copy; <a class="text-white" href="#">Your Site Name</a>. All Rights Reserved.
+                    </p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <p class="mb-0">Designed by <a class="text-white" href="https://htmlcodex.com">HTML Codex</a></p>

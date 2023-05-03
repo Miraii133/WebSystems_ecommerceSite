@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php 
+<?php
 require "login_script.php";
 ?>
+
 <head>
     <meta charset="utf-8">
     <title>PET SHOP - Pet Shop Website Template</title>
@@ -16,7 +17,7 @@ require "login_script.php";
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@700&display=swap" rel="stylesheet">  
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@700&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -80,28 +81,19 @@ require "login_script.php";
             <div class="navbar-nav ms-auto py-0">
                 <a href="index.php" class="nav-item nav-link active">Home</a>
                 <a href="product.php" class="nav-item nav-link">Product</a>
-                <!--<div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                    <div class="dropdown-menu m-0">
-                        <a href="price.html" class="dropdown-item">Pricing Plan</a>
-                        <a href="team.html" class="dropdown-item">The Team</a>
-                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        <a href="blog.html" class="dropdown-item">Blog Grid</a>
-                        <a href="detail.html" class="dropdown-item">Blog Detail</a>
-                    </div>
-                </div>-->
-                <?php 
-                if (!isset($_COOKIE['email'])){
+                <?php
+                if (!isset($_COOKIE['email'])) {
                     echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
                     echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
                 } else {
                     echo "<a href='cart.php' class='nav-item nav-link'>Cart</a>";
                     //<!-- goes back to login page when logged out -->
-                    echo "<a href='login.php' class='nav-item nav-link'>Logout</a>";
+                    echo "<a href='logout_script.php' class='nav-item nav-link'>Logout</a>";
                 }
-                
+
                 ?>
-                <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact <i class="bi bi-arrow-right"></i></a>
+                <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact
+                    <i class="bi bi-arrow-right"></i></a>
             </div>
         </div>
     </nav>
@@ -115,7 +107,8 @@ require "login_script.php";
                 <div class="col-lg-8 text-center text-lg-start">
                     <h1 class="display-1 text-uppercase text-dark mb-lg-4">Pet Shop</h1>
                     <h1 class="text-uppercase text-white mb-lg-4">Make Your Pets Happy</h1>
-                    <p class="fs-4 text-white mb-lg-4">Dolore tempor clita lorem rebum kasd eirmod dolore diam eos kasd. Kasd clita ea justo est sed kasd erat clita sea</p>
+                    <p class="fs-4 text-white mb-lg-4">Dolore tempor clita lorem rebum kasd eirmod dolore diam eos kasd.
+                        Kasd clita ea justo est sed kasd erat clita sea</p>
                     <div class="d-flex align-items-center justify-content-center justify-content-lg-start pt-5">
                         <a href="" class="btn btn-outline-light border-2 py-md-3 px-md-5 me-5">Read More</a>
                         <button type="button" class="btn-play" data-bs-toggle="modal"
@@ -144,7 +137,10 @@ require "login_script.php";
                     <div class="ratio ratio-16x9">
                         <!--<iframe class="embed-responsive-item" src="https://youtu.be/dQw4w9WgXcQ" id="video" allowfullscreen allowscriptaccess="always"
                             allow="autoplay"></iframe>-->
-                            <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
@@ -159,7 +155,8 @@ require "login_script.php";
             <div class="row gx-5">
                 <div class="col-lg-5 mb-5 mb-lg-0" style="min-height: 500px;">
                     <div class="position-relative h-100">
-                        <img class="position-absolute w-100 h-100 rounded" src="img/about.jpg" style="object-fit: cover;">
+                        <img class="position-absolute w-100 h-100 rounded" src="img/about.jpg"
+                            style="object-fit: cover;">
                     </div>
                 </div>
                 <div class="col-lg-7">
@@ -167,13 +164,14 @@ require "login_script.php";
                         <h6 class="text-primary text-uppercase">About Us</h6>
                         <h1 class="display-5 text-uppercase mb-0">We Keep Your Pets Happy All Time</h1>
                     </div>
-                    <h4 class="text-body mb-4">Diam dolor diam ipsum tempor sit. Clita erat ipsum et lorem stet no labore lorem sit clita duo justo magna dolore</h4>
+                    <h4 class="text-body mb-4">Diam dolor diam ipsum tempor sit. Clita erat ipsum et lorem stet no
+                        labore lorem sit clita duo justo magna dolore</h4>
                     <div class="bg-light p-4">
                         <ul class="nav nav-pills justify-content-between mb-3" id="pills-tab" role="tablist">
                             <li class="nav-item w-50" role="presentation">
-                                <button class="nav-link text-uppercase w-100 active" id="pills-1-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-1" type="button" role="tab" aria-controls="pills-1"
-                                    aria-selected="true">Our Mission</button>
+                                <button class="nav-link text-uppercase w-100 active" id="pills-1-tab"
+                                    data-bs-toggle="pill" data-bs-target="#pills-1" type="button" role="tab"
+                                    aria-controls="pills-1" aria-selected="true">Our Mission</button>
                             </li>
                             <li class="nav-item w-50" role="presentation">
                                 <button class="nav-link text-uppercase w-100" id="pills-2-tab" data-bs-toggle="pill"
@@ -182,11 +180,22 @@ require "login_script.php";
                             </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab">
-                                <p class="mb-0">Tempor erat elitr at rebum at at clita aliquyam consetetur. Diam dolor diam ipsum et, tempor voluptua sit consetetur sit. Aliquyam diam amet diam et eos sadipscing labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus clita duo justo et tempor consetetur takimata eirmod, dolores takimata consetetur invidunt magna dolores aliquyam dolores dolore. Amet erat amet et magna</p>
+                            <div class="tab-pane fade show active" id="pills-1" role="tabpanel"
+                                aria-labelledby="pills-1-tab">
+                                <p class="mb-0">Tempor erat elitr at rebum at at clita aliquyam consetetur. Diam dolor
+                                    diam ipsum et, tempor voluptua sit consetetur sit. Aliquyam diam amet diam et eos
+                                    sadipscing labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit.
+                                    Sanctus clita duo justo et tempor consetetur takimata eirmod, dolores takimata
+                                    consetetur invidunt magna dolores aliquyam dolores dolore. Amet erat amet et magna
+                                </p>
                             </div>
                             <div class="tab-pane fade" id="pills-2" role="tabpanel" aria-labelledby="pills-2-tab">
-                                <p class="mb-0">Tempor erat elitr at rebum at at clita aliquyam consetetur. Diam dolor diam ipsum et, tempor voluptua sit consetetur sit. Aliquyam diam amet diam et eos sadipscing labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus clita duo justo et tempor consetetur takimata eirmod, dolores takimata consetetur invidunt magna dolores aliquyam dolores dolore. Amet erat amet et magna</p>
+                                <p class="mb-0">Tempor erat elitr at rebum at at clita aliquyam consetetur. Diam dolor
+                                    diam ipsum et, tempor voluptua sit consetetur sit. Aliquyam diam amet diam et eos
+                                    sadipscing labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit.
+                                    Sanctus clita duo justo et tempor consetetur takimata eirmod, dolores takimata
+                                    consetetur invidunt magna dolores aliquyam dolores dolore. Amet erat amet et magna
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -195,7 +204,7 @@ require "login_script.php";
         </div>
     </div>
     <!-- About End -->
-    
+
 
     <!-- Services Start -->
     <div class="container-fluid py-5">
@@ -211,7 +220,8 @@ require "login_script.php";
                         <div>
                             <h5 class="text-uppercase mb-3">Pet Boarding</h5>
                             <p>Kasd dolor no lorem sit tempor at justo rebum rebum stet justo elitr dolor amet sit</p>
-                            <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
+                            <a class="text-primary text-uppercase" href="">Read More<i
+                                    class="bi bi-chevron-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -221,7 +231,8 @@ require "login_script.php";
                         <div>
                             <h5 class="text-uppercase mb-3">Pet Feeding</h5>
                             <p>Kasd dolor no lorem sit tempor at justo rebum rebum stet justo elitr dolor amet sit</p>
-                            <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
+                            <a class="text-primary text-uppercase" href="">Read More<i
+                                    class="bi bi-chevron-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -231,7 +242,8 @@ require "login_script.php";
                         <div>
                             <h5 class="text-uppercase mb-3">Pet Grooming</h5>
                             <p>Kasd dolor no lorem sit tempor at justo rebum rebum stet justo elitr dolor amet sit</p>
-                            <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
+                            <a class="text-primary text-uppercase" href="">Read More<i
+                                    class="bi bi-chevron-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -241,7 +253,8 @@ require "login_script.php";
                         <div>
                             <h5 class="text-uppercase mb-3">Pet Training</h5>
                             <p>Kasd dolor no lorem sit tempor at justo rebum rebum stet justo elitr dolor amet sit</p>
-                            <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
+                            <a class="text-primary text-uppercase" href="">Read More<i
+                                    class="bi bi-chevron-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -251,7 +264,8 @@ require "login_script.php";
                         <div>
                             <h5 class="text-uppercase mb-3">Pet Exercise</h5>
                             <p>Kasd dolor no lorem sit tempor at justo rebum rebum stet justo elitr dolor amet sit</p>
-                            <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
+                            <a class="text-primary text-uppercase" href="">Read More<i
+                                    class="bi bi-chevron-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -261,7 +275,8 @@ require "login_script.php";
                         <div>
                             <h5 class="text-uppercase mb-3">Pet Treatment</h5>
                             <p>Kasd dolor no lorem sit tempor at justo rebum rebum stet justo elitr dolor amet sit</p>
-                            <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
+                            <a class="text-primary text-uppercase" href="">Read More<i
+                                    class="bi bi-chevron-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -349,7 +364,9 @@ require "login_script.php";
                         <h6 class="text-dark text-uppercase">Special Offer</h6>
                         <h1 class="display-5 text-uppercase text-white mb-0">Save 50% on all items your first order</h1>
                     </div>
-                    <p class="text-white mb-4">Eirmod sed tempor lorem ut dolores sit kasd ipsum. Dolor ea et dolore et at sea ea at dolor justo ipsum duo rebum sea. Eos vero eos vero ea et dolore eirmod et. Dolores diam duo lorem. Elitr ut dolores magna sit. Sea dolore sed et.</p>
+                    <p class="text-white mb-4">Eirmod sed tempor lorem ut dolores sit kasd ipsum. Dolor ea et dolore et
+                        at sea ea at dolor justo ipsum duo rebum sea. Eos vero eos vero ea et dolore eirmod et. Dolores
+                        diam duo lorem. Elitr ut dolores magna sit. Sea dolore sed et.</p>
                     <a href="" class="btn btn-light py-md-3 px-md-5 me-3">Shop Now</a>
                     <a href="" class="btn btn-outline-light py-md-3 px-md-5">Read More</a>
                 </div>
@@ -373,8 +390,7 @@ require "login_script.php";
                         <h6 class="text-body mb-5">The Best Choice</h6>
                         <div class="text-center bg-primary p-4 mb-2">
                             <h1 class="display-4 text-white mb-0">
-                                <small class="align-top"
-                                    style="font-size: 22px; line-height: 45px;">$</small>49<small
+                                <small class="align-top" style="font-size: 22px; line-height: 45px;">$</small>49<small
                                     class="align-bottom" style="font-size: 16px; line-height: 40px;">/
                                     Mo</small>
                             </h1>
@@ -406,8 +422,7 @@ require "login_script.php";
                         <h6 class="text-body mb-5">The Best Choice</h6>
                         <div class="text-center bg-dark p-4 mb-2">
                             <h1 class="display-4 text-white mb-0">
-                                <small class="align-top"
-                                    style="font-size: 22px; line-height: 45px;">$</small>99<small
+                                <small class="align-top" style="font-size: 22px; line-height: 45px;">$</small>99<small
                                     class="align-bottom" style="font-size: 16px; line-height: 40px;">/
                                     Mo</small>
                             </h1>
@@ -439,8 +454,7 @@ require "login_script.php";
                         <h6 class="text-body mb-5">The Best Choice</h6>
                         <div class="text-center bg-primary p-4 mb-2">
                             <h1 class="display-4 text-white mb-0">
-                                <small class="align-top"
-                                    style="font-size: 22px; line-height: 45px;">$</small>149<small
+                                <small class="align-top" style="font-size: 22px; line-height: 45px;">$</small>149<small
                                     class="align-bottom" style="font-size: 16px; line-height: 40px;">/
                                     Mo</small>
                             </h1>
@@ -575,11 +589,14 @@ require "login_script.php";
                         <div class="testimonial-item text-center">
                             <div class="position-relative mb-4">
                                 <img class="img-fluid mx-auto" src="img/testimonial-1.jpg" alt="">
-                                <div class="position-absolute top-100 start-50 translate-middle d-flex align-items-center justify-content-center bg-white" style="width: 45px; height: 45px;">
+                                <div class="position-absolute top-100 start-50 translate-middle d-flex align-items-center justify-content-center bg-white"
+                                    style="width: 45px; height: 45px;">
                                     <i class="bi bi-chat-square-quote text-primary"></i>
                                 </div>
                             </div>
-                            <p>Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut et, nonumy et labore et tempor diam tempor erat. Erat dolor rebum sit ipsum.</p>
+                            <p>Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At
+                                lorem lorem magna ut et, nonumy et labore et tempor diam tempor erat. Erat dolor rebum
+                                sit ipsum.</p>
                             <hr class="w-25 mx-auto">
                             <h5 class="text-uppercase">Client Name</h5>
                             <span>Profession</span>
@@ -587,11 +604,14 @@ require "login_script.php";
                         <div class="testimonial-item text-center">
                             <div class="position-relative mb-4">
                                 <img class="img-fluid mx-auto" src="img/testimonial-2.jpg" alt="">
-                                <div class="position-absolute top-100 start-50 translate-middle d-flex align-items-center justify-content-center bg-white" style="width: 45px; height: 45px;">
+                                <div class="position-absolute top-100 start-50 translate-middle d-flex align-items-center justify-content-center bg-white"
+                                    style="width: 45px; height: 45px;">
                                     <i class="bi bi-chat-square-quote text-primary"></i>
                                 </div>
                             </div>
-                            <p>Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut et, nonumy et labore et tempor diam tempor erat. Erat dolor rebum sit ipsum.</p>
+                            <p>Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At
+                                lorem lorem magna ut et, nonumy et labore et tempor diam tempor erat. Erat dolor rebum
+                                sit ipsum.</p>
                             <hr class="w-25 mx-auto">
                             <h5 class="text-uppercase">Client Name</h5>
                             <span>Profession</span>
@@ -625,8 +645,10 @@ require "login_script.php";
                                         <small><i class="bi bi-calendar-date me-2"></i>01 Jan, 2045</small>
                                     </div>
                                     <h5 class="text-uppercase mb-3">Dolor sit magna rebum clita rebum dolor</h5>
-                                    <p>Ipsum sed lorem amet dolor amet duo ipsum amet et dolore est stet tempor eos dolor</p>
-                                    <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
+                                    <p>Ipsum sed lorem amet dolor amet duo ipsum amet et dolore est stet tempor eos
+                                        dolor</p>
+                                    <a class="text-primary text-uppercase" href="">Read More<i
+                                            class="bi bi-chevron-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -645,8 +667,10 @@ require "login_script.php";
                                         <small><i class="bi bi-calendar-date me-2"></i>01 Jan, 2045</small>
                                     </div>
                                     <h5 class="text-uppercase mb-3">Dolor sit magna rebum clita rebum dolor</h5>
-                                    <p>Ipsum sed lorem amet dolor amet duo ipsum amet et dolore est stet tempor eos dolor</p>
-                                    <a class="text-primary text-uppercase" href="">Read More<i class="bi bi-chevron-right"></i></a>
+                                    <p>Ipsum sed lorem amet dolor amet duo ipsum amet et dolore est stet tempor eos
+                                        dolor</p>
+                                    <a class="text-primary text-uppercase" href="">Read More<i
+                                            class="bi bi-chevron-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -656,7 +680,7 @@ require "login_script.php";
         </div>
     </div>
     <!-- Blog End -->
-    
+
 
     <!-- Footer Start -->
     <div class="container-fluid bg-light mt-5 py-5">
@@ -664,7 +688,8 @@ require "login_script.php";
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
                     <h5 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Get In Touch</h5>
-                    <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed dolor</p>
+                    <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed
+                        dolor</p>
                     <p class="mb-2"><i class="bi bi-geo-alt text-primary me-2"></i>123 Street, New York, USA</p>
                     <p class="mb-2"><i class="bi bi-envelope-open text-primary me-2"></i>info@example.com</p>
                     <p class="mb-0"><i class="bi bi-telephone text-primary me-2"></i>+012 345 67890</p>
@@ -673,10 +698,14 @@ require "login_script.php";
                     <h5 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Quick Links</h5>
                     <div class="d-flex flex-column justify-content-start">
                         <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About
+                            Us</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our
+                            Services</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The
+                            Team</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest
+                            Blog</a>
                         <a class="text-body" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
                     </div>
                 </div>
@@ -684,10 +713,14 @@ require "login_script.php";
                     <h5 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Popular Links</h5>
                     <div class="d-flex flex-column justify-content-start">
                         <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
-                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About
+                            Us</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our
+                            Services</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The
+                            Team</a>
+                        <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest
+                            Blog</a>
                         <a class="text-body" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
                     </div>
                 </div>
@@ -727,7 +760,8 @@ require "login_script.php";
         <div class="container">
             <div class="row g-5">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-md-0">&copy; <a class="text-white" href="#">Your Site Name</a>. All Rights Reserved.</p>
+                    <p class="mb-md-0">&copy; <a class="text-white" href="#">Your Site Name</a>. All Rights Reserved.
+                    </p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <p class="mb-0">Designed by <a class="text-white" href="https://htmlcodex.com">HTML Codex</a></p>

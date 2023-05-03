@@ -1,12 +1,13 @@
-<?php 
+<?php
 
 require "login_cookies.php";
-function connectToDB(){
-    $hostname="localhost";
-    $database="Shopee";
-    $db_login="root";
-    $db_pass="";
-    
+function connectToDB()
+{
+    $hostname = "localhost";
+    $database = "Shopee";
+    $db_login = "root";
+    $db_pass = "";
+
     /*
     MYSQLI_REPORT_ERROR	    Report errors from mysqli function calls
     MYSQLI_REPORT_STRICT	Throw mysqli_sql_exception for errors instead of warnings
@@ -20,43 +21,46 @@ function connectToDB(){
     return $dlink;
 }
 
-function verifyInputsIfNotEmpty(){
+function verifyInputsIfNotEmpty()
+{
     // loops through every single _POST values
-    foreach((array) $_POST as $fieldValues) {
-        if(empty($fieldValues)) {
-           echo "<script> alert('Fields are blank!');</script>";
-           redirectUserUponFailure();
-           return false;
+    foreach ((array) $_POST as $fieldValues) {
+        if (empty($fieldValues)) {
+            echo "<script> alert('Fields are blank!');</script>";
+            redirectUserUponFailure();
+            return false;
         }
-    
+
     }
     return true;
 }
 
-function verifyUserIsRegistered($dlink){
-    $query="
+function verifyUserIsRegistered($dlink)
+{
+    $query = "
     SELECT email, paswrd FROM user 
     WHERE email='{$_REQUEST['email']}' AND paswrd='{$_REQUEST['paswrd']}' ";
     try {
-       $result =  mysqli_query($dlink, $query);
-       if (mysqli_num_rows($result) != 0){
-        echo "<script> alert('Successful Login');</script>";
-        return true;
-    } else {
-        echo "<script> alert('Account does not exist!');</script>";
-        redirectUserUponFailure();
-        return false;
-    }
-    } catch (Exception $ex){ 
+        $result = mysqli_query($dlink, $query);
+        if (mysqli_num_rows($result) != 0) {
+            echo "<script> alert('Successful Login');</script>";
+            return true;
+        } else {
+            echo "<script> alert('Account does not exist!');</script>";
+            redirectUserUponFailure();
+            return false;
+        }
+    } catch (Exception $ex) {
         echo "<script> console.log('{$ex}');</script>";
     }
 }
 
-function getUserType($dlink){
-    $query="
+function getUserType($dlink)
+{
+    $query = "
     SELECT * FROM user 
     WHERE email='{$_REQUEST['email']}' AND paswrd='{$_REQUEST['paswrd']}' ";
-    $result =  mysqli_query($dlink, $query);
+    $result = mysqli_query($dlink, $query);
     while ($row = mysqli_fetch_row($result)) {
         return $row[6];
     }
@@ -64,23 +68,25 @@ function getUserType($dlink){
 
 // can be refactored to be combined with getUserType
 // but that will come later
-function getUserEmail($dlink){
-    $query="
+function getUserEmail($dlink)
+{
+    $query = "
     SELECT * FROM user 
     WHERE email='{$_REQUEST['email']}' AND paswrd='{$_REQUEST['paswrd']}' ";
-    $result =  mysqli_query($dlink, $query);
+    $result = mysqli_query($dlink, $query);
     while ($row = mysqli_fetch_row($result)) {
         return $row[1];
     }
 }
-
-function redirectUserUponFailure(){
+function redirectUserUponFailure()
+{
     echo '<meta http-equiv="refresh" content="0; url=register.php">';
 }
-function redirectUserUponSuccess($dlink){
+function redirectUserUponSuccess($dlink)
+{
     $userType = getUserType($dlink);
     $userEmail = getUserEmail($dlink);
-    header("Location: logged_in_page.php?userType={$userType}&userEmail={$userEmail}");
+    header("Location: product.php");
     createLoginCookies($userEmail, $userType);
 }
 
@@ -88,11 +94,11 @@ function redirectUserUponSuccess($dlink){
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the name from the form data
-    
+
     $dlink = connectToDB();
     // inserts inputs to DB if fields are not empty, and email is not a duplicate of
     // existing record.
-    if (verifyInputsIfNotEmpty() && verifyUserIsRegistered($dlink)) {   
+    if (verifyInputsIfNotEmpty() && verifyUserIsRegistered($dlink)) {
         redirectUserUponSuccess($dlink);
     }
 }
