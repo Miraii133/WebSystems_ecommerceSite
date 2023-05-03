@@ -75,7 +75,12 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
-                <a href="index.html" class="nav-item nav-link">Home</a>
+            <?php 
+                $email = $_COOKIE['email'];
+                $userType = $_COOKIE['userType'];
+                echo "<h4 class='py-4 ' >Welcome ${userType}, ${email} </h4>";
+            ?>
+                <a href="index.php" class="nav-item nav-link">Home</a>
                 <a href="product.php" class="nav-item nav-link active">Product</a>
                <!-- <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>

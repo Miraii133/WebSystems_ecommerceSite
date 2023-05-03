@@ -87,6 +87,7 @@ if (isset($_COOKIE['email'])){
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
+           
                 <a href="index.php" class="nav-item nav-link">Home</a>
                 <a href="product.php" class="nav-item nav-link active">Product</a>
                 <!-- <div class="nav-item dropdown">

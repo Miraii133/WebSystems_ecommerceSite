@@ -8,4 +8,10 @@
         setcookie("email", "", -1);
         setcookie("userType", "", -1);
     }
+
+    /*function getCookies(){
+        $email = $_COOKIE['email'];
+        $userType = $_COOKIE['userType'];
+        return array($email, $userType);
+    }*/
 ?>

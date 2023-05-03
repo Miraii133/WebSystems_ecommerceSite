@@ -81,7 +81,7 @@ if (isset($_COOKIE['email'])){
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
-                <a href="index.html" class="nav-item nav-link active">Home</a>
+                <a href="index.php" class="nav-item nav-link active">Home</a>
                 <a href="product.php" class="nav-item nav-link">Product</a>
                 <!--<div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
@@ -93,8 +93,13 @@ if (isset($_COOKIE['email'])){
                         <a href="detail.html" class="dropdown-item">Blog Detail</a>
                     </div>
                 </div>-->
-                <a href="register.php" class="nav-item nav-link">Register</a>
-                <a href="login.php" class="nav-item nav-link">Login</a>
+                <?php 
+                if (!isset($_COOKIE['email'])){
+                    echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
+                    echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
+                }
+                
+                ?>
                 <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact <i class="bi bi-arrow-right"></i></a>
             </div>
         </div>
