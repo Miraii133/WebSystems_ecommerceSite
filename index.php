@@ -80,10 +80,13 @@ require "login_script.php";
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <?php
-                $email = $_COOKIE['email'];
-                $userType = $_COOKIE['userType'];
-                echo "<h4 class='py-4 ' >Welcome ${userType}, ${email} </h4>";
+                if (isset($_COOKIE['email'])) {
+                    $email = $_COOKIE['email'];
+                    $userType = $_COOKIE['userType'];
+                    echo "<h4 class='py-4 ' >Welcome ${userType}, ${email} </h4>";
+                }
                 ?>
+
                 <a href="index.php" class="nav-item nav-link active">Home</a>
                 <a href="product.php" class="nav-item nav-link">Product</a>
                 <?php
