@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php
-require "registration_script.php";
-//require __DIR__ . "/php_scripts/registration_script.php";
-?>
+
 
 <head>
     <meta charset="utf-8">
