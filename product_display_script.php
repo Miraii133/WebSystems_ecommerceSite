@@ -27,16 +27,15 @@ function getAllAvailableProduct($dlink)
     $query = "
     SELECT * FROM products";
     $result = mysqli_query($dlink, $query);
-    while ($row = mysqli_fetch_row($result)) {
-        $result_array[] = $row;
-        "<script> console.log('booo $result_array[1]');</script>";
-        $banana = "Hello";
+    $result_array = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<script> console.log('${row['productname']}'); </script>";
         $html = <<<HTML
 <!-- HTML tags here -->
  <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
-            <img class="rounded mx-auto d-block" src="{$result_array[5]}" alt="">
-            <h6 class="text-uppercase">{$result_array[2]}</h6>
-            <h5 class="text-primary mb-0">{$result_array[7]}</h5>
+            <img class="rounded mx-auto d-block" src="{$row['productimage']}" alt="">
+            <h6 class="text-uppercase">{$row['productname']}</h6>
+            <h5 class="text-primary mb-0">{$row['lastprice']}</h5>
             <div class="btn-action d-flex justify-content-center">
                 <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
                 <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
