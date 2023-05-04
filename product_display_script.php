@@ -23,15 +23,42 @@ function connectToDB()
 
 function getAllAvailableProduct($dlink)
 {
-    echo "<script> console.log('called!');</script>";
+    $html_string = file_get_contents('product.php');
+
+    // Load the HTML string into a DOMDocument object
+    $dom = new DOMDocument();
+    @$dom->loadHTML($html_string);
+
+    // Get all the h1 tags using DOMDocument's getElementsByTagName method
+
     $query = "
-    SELECT * FROM products";
+    SELECT DISTINCT prodcat FROM products";
     $result = mysqli_query($dlink, $query);
-    $result_array = array();
+    //$product_category_html = <h1 class="text-center">${row['prodcat']}</h1>
+
+    /*
+    /*$existing_h1_tags = $dom->getElementsByTagName('h1');
+    foreach ($existing_h1_tags as $tag) {
+    "<script> console.log(' content $tag->textContent');</script>";
+    "<script> console.log(' ba $row[prodcat]');</script>";
+    if ($tag->textContent != $row['prodcat']) {
+    $category_html = <<<HTML
+    <h1 class="text-center">${row['prodcat']}</h1>
+    HTML;
+    }
+    //       echo $tag->textContent . "<br>";
+    }*/
+
     while ($row = mysqli_fetch_assoc($result)) {
-        echo "<script> console.log('${row['productname']}'); </script>";
+        $prod_cat_html = <<<HTML
+        <h1>{$row['prodcat']}</h1>;
+        HTML;
+
+
+
         $html = <<<HTML
 <!-- HTML tags here -->
+    
  <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
             <img class="rounded mx-auto d-block" src="{$row['productimage']}" alt="">
             <h6 class="text-uppercase">{$row['productname']}</h6>
@@ -43,6 +70,7 @@ function getAllAvailableProduct($dlink)
         </div>
 HTML;
 
+        echo $prod_cat_html;
         echo $html;
     }
 }
