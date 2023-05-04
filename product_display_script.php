@@ -1,31 +1,42 @@
 <?php
+
+
+function connectToDB()
+{
+    $hostname = "localhost";
+    $database = "Shopee";
+    $db_login = "root";
+    $db_pass = "";
+
+    /*
+    MYSQLI_REPORT_ERROR	    Report errors from mysqli function calls
+    MYSQLI_REPORT_STRICT	Throw mysqli_sql_exception for errors instead of warnings
+    */
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+    $dlink = mysqli_connect($hostname, $db_login, $db_pass, $database);
+    mysqli_select_db($dlink, $database);
+    // returns $dlink so other functions can use the same connection
+    // should probably terminate it at some point
+    // to avoid cpu leak 
+    return $dlink;
+}
+
 function getAllAvailableProduct($dlink)
 {
+    echo "<script> console.log('called!');</script>";
     $query = "
-    SELECT * FROM user 
-    WHERE email='{$_REQUEST['email']}' AND paswrd='{$_REQUEST['paswrd']}' ";
+    SELECT * FROM products";
     $result = mysqli_query($dlink, $query);
     while ($row = mysqli_fetch_row($result)) {
-        return $row[6];
-    }
-}
-
-
-if (!isset($_COOKIE['email'])) {
-    echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
-    echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
-} else {
-    echo "<a href='cart.php' class='nav-item nav-link'>Cart</a>";
-    echo "<a href='logout_script.php'  class='nav-item nav-link'>Logout</a>";
-}
-
-$banana = "Hello";
-$html = <<<HTML
+        $result_array[] = $row;
+        "<script> console.log('booo $result_array[1]');</script>";
+        $banana = "Hello";
+        $html = <<<HTML
 <!-- HTML tags here -->
  <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
-            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
-            <h6 class="text-uppercase">Quality Pet Foods</h6>
-            <h5 class="text-primary mb-0">$199.00</h5>
+            <img class="rounded mx-auto d-block" src="{$result_array[5]}" alt="">
+            <h6 class="text-uppercase">{$result_array[2]}</h6>
+            <h5 class="text-primary mb-0">{$result_array[7]}</h5>
             <div class="btn-action d-flex justify-content-center">
                 <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
                 <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
@@ -33,5 +44,21 @@ $html = <<<HTML
         </div>
 HTML;
 
-echo $html;
+        echo $html;
+    }
+}
+
+
+
+/*if (!isset($_COOKIE['email'])) {
+echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
+echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
+} else {
+echo "<a href='cart.php' class='nav-item nav-link'>Cart</a>";
+echo "<a href='logout_script.php'  class='nav-item nav-link'>Logout</a>";
+}*/
+
+
+$dlink = connectToDB();
+echo getAllAvailableProduct($dlink);
 ?>

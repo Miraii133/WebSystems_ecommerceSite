@@ -85,16 +85,7 @@
                 ?>
                 <a href="index.php" class="nav-item nav-link">Home</a>
                 <a href="product.php" class="nav-item nav-link active">Product</a>
-                <!-- <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                    <div class="dropdown-menu m-0">
-                        <a href="price.html" class="dropdown-item">Pricing Plan</a>
-                        <a href="team.html" class="dropdown-item">The Team</a>
-                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        <a href="blog.html" class="dropdown-item">Blog Grid</a>
-                        <a href="detail.html" class="dropdown-item">Blog Detail</a>
-                    </div>
-                </div>-->
+
                 <?php
                 if (!isset($_COOKIE['email'])) {
                     echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
@@ -112,7 +103,7 @@
     <!-- Navbar End -->
 
 
-    <!-- Products Start -->
+    <!-- Products in Carousel Start-->
     <div class="container-fluid py-5">
         <div class="container">
             <div class="border-start border-5 border-primary ps-5 mb-5" style="max-width: 600px;">
@@ -227,29 +218,11 @@
     <!-- Product Category Start -->
     <h1 class="text-center">BRUH</h1>
     <div class="mx-auto">
-        <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
-            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
-            <h6 class="text-uppercase">
-                <?php
-                include "product_display.php";
-                ?>
 
-            </h6>
-            <h5 class="text-primary mb-0">$199.00</h5>
-            <div class="btn-action d-flex justify-content-center">
-                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
-                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
-            </div>
-        </div>
-        <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
-            <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
-            <h6 class="text-uppercase">Quality Pet Foods</h6>
-            <h5 class="text-primary mb-0">$199.00</h5>
-            <div class="btn-action d-flex justify-content-center">
-                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
-                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
-            </div>
-        </div>
+        <?php
+        include "product_display_script.php";
+        ?>
+
         <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
             <img class="rounded mx-auto d-block" src="img/product-1.png" alt="">
             <h6 class="text-uppercase">Quality Pet Foods</h6>
