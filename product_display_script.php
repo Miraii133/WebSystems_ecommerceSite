@@ -33,45 +33,38 @@ function getAllAvailableProduct($dlink)
 
     $query = "
     SELECT DISTINCT prodcat FROM products";
-    $result = mysqli_query($dlink, $query);
-    //$product_category_html = <h1 class="text-center">${row['prodcat']}</h1>
 
-    /*
-    /*$existing_h1_tags = $dom->getElementsByTagName('h1');
-    foreach ($existing_h1_tags as $tag) {
-    "<script> console.log(' content $tag->textContent');</script>";
-    "<script> console.log(' ba $row[prodcat]');</script>";
-    if ($tag->textContent != $row['prodcat']) {
-    $category_html = <<<HTML
-    <h1 class="text-center">${row['prodcat']}</h1>
-    HTML;
-    }
-    //       echo $tag->textContent . "<br>";
-    }*/
+    $result = mysqli_query($dlink, $query);
 
     while ($row = mysqli_fetch_assoc($result)) {
         $prod_cat_html = <<<HTML
-        <h1>{$row['prodcat']}</h1>;
+        <h1 class="text-center">{$row['prodcat']}</h1>;
         HTML;
+        echo $prod_cat_html;
+        $product_info_query = "
+    SELECT prodid, productname, productdesc, productlink, productimage, quantity, lastprice, ourprice FROM products WHERE prodcat='${row['prodcat']}'";
 
 
+        $product_info_result = mysqli_query($dlink, $product_info_query);
+        foreach ($product_info_result as $product_row) {
 
-        $html = <<<HTML
-<!-- HTML tags here -->
-    
+            $product_info_html = <<<HTML
  <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
-            <img class="rounded mx-auto d-block" src="{$row['productimage']}" alt="">
-            <h6 class="text-uppercase">{$row['productname']}</h6>
-            <h5 class="text-primary mb-0">{$row['lastprice']}</h5>
+            <img class="rounded mx-auto d-block" src="{$product_row['productimage']}" alt="">
+            <h6 class="text-uppercase">{$product_row['productname']}</h6>
+            <h5 class="text-primary mb-0">{$product_row['lastprice']}</h5>
             <div class="btn-action d-flex justify-content-center">
                 <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
                 <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
             </div>
         </div>
 HTML;
+            echo $product_info_html;
+        }
 
-        echo $prod_cat_html;
-        echo $html;
+
+
+
     }
 }
 

@@ -226,7 +226,6 @@
 
 
     </div>
-    <h1 class="text-center">FOOD</h1>
 
 
 
