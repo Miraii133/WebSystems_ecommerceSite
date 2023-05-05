@@ -29,21 +29,22 @@ function getAllAvailableProduct($dlink)
     $dom = new DOMDocument();
     @$dom->loadHTML($html_string);
 
-    // Get all the h1 tags using DOMDocument's getElementsByTagName method
-
-    $query = "
+    // retrieves DISTINCT prodcategories
+    // to avoid duplication of categories
+    $get_unique_category_query = "
     SELECT DISTINCT prodcat FROM products";
 
-    $result = mysqli_query($dlink, $query);
-
+    $result = mysqli_query($dlink, $get_unique_category_query);
     while ($row = mysqli_fetch_assoc($result)) {
         $prod_cat_html = <<<HTML
         <h1 class="text-center">{$row['prodcat']}</h1>;
         HTML;
         echo $prod_cat_html;
+        // gets all products that have the same category as the one being looped in $row
+        // example, if current category is dog_food, and the current row has the category dog_food,
+        // then retrieve all the data of that row.
         $product_info_query = "
     SELECT prodid, productname, productdesc, productlink, productimage, quantity, lastprice, ourprice FROM products WHERE prodcat='${row['prodcat']}'";
-
 
         $product_info_result = mysqli_query($dlink, $product_info_query);
         foreach ($product_info_result as $product_row) {
@@ -68,7 +69,16 @@ HTML;
             <h5 class="text-primary mb-0">{$product_row['lastprice']}</h5>
             <div class="btn-action d-flex justify-content-center">
                 <!-- Passes add_to_cart and prodid parameter to cart_script.php --> 
-                <a class="btn btn-primary py-2 px-3" href="cart_script.php?add_to_cart=true&prodid={$product_row['prodid']}"><i class="bi bi-cart"></i></a>
+                <!-- prodid | prodcat  | productname | productdesc | productlink | productimage  | quantity | lastprice | ourprice -->
+                <!--picture -> description -> name -> quantity -> price -> "delete" button-->
+                <a class="btn btn-primary py-2 px-3" href="cart_script.php?add_to_cart=true
+                &prodid={$product_row['prodid']}
+                &productdesc={$product_row['productdesc']}
+                &productname={$product_row['productname']}
+                &productlink={$product_row['productimage']}
+                &quantity={$product_row['quantity']}
+                &lastprice={$product_row['lastprice']}
+                "><i class="bi bi-cart"></i></a>
                 <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
             </div>
         </div>
