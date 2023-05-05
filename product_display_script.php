@@ -47,19 +47,36 @@ function getAllAvailableProduct($dlink)
 
         $product_info_result = mysqli_query($dlink, $product_info_query);
         foreach ($product_info_result as $product_row) {
-
-            $product_info_html = <<<HTML
+            // if user viewing product.php is not logged in, remove add to cart button
+            if (!isset($_COOKIE['email'])) {
+                $product_info_html = <<<HTML
  <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
             <img class="rounded mx-auto d-block" src="{$product_row['productimage']}" alt="">
             <h6 class="text-uppercase">{$product_row['productname']}</h6>
             <h5 class="text-primary mb-0">{$product_row['lastprice']}</h5>
             <div class="btn-action d-flex justify-content-center">
-                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-cart"></i></a>
+            <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
+        </div>
+HTML;
+                // if user viewing product.php is logged in, add to cart button
+            } else {
+                $product_info_html = <<<HTML
+ <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="{$product_row['productimage']}" alt="">
+            <h6 class="text-uppercase">{$product_row['productname']}</h6>
+            <h5 class="text-primary mb-0">{$product_row['lastprice']}</h5>
+            <div class="btn-action d-flex justify-content-center">
+                <!-- Passes add_to_cart and prodid parameter to cart_script.php --> 
+                <a class="btn btn-primary py-2 px-3" href="cart_script.php?add_to_cart=true&{$product_row['prodid']}"><i class="bi bi-cart"></i></a>
                 <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
             </div>
         </div>
 HTML;
+
+            }
             echo $product_info_html;
+
         }
 
 
@@ -67,17 +84,6 @@ HTML;
 
     }
 }
-
-
-
-/*if (!isset($_COOKIE['email'])) {
-echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
-echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
-} else {
-echo "<a href='cart.php' class='nav-item nav-link'>Cart</a>";
-echo "<a href='logout_script.php'  class='nav-item nav-link'>Logout</a>";
-}*/
-
 
 $dlink = connectToDB();
 echo getAllAvailableProduct($dlink);

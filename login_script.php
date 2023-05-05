@@ -54,6 +54,16 @@ function verifyUserIsRegistered($dlink)
         echo "<script> console.log('{$ex}');</script>";
     }
 }
+function getUserId($dlink)
+{
+    $query = "
+    SELECT * FROM user 
+    WHERE email='{$_REQUEST['email']}' AND paswrd='{$_REQUEST['paswrd']}' ";
+    $result = mysqli_query($dlink, $query);
+    while ($row = mysqli_fetch_row($result)) {
+        return $row[0];
+    }
+}
 
 function getUserType($dlink)
 {
@@ -84,17 +94,17 @@ function redirectUserUponFailure()
 }
 function redirectUserUponSuccess($dlink)
 {
+    $userId = getUserId($dlink);
     $userType = getUserType($dlink);
     $userEmail = getUserEmail($dlink);
     header("Location: product.php");
-    createLoginCookies($userEmail, $userType);
+    createLoginCookies($userId, $userEmail, $userType);
 }
 
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the name from the form data
-
     $dlink = connectToDB();
     // inserts inputs to DB if fields are not empty, and email is not a duplicate of
     // existing record.
