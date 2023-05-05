@@ -71,14 +71,8 @@ HTML;
                 <!-- Passes add_to_cart and prodid parameter to cart_script.php --> 
                 <!-- prodid | prodcat  | productname | productdesc | productlink | productimage  | quantity | lastprice | ourprice -->
                 <!--picture -> description -> name -> quantity -> price -> "delete" button-->
-                <a class="btn btn-primary py-2 px-3" href="cart_script.php?add_to_cart=true
-                &prodid={$product_row['prodid']}
-                &productdesc={$product_row['productdesc']}
-                &productname={$product_row['productname']}
-                &productlink={$product_row['productimage']}
-                &quantity={$product_row['quantity']}
-                &lastprice={$product_row['lastprice']}
-                "><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href="cart_script.php?add_to_cart=true&prodid={$product_row['prodid']}&productdesc={$product_row['productdesc']}&productname={$product_row['productname']}&productimage={$product_row['productimage']}&quantity={$product_row['quantity']}&price={$product_row['lastprice']}">
+                <i class="bi bi-cart"></i></a>
                 <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
             </div>
         </div>

@@ -22,9 +22,23 @@ function connectToDB()
 
 function add_to_cart($dlink)
 {
+    echo "<script> console.log('Hello');</script>";
     $prodid = $_GET['prodid'];
     $userid = $_COOKIE['userid'];
-    $image = $_GET[''];
+    $productdesc = $_GET['productdesc'];
+    $productname = $_GET['productname'];
+    $productimage = $_GET['productimage'];
+    $quantity = $_GET['quantity'];
+    $lastprice = $_GET['price'];
+    $cartContent_array = array(
+        $prodid,
+        $productdesc,
+        $productname,
+        $productimage,
+        $quantity,
+        $lastprice
+    );
+
     $prod_id_query = "SELECT * FROM products WHERE prodid=${prodid}";
     $get_prodid = mysqli_query($dlink, $prod_id_query);
     // turns array get_prodid into readable prodid
@@ -32,7 +46,8 @@ function add_to_cart($dlink)
         $prodid = $row['prodid'];
     }
     //picture -> description -> name -> quantity -> price -> "delete" button
-    //setcookie('cartContent', serialize());
+    setcookie('cartContent', serialize($cartContent_array), time() + 3600);
+    echo '<meta http-equiv="refresh" content="0; url=cart.php">';
     // fix time bug 
     /*$add_to_cart_query = "
     INSERT INTO purchase VALUES ($userid, $prodid, 1, 44, 'Pending');
@@ -41,9 +56,11 @@ function add_to_cart($dlink)
 
 }
 $dlink = connectToDB();
-if (isset($_GET['add_to_cart']) && $_GET['add_to_cart'] == 'true') {
+//isset($_GET['add_to_cart']) &&
+if ($_GET['add_to_cart'] == 'true') {
     // retrieves prodid coming from getAvailableProducts in product_display_script.php.
     add_to_cart($dlink);
+
 }
 
 ?>
