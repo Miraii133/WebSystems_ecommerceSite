@@ -114,13 +114,19 @@
         </tr>
         <tr>
             <td>Alfreds Futterkiste</td>
-            <td>Maria Anders</td>
+            <td>MBANANA</td>
             <td>Germany</td>
+            <td>Germany</td>
+            <td>Germany</td>
+            <td>Delete</td>
         </tr>
         <tr>
             <td>Centro comercial Moctezuma</td>
             <td>Francisco Chang</td>
             <td>Mexico</td>
+            <td>Mexico</td>
+            <td>Mexico</td>
+            <td>Add</td>
         </tr>
     </table>
 
