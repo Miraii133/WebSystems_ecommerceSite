@@ -68,7 +68,7 @@ HTML;
             <h5 class="text-primary mb-0">{$product_row['lastprice']}</h5>
             <div class="btn-action d-flex justify-content-center">
                 <!-- Passes add_to_cart and prodid parameter to cart_script.php --> 
-                <a class="btn btn-primary py-2 px-3" href="cart_script.php?add_to_cart=true&{$product_row['prodid']}"><i class="bi bi-cart"></i></a>
+                <a class="btn btn-primary py-2 px-3" href="cart_script.php?add_to_cart=true&prodid={$product_row['prodid']}"><i class="bi bi-cart"></i></a>
                 <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
             </div>
         </div>

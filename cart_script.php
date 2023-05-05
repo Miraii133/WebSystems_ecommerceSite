@@ -22,12 +22,19 @@ function connectToDB()
 
 function add_to_cart($dlink, $prodid)
 {
-    $email = $_COOKIE['userid'];
+    $userid = $_COOKIE['userid'];
     $prod_id_query = "SELECT * FROM products WHERE prodid=${prodid}";
     $get_prodid = mysqli_query($dlink, $prod_id_query);
+    // turns array get_prodid into readable prodid
+    while ($row = $get_prodid->fetch_assoc()) {
+        $prodid = $row['prodid'];
+    }
+    // fix time bug
     $add_to_cart_query = "
-    INSERT INTO PURCHASE 
+    INSERT INTO purchase VALUES ($userid, $prodid, 1, 44, 'Pending');
     ";
+    print_r($add_to_cart_query);
+    mysqli_query($dlink, $add_to_cart_query);
 
 }
 $dlink = connectToDB();
