@@ -45,6 +45,7 @@ function add_to_cart($dlink)
     while ($row = $get_prodid->fetch_assoc()) {
         $prodid = $row['prodid'];
     }
+
     //picture -> description -> name -> quantity -> price -> "delete" button
     setcookie('cartContent', serialize($cartContent_array), time() + 3600);
     echo '<meta http-equiv="refresh" content="0; url=cart.php">';

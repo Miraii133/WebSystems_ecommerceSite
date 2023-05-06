@@ -77,6 +77,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <?php
+                // adds Welcome message when user is logged in
                 if (isset($_COOKIE['email'])) {
                     $email = $_COOKIE['email'];
                     $userType = $_COOKIE['userType'];
@@ -87,6 +88,9 @@
                 <a href="product.php" class="nav-item nav-link active">Product</a>
 
                 <?php
+                // shows register and login when not logged in,
+                // shows cart and logout when logged in as only logged in users should
+                // be able to see.
                 if (!isset($_COOKIE['email'])) {
                     echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
                     echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
@@ -216,16 +220,19 @@
     <!-- Products End -->
 
     <!-- Product Category Start -->
-
-    <!-- Product categories: Dog food, Cat Food, Bird Food, Feeding Bowls, Drinking Bowls, Leash, Cages -->
     <div class="mx-auto">
 
         <?php
+        // embeds all the HTML tags inside
+        // product_display_script to enable
+        // dynamic dispaly of products from
+        // database
         include "product_display_script.php";
         ?>
 
 
     </div>
+    <!-- Product Category End -->
 
 
 

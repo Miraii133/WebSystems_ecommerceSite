@@ -24,6 +24,7 @@ function connectToDB()
 function verifyInputsIfNotEmpty()
 {
     // loops through every single _POST values
+    // to check every $_POST results are filled in
     foreach ((array) $_POST as $fieldValues) {
         if (empty($fieldValues)) {
             echo "<script> alert('Fields are blank!');</script>";
@@ -37,6 +38,9 @@ function verifyInputsIfNotEmpty()
 
 function verifyUserIsRegistered($dlink)
 {
+    // checks if a user is registered through email and password
+    // using $_REQUEST to see if $_POST has contents inside it.
+    // can probably use $_POST again instead of $_REQUEST for consistency
     $query = "
     SELECT email, paswrd FROM user 
     WHERE email='{$_REQUEST['email']}' AND paswrd='{$_REQUEST['paswrd']}' ";
@@ -90,6 +94,7 @@ function getUserEmail($dlink)
 }
 function redirectUserUponFailure()
 {
+    // can probably just replace this with header()
     echo '<meta http-equiv="refresh" content="0; url=register.php">';
 }
 function redirectUserUponSuccess($dlink)

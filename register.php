@@ -88,9 +88,7 @@
         </div>
     </nav>
     <!-- Navbar End -->
-    <!-- 
-    //Table must contain:
-    // userid, email, passwrd, contact, custname, address, usertype, user_ip -->
+    <!-- Registration TextField -->
     <h1>Register</h1>
     <form action=registration_script.php method=POST>
         Enter Email<input type=text name=email><br>

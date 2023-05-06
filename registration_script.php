@@ -61,25 +61,22 @@ function verifyInputsIfNotDuplicate($dlink)
 }
 
 // assigns user type on inserted user
-// first ever registered = admin
-// rest of registered = user
+// first ever registered user is automatically admin
+// rest of registered is user
 function assignUserType($dlink)
 {
     $query = "
-    SELECT * FROM user
-    ";
+    SELECT * 
+    FROM user";
     try {
         $result = mysqli_query($dlink, $query);
-
-
     } catch (Exception $ex) {
         echo "<script> console.log('{$ex}');</script>";
     }
-    if (mysqli_num_rows($result) == 0) {
+    if (mysqli_num_rows($result) == 0)
         return "admin";
-    } else {
-        return "user";
-    }
+    return "user";
+
 }
 
 // Inserts inputs to DB
@@ -132,4 +129,3 @@ if ($_POST['submit']) {
     }
 }
 ?>
-<!--  <meta http-equiv="refresh" content="0; url=http://example.com">  -->

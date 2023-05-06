@@ -95,9 +95,8 @@ require "login_script.php";
         </div>
     </nav>
     <!-- Navbar End -->
-    <!-- 
-    //Table must contain:
-    // userid, email, passwrd, contact, custname, address, usertype, user_ip -->
+
+    <!-- Login TextFields -->
     <h1>Login</h1>
     <form action=login_script.php method=POST>
         Enter Email<input type=text name=email><br>
