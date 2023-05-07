@@ -20,9 +20,9 @@ function connectToDB()
     return $dlink;
 }
 
-function add_to_cart($dlink)
+function add_to_cart_cookie($dlink)
 {
-    echo "<script> console.log('Hello');</script>";
+    // retrieves prodid coming from getAvailableProducts in product_display_script.php.
     $prodid = $_GET['prodid'];
     $userid = $_COOKIE['userid'];
     $productdesc = $_GET['productdesc'];
@@ -46,21 +46,59 @@ function add_to_cart($dlink)
         $prodid = $row['prodid'];
     }
 
-    //picture -> description -> name -> quantity -> price -> "delete" button
+    // loop through all products list and see if it matches any of the $prodid
+    $get_all_products_query = "
+    SELECT *
+    FROM products";
+    $get_all_products = mysqli_query($dlink, $get_all_products_query);
+    $cartContent_array = isset($_COOKIE['cartContent']) ? unserialize($_COOKIE['cartContent']) : [];
+    // loops through all cart content and gets all prodids to
+    // compare with all products prodids
+    foreach ($cartContent_array as $cartContent_id) {
+        foreach ($get_all_products as $productList_id) {
+            // if any of the product matches with the prodid of the products in the cart
+            // turn $is_in_cart to true to indicate the match
+            // then grab the cart_id
+            if ($productList_id['prodid'] == $cartContent_id[0]) {
+                $is_in_cart = true;
+                $cart_id = $cartContent_id[0];
+            }
+        }
+
+
+    }
+    if ($is_in_cart === false) {
+        $cartContent_array['quantity'] = 1;
+        $products_cart[] = $cartContent_array;
+    } else {
+        // [7] here is the $carted_quantity index of the array, $products_cart
+        $carted_quantity = $products_cart[$cart_id][7];
+        $products_cart[$cart_id] = [$product_id, $product_category, $product_name, $product_description, $product_image, $product_quantity, $product_price, $carted_quantity + 1];
+    }
+    setcookie("products_cart", serialize($products_cart), time() + 86400, '/');
+
+    /*while ($row = $get_all_products->fetch_assoc()) {
+    if ($row['prodid'] == $prodid) {
+    }
+    }*/
+
+
+
+
     setcookie('cartContent', serialize($cartContent_array), time() + 3600);
-    echo '<meta http-equiv="refresh" content="0; url=cart.php">';
-    // fix time bug 
-    /*$add_to_cart_query = "
-    INSERT INTO purchase VALUES ($userid, $prodid, 1, 44, 'Pending');
-    ";
-    mysqli_query($dlink, $add_to_cart_query);*/
+
+
+
+    // echo '<meta http-equiv="refresh" content="0; url=cart.php">';
 
 }
+
+
+
+
 $dlink = connectToDB();
-//isset($_GET['add_to_cart']) &&
-if ($_GET['add_to_cart'] == 'true') {
-    // retrieves prodid coming from getAvailableProducts in product_display_script.php.
-    add_to_cart($dlink);
+if ($_REQUEST['add_to_cart'] == 'true') {
+    add_to_cart_cookie($dlink);
 
 }
 

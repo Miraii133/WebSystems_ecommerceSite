@@ -36,8 +36,8 @@ function getAllAvailableProduct($dlink)
         HTML;
         echo $prod_cat_html;
         // gets all products that have the same category as the one being looped in $row
-        // example, if current category is dog_food, and the current row has the category dog_food,
-        // then retrieve all the data of that row.
+        // example, if current category is dog_food, and the current product being looped
+        // has the category dog_food, then retrieve all the data of that row.
         $product_info_query = "
     SELECT prodid, productname, productdesc, productlink, 
     productimage, quantity, lastprice, ourprice 
@@ -45,6 +45,7 @@ function getAllAvailableProduct($dlink)
     WHERE prodcat='${row['prodcat']}'";
 
         $product_info_result = mysqli_query($dlink, $product_info_query);
+        // loops through entire rows that matches the current category
         foreach ($product_info_result as $product_row) {
             // if user viewing product.php is not logged in, remove add to cart button
             if (!isset($_COOKIE['email'])) {
@@ -66,17 +67,18 @@ HTML;
             <h6 class="text-uppercase">{$product_row['productname']}</h6>
             <h5 class="text-primary mb-0">{$product_row['lastprice']}</h5>
             <div class="btn-action d-flex justify-content-center">
-                <!-- Passes add_to_cart and prodid parameter to cart_script.php --> 
-                <!-- prodid | prodcat  | productname | productdesc | productlink | productimage  | quantity | lastprice | ourprice -->
-                <!--picture -> description -> name -> quantity -> price -> "delete" button-->
-                <a class="btn btn-primary py-2 px-3" href="cart_script.php?
-                add_to_cart=true
-                &prodid={$product_row['prodid']}
-                &productdesc={$product_row['productdesc']}
-                &productname={$product_row['productname']}
-                &productimage={$product_row['productimage']}
-                &quantity={$product_row['quantity']}
-                &price={$product_row['lastprice']}">
+
+            <!-- Creates HTML anchor that contains dynamic 
+                variable values from database and passes it to
+                cart_script.php -->
+                <a class="btn btn-primary py-2 px-3" href="cart_script.php?add_to_cart=true&
+                prodid={$product_row['prodid']}&
+                productdesc={$product_row['productdesc']}&
+                productname={$product_row['productname']}&
+                productimage={$product_row['productimage']}&
+                quantity={$product_row['quantity']}&
+                price={$product_row['lastprice']}">
+               
                 <i class="bi bi-cart"></i></a>
                 <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
             </div>

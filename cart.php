@@ -100,25 +100,22 @@
         </div>
     </nav>
     <!-- Navbar End -->
-
     <table class="table">
         <!-- picture -> description -> name -> quantity -> price -> "delete" button -->
-        <tr>
+        <th>Image</th>
+        <th>Description</th>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Action</th>
 
-            <th>Image</th>
-            <th>Description</th>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Action</th>
-        </tr>
         <tr>
             <td>Alfreds Futterkiste</td>
             <td>MBANANA</td>
             <td>Germany</td>
             <td>Germany</td>
             <td>Germany</td>
-            <td>Delete</td>
+            <td><a href="cart.php">DELETE</a></td>
         </tr>
         <tr>
             <td>Centro comercial Moctezuma</td>
