@@ -30,14 +30,6 @@ function add_to_cart_cookie($dlink)
     $productimage = $_GET['productimage'];
     $quantity = $_GET['quantity'];
     $lastprice = $_GET['price'];
-    $cartContent_array = array(
-        $prodid,
-        $productdesc,
-        $productname,
-        $productimage,
-        $quantity,
-        $lastprice
-    );
 
     $prod_id_query = "SELECT * FROM products WHERE prodid=${prodid}";
     $get_prodid = mysqli_query($dlink, $prod_id_query);
@@ -54,6 +46,7 @@ function add_to_cart_cookie($dlink)
     $cartContent_array = isset($_COOKIE['cartContent']) ? unserialize($_COOKIE['cartContent']) : [];
     // loops through all cart content and gets all prodids to
     // compare with all products prodids
+    $is_in_cart = false;
     foreach ($cartContent_array as $cartContent_id) {
         foreach ($get_all_products as $productList_id) {
             // if any of the product matches with the prodid of the products in the cart
@@ -68,28 +61,43 @@ function add_to_cart_cookie($dlink)
 
     }
     if ($is_in_cart === false) {
-        $cartContent_array['quantity'] = 1;
-        $products_cart[] = $cartContent_array;
+        $cartContent_array[] = [
+            $prodid,
+            $productdesc,
+            $productname,
+            $productname,
+            $productimage,
+            // 1 is the quantity
+            $quantity,
+            $lastprice
+        ];
+        setcookie("cartContent", serialize($cartContent_array), time() + 86400, '/');
     } else {
-        // [7] here is the $carted_quantity index of the array, $products_cart
-        $carted_quantity = $products_cart[$cart_id][7];
-        $products_cart[$cart_id] = [$product_id, $product_category, $product_name, $product_description, $product_image, $product_quantity, $product_price, $carted_quantity + 1];
+        // [6] here is the $quantity column index of the array, $products_cart ( this might cause a problem later so)
+        $current_cartquantity = $cartContent_array[$cart_id][6];
+        $cartContent_array[$cart_id] = [
+            $prodid,
+            $productname,
+            $productdesc,
+            $productimage,
+            $quantity + 1,
+            $lastprice
+        ];
+        setcookie("cartContent", serialize($cartContent_array), time() + 86400, '/');
     }
-    setcookie("products_cart", serialize($products_cart), time() + 86400, '/');
 
-    /*while ($row = $get_all_products->fetch_assoc()) {
-    if ($row['prodid'] == $prodid) {
-    }
-    }*/
+    echo '<meta http-equiv="refresh" content="0; url=cart.php">';
 
+}
 
-
-
-    setcookie('cartContent', serialize($cartContent_array), time() + 3600);
-
-
-
-    // echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+// displays cartContent to cart.php
+function displayCartContent()
+{
+    $tableRowsData = <<<HTML
+    <tr> 
+    
+    <tr>
+    HTML;
 
 }
 
@@ -97,9 +105,15 @@ function add_to_cart_cookie($dlink)
 
 
 $dlink = connectToDB();
-if ($_REQUEST['add_to_cart'] == 'true') {
+if (isset($_REQUEST['add_to_cart']) && $_REQUEST['add_to_cart'] == 'true') {
     add_to_cart_cookie($dlink);
-
+    // unsets 'add_to_cart' so when cart.php is ran, this if
+    // condition is no longer ran.
+    // otherwise without unsetting add_to_cart, cart.php will run
+    // this
+    unset($_POST['add_to_cart']);
+} else {
+    displayCartContent();
 }
 
 ?>

@@ -125,6 +125,9 @@
             <td>Mexico</td>
             <td>Add</td>
         </tr>
+        <?php
+        include "cart_script.php";
+        ?>
     </table>
 
 
