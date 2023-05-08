@@ -93,10 +93,11 @@ function add_to_cart_cookie($dlink)
 
 function delete_from_cart_cookie()
 {
+    echo "<script>console.log('hello');</script>";
     $cartContent_array = unserialize($_COOKIE['cartContent']);
-    $remove_from_cart = $_REQUEST["delete_cartContent"] ?? 0;
+    $remove_from_cart_prodid = $_REQUEST["prodid"] ?? 0;
     foreach ($cartContent_array as $key => $product) {
-        if ($remove_from_cart == $product[0]) {
+        if ($remove_from_cart_prodid == $product[0]) {
             unset($cartContent_array[$key]);
             setcookie("cartContent", serialize($cartContent_array), time() + 86400, '/');
             echo '<meta http-equiv="refresh" content="0; url=cart.php">';
@@ -127,7 +128,10 @@ function displayCartContent()
 
         $tableRowsData = <<<HTML
     <tr> 
-        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> <img src="${product_img}"> </td>
+        <td style="width: 0px; display:inline; margin-top:100px;">
+        <input type="checkbox" id="product_selector_checkbox" 
+        name="product_selector_checkbox" value="select_product" > </td>
+        <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> <img src="${product_img}"> </td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_name</td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_description</td>
          
@@ -142,16 +146,17 @@ function displayCartContent()
     </td>
         <td style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $product_price</td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
-        <a href="cart_script.php?delete_cartContent=true"> DELETE </a></td>
+        <a href="cart_script.php?delete_cartContent=true&prodid=${product_id}"> DELETE </a></td>
     </tr>
     
 HTML;
         echo $tableRowsData;
     }
-    $totalPriceHTML = <<<HTML
+    $cart_bottom_part = <<<HTML
 <td> Total price: $total_price</td>
 HTML;
-    echo $totalPriceHTML;
+    echo $cart_bottom_part;
+    echo "<td> <button>Place Order</button> </td>";
 
 
 }
@@ -164,7 +169,7 @@ if (isset($_REQUEST['add_to_cart']) && $_REQUEST['add_to_cart'] == 'true') {
     // otherwise without unsetting add_to_cart, cart.php will run
     // this
     unset($_POST['add_to_cart']);
-} else if (isset($_REQUEST['delete_cartContent']) && $_REQUEST['delete_cartContent' == 'true']) {
+} else if (isset($_REQUEST['delete_cartContent']) && $_REQUEST['delete_cartContent'] == 'true') {
     delete_from_cart_cookie();
 
 } else {

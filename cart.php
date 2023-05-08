@@ -102,7 +102,7 @@
     <!-- Navbar End -->
     <table class="table">
         <!-- picture -> description -> name -> quantity -> price -> "delete" button -->
-        <th style="padding-left: 50px; padding-right: 70px; padding-bottom: 100px;">Image</th>
+        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">Image</th>
         <th>Description</th>
         <th>Name</th>
         <th>Quantity</th>
