@@ -93,11 +93,32 @@ function add_to_cart_cookie($dlink)
 // displays cartContent to cart.php
 function displayCartContent()
 {
-    $tableRowsData = <<<HTML
+
+    $cartContent_array = unserialize($_COOKIE['cartContent']);
+
+    echo "<script> console.log('Hello world');</script>";
+    foreach ($cartContent_array as $id => $in_cart) {
+        $product_id = $in_cart[0];
+        $product_name = $in_cart[2];
+        $product_description = $in_cart[3];
+        $product_img = $in_cart[4];
+        $carted_quantity = $in_cart[5];
+        $product_price = $in_cart[6] * $carted_quantity;
+        //$total_price += $product_price;
+
+        $tableRowsData = <<<HTML
     <tr> 
-    
+        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> <img src="${product_img}"> </td>
+        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_name</td>
+        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_description</td>
+        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $carted_quantity</td>
+        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_price</td>
+        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> <a href="product.php"> DELETE </a></td>
     <tr>
     HTML;
+        echo $tableRowsData;
+
+    }
 
 }
 

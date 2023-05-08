@@ -102,32 +102,17 @@
     <!-- Navbar End -->
     <table class="table">
         <!-- picture -> description -> name -> quantity -> price -> "delete" button -->
-        <th>Image</th>
+        <th style="padding-left: 50px; padding-right: 70px; padding-bottom: 100px;">Image</th>
         <th>Description</th>
         <th>Name</th>
         <th>Quantity</th>
         <th>Price</th>
         <th>Action</th>
 
-        <tr>
-            <td>Alfreds Futterkiste</td>
-            <td>MBANANA</td>
-            <td>Germany</td>
-            <td>Germany</td>
-            <td>Germany</td>
-            <td><a href="cart.php">DELETE</a></td>
-        </tr>
-        <tr>
-            <td>Centro comercial Moctezuma</td>
-            <td>Francisco Chang</td>
-            <td>Mexico</td>
-            <td>Mexico</td>
-            <td>Mexico</td>
-            <td>Add</td>
-        </tr>
         <?php
         include "cart_script.php";
         ?>
+
     </table>
 
 
