@@ -22,7 +22,8 @@ function connectToDB()
 
 function add_to_cart_cookie($dlink)
 {
-    // retrieves prodid coming from getAvailableProducts in product_display_script.php.
+    // retrieves prodid coming from getAvailableProducts in product_display_script.php
+    // when user clicks cart button
     $prodid = $_GET['prodid'];
     $userid = $_COOKIE['userid'];
     $productdesc = $_GET['productdesc'];
@@ -69,7 +70,24 @@ function add_to_cart_cookie($dlink)
             $quantity,
             // 1 is the quantity
             $lastprice
+
         ];
+
+        foreach ($cartContent_array as $id => $in_cart) {
+            $product_id = $in_cart[3];
+
+            // prod 0 is  for some reason
+            $product_name = $in_cart[1];
+            $product_description = $in_cart[2];
+            $product_img = $in_cart[3];
+            $carted_quantity = $in_cart[4];
+            // $product_price = $in_cart[6]; //*cart_quantity
+            //$total_price += $product_price;
+            echo "<script> console.log('prodimg ${product_img}');</script>";
+            echo "<script> console.log('prodname ${product_name}');</script>";
+            echo "<script> console.log('prod desc ${product_description}');</script>";
+            echo "<script> console.log('quantity${carted_quantity}');</script>";
+        }
         setcookie("cartContent", serialize($cartContent_array), time() + 86400, '/');
     } else {
         // [6] here is the $quantity column index of the array, $products_cart ( this might cause a problem later so)
@@ -82,6 +100,8 @@ function add_to_cart_cookie($dlink)
             // +1
             $lastprice
         ];
+
+
         setcookie("cartContent", serialize($cartContent_array), time() + 86400, '/');
     }
 
@@ -97,16 +117,13 @@ function displayCartContent()
 
     foreach ($cartContent_array as $id => $in_cart) {
         $product_id = $in_cart[0];
+        $product_description = $in_cart[1];
         $product_name = $in_cart[2];
-        $product_description = $in_cart[3];
-        $product_img = $in_cart[4];
-        $carted_quantity = $in_cart[5];
-        // $product_price = $in_cart[6]; //*cart_quantity
+        $product_img = $in_cart[3];
+        $carted_quantity = $in_cart[4];
+        $product_price = $in_cart[5]; //*cart_quantity
         //$total_price += $product_price;
-        echo "<script> console.log('prodimg ${product_img}');</script>";
-        echo "<script> console.log('prodname ${product_name}');</script>";
-        echo "<script> console.log('prod desc ${product_description}');</script>";
-        echo "<script> console.log('quantity${carted_quantity}');</script>";
+
 
         $tableRowsData = <<<HTML
     <tr> 
@@ -114,9 +131,10 @@ function displayCartContent()
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_name</td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_description</td>
         <td style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $carted_quantity</td>
+        <td style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $product_price</td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> <a href="product.php"> DELETE </a></td>
     <tr>
-    HTML;
+HTML;
         echo $tableRowsData;
 
     }
