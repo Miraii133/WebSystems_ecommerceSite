@@ -68,26 +68,9 @@ function add_to_cart_cookie($dlink)
             $productdesc,
             $productimage,
             $quantity,
-            // 1 is the quantity
             $lastprice
 
         ];
-
-        foreach ($cartContent_array as $id => $in_cart) {
-            $product_id = $in_cart[3];
-
-            // prod 0 is  for some reason
-            $product_name = $in_cart[1];
-            $product_description = $in_cart[2];
-            $product_img = $in_cart[3];
-            $carted_quantity = $in_cart[4];
-            // $product_price = $in_cart[6]; //*cart_quantity
-            //$total_price += $product_price;
-            echo "<script> console.log('prodimg ${product_img}');</script>";
-            echo "<script> console.log('prodname ${product_name}');</script>";
-            echo "<script> console.log('prod desc ${product_description}');</script>";
-            echo "<script> console.log('quantity${carted_quantity}');</script>";
-        }
         setcookie("cartContent", serialize($cartContent_array), time() + 86400, '/');
     } else {
         // [6] here is the $quantity column index of the array, $products_cart ( this might cause a problem later so)
@@ -96,8 +79,7 @@ function add_to_cart_cookie($dlink)
             $productname,
             $productdesc,
             $productimage,
-            $quantity,
-            // +1
+            $quantity + 1,
             $lastprice
         ];
 
@@ -109,20 +91,38 @@ function add_to_cart_cookie($dlink)
 
 }
 
+function delete_from_cart_cookie()
+{
+    $cartContent_array = unserialize($_COOKIE['cartContent']);
+    $remove_from_cart = $_REQUEST["delete_cartContent"] ?? 0;
+    foreach ($cartContent_array as $key => $product) {
+        if ($remove_from_cart == $product[0]) {
+            unset($cartContent_array[$key]);
+            setcookie("cartContent", serialize($cartContent_array), time() + 86400, '/');
+            echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+        }
+
+    }
+}
+
 // displays cartContent to cart.php
 function displayCartContent()
 {
 
     $cartContent_array = unserialize($_COOKIE['cartContent']);
-
+    $total_price = 0;
     foreach ($cartContent_array as $id => $in_cart) {
         $product_id = $in_cart[0];
+        // product_description comes first before
+        // product_name despite product_name 
+        // being the first index before product_description
+        // will fix this soon
         $product_description = $in_cart[1];
         $product_name = $in_cart[2];
         $product_img = $in_cart[3];
-        $carted_quantity = $in_cart[4];
-        $product_price = $in_cart[5]; //*cart_quantity
-        //$total_price += $product_price;
+        $cart_items_quantity = $in_cart[4];
+        $product_price = $in_cart[5];
+        $total_price += $product_price;
 
 
         $tableRowsData = <<<HTML
@@ -130,19 +130,31 @@ function displayCartContent()
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> <img src="${product_img}"> </td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_name</td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_description</td>
-        <td style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $carted_quantity</td>
+         
+         <td>
+        <select name="languages" id="lang">
+        <option value=1>1</option>
+        <option value=2>2</option>
+        <option value=3>3</option>
+        <option value=4>4</option>
+        <option value=5>5</option>
+      </select>
+    </td>
         <td style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $product_price</td>
-        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> <a href="product.php"> DELETE </a></td>
-    <tr>
+        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
+        <a href="cart_script.php?delete_cartContent=true"> DELETE </a></td>
+    </tr>
+    
 HTML;
         echo $tableRowsData;
-
     }
+    $totalPriceHTML = <<<HTML
+<td> Total price: $total_price</td>
+HTML;
+    echo $totalPriceHTML;
+
 
 }
-
-
-
 
 $dlink = connectToDB();
 if (isset($_REQUEST['add_to_cart']) && $_REQUEST['add_to_cart'] == 'true') {
@@ -152,6 +164,9 @@ if (isset($_REQUEST['add_to_cart']) && $_REQUEST['add_to_cart'] == 'true') {
     // otherwise without unsetting add_to_cart, cart.php will run
     // this
     unset($_POST['add_to_cart']);
+} else if (isset($_REQUEST['delete_cartContent']) && $_REQUEST['delete_cartContent' == 'true']) {
+    delete_from_cart_cookie();
+
 } else {
     displayCartContent();
 }
