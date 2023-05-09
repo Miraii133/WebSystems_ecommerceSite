@@ -123,6 +123,7 @@ function updateQuantity($product_price, $prodid)
 // displays cartContent to cart.php
 function displayCartContent()
 {
+
     $cartContent_array = unserialize($_COOKIE['cartContent']);
     $totalPrice_of_all_product = 0;
     foreach ($cartContent_array as $id => $in_cart) {
@@ -160,18 +161,25 @@ function displayCartContent()
         <option value=5>5</option>
       </select value>
      <script>
+        
 function updateTotalPrice(selectTag, product_price) {
   // get the price and quantity of the current product
   var productPrice = product_price;
   var quantity = selectTag.value;
 
   // calculate the new total price
-  var newTotalPrice = productPrice * quantity;
+  var totalPrice = productPrice * quantity;
 
   // update the total price cell in the table
-  var totalCell = selectTag.parentNode.nextSibling;
-  totalCell.innerHTML = newTotalPrice;
+  var totalCell = selectTag.parentNode.parentNode.querySelector('#total_product_price');
+  totalCell.innerHTML = totalPrice;
 
+
+  var newTotalPrice += totalPrice;
+  var totalPrice_of_all_product = selectTag.parentNode.parentNode.querySelector('#totalPrice_of_all_product');
+  //totalPrice_of_all_product.innerHTML = newTotalPrice;
+  //console.log(newTotalPrice);
+  
   // update the value of the selected option to match the new quantity
   selectTag.value = quantity;
 }
@@ -179,32 +187,21 @@ function updateTotalPrice(selectTag, product_price) {
     
      
     </td>
-        <td style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $total_product_price</td>
+        <td id="total_product_price" style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $total_product_price</td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
-        <?php
+       
         <a href="cart_script.php?delete_cartContent=true&prodid=${product_id}"> DELETE </a></td>
     </tr>
-<script>
-/*function submitForm() {
-  console.log (document.getElementById("update_quantity_form").value);
-}*/
-</script>
 HTML;
 
         $totalPrice_of_all_product += $total_product_price;
         echo $tableRowsData;
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $selected_option = $_POST['select_quantity'];
-            echo "You selected: " . $selected_option;
-        }
+
 
 
     }
-
-
-
     $cart_bottom_part = <<<HTML
-        <td> Total price: $totalPrice_of_all_product</td>
+        <td id="totalPrice_of_all_product"> Total price: $totalPrice_of_all_product</td>
         
 HTML;
 
