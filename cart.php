@@ -105,8 +105,9 @@
         <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">Image</th>
         <th>Description</th>
         <th>Name</th>
+        <th>Unit Price</th>
         <th>Quantity</th>
-        <th>Price</th>
+        <th>Total Price</th>
         <th>Action</th>
 
         <?php

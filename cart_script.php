@@ -105,12 +105,25 @@ function delete_from_cart_cookie()
     }
 }
 
+function updateQuantity($product_price, $prodid)
+{
+    if (isset($_POST['quantity_amount'])) {
+        echo "<script> console.log('ngi');</script>";
+        $selected_quantity = $_POST['quantity_amount'];
+        $prodid = $_POST['prodid'];
+        $cartContent_array[$prodid]['quantity'] = $selected_quantity;
+        $cartContent_array[$prodid]['lastprice'] = $product_price * $selected_quantity;
+        $selected_quantity = $_POST['quantity_amount'];
+        setcookie("cartContent", ($cartContent_array), time() + 86400, '/');
+    }
+}
+
 // displays cartContent to cart.php
 function displayCartContent()
 {
 
     $cartContent_array = unserialize($_COOKIE['cartContent']);
-    $total_price = 0;
+    $totalPrice_of_all_product = 0;
     foreach ($cartContent_array as $id => $in_cart) {
         $product_id = $in_cart[0];
         // product_description comes first before
@@ -136,11 +149,8 @@ function displayCartContent()
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_name</td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_description</td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_price</td>
-         
-        
         <td>
         <select name="quantity_amount" id="lang">
-            
         <option value='${cart_items_quantity}' selected>${cart_items_quantity}</option>
         <option value=2>2</option>
         <option value=3>3</option>
@@ -154,20 +164,17 @@ function displayCartContent()
     </tr>
     
 HTML;
-
+        $totalPrice_of_all_product += $total_product_price;
         echo $tableRowsData;
-        $totalPrice_of_all_product += $product_price;
     }
-    if (isset($_POST['quantity_amount']) && isset($_POST['prodid'])) {
-        $selected_quantity = $_POST['quantity_amount'];
-        $prodid = $_POST['prodid'];
 
 
-    }
+
     $cart_bottom_part = <<<HTML
-<td> Total price: $total_price</td>
+        <td> Total price: $totalPrice_of_all_product</td>
 HTML;
     echo $cart_bottom_part;
+
     echo "<td> <button>Place Order</button> </td>";
 
 
