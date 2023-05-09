@@ -54,6 +54,7 @@ function getAllAvailableProduct($dlink)
             <img class="rounded mx-auto d-block" src="{$product_row['productimage']}" alt="">
             <h6 class="text-uppercase">{$product_row['productname']}</h6>
             <h5 class="text-primary mb-0">{$product_row['lastprice']}</h5>
+            <h6 class="text-primary mb-0">Quantity: {$product_row['quantity']}</h6>
             <div class="btn-action d-flex justify-content-center">
             <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
             </div>
@@ -66,6 +67,7 @@ HTML;
             <img class="rounded mx-auto d-block" src="{$product_row['productimage']}" alt="">
             <h6 class="text-uppercase">{$product_row['productname']}</h6>
             <h5 class="text-primary mb-0">{$product_row['lastprice']}</h5>
+            <h6 class="text-primary mb-0">Quantity: {$product_row['quantity']}</h6>
             <div class="btn-action d-flex justify-content-center">
 
             <!-- Creates HTML anchor that contains dynamic 

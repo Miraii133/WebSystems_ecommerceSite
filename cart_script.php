@@ -93,7 +93,6 @@ function add_to_cart_cookie($dlink)
 
 function delete_from_cart_cookie()
 {
-    echo "<script>console.log('hello');</script>";
     $cartContent_array = unserialize($_COOKIE['cartContent']);
     $remove_from_cart_prodid = $_REQUEST["prodid"] ?? 0;
     foreach ($cartContent_array as $key => $product) {
@@ -122,9 +121,11 @@ function displayCartContent()
         $product_name = $in_cart[2];
         $product_img = $in_cart[3];
         $cart_items_quantity = $in_cart[4];
+        // product_price is the unit price or the individual price of the 
+        // product
         $product_price = $in_cart[5];
-        $total_price += $product_price;
-
+        // total_product_price is the unit price * the amount in the cart
+        $total_product_price = $product_price * $cart_items_quantity;
 
         $tableRowsData = <<<HTML
     <tr> 
@@ -134,23 +135,34 @@ function displayCartContent()
         <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> <img src="${product_img}"> </td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_name</td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_description</td>
+        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_price</td>
          
-         <td>
-        <select name="languages" id="lang">
-        <option value=1>1</option>
+        
+        <td>
+        <select name="quantity_amount" id="lang">
+            
+        <option value='${cart_items_quantity}' selected>${cart_items_quantity}</option>
         <option value=2>2</option>
         <option value=3>3</option>
         <option value=4>4</option>
         <option value=5>5</option>
-      </select>
+      </select value>
     </td>
-        <td style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $product_price</td>
+        <td style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $total_product_price</td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
         <a href="cart_script.php?delete_cartContent=true&prodid=${product_id}"> DELETE </a></td>
     </tr>
     
 HTML;
+
         echo $tableRowsData;
+        $totalPrice_of_all_product += $product_price;
+    }
+    if (isset($_POST['quantity_amount']) && isset($_POST['prodid'])) {
+        $selected_quantity = $_POST['quantity_amount'];
+        $prodid = $_POST['prodid'];
+
+
     }
     $cart_bottom_part = <<<HTML
 <td> Total price: $total_price</td>
