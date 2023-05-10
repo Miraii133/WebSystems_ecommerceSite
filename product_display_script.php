@@ -79,7 +79,8 @@ HTML;
                 productname={$product_row['productname']}&
                 productimage={$product_row['productimage']}&
                 quantity={$product_row['quantity']}&
-                price={$product_row['lastprice']}">
+                price={$product_row['lastprice']}
+                ">
                
                 <i class="bi bi-cart"></i></a>
                 <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>

@@ -88,7 +88,7 @@ function add_to_cart_cookie($dlink)
         setcookie("cartContent", serialize($cartContent_array), time() + 86400, '/');
     }
 
-    echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+    //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
 
 }
 
@@ -137,18 +137,24 @@ function updateTotalPrice()
 function displayCartContent()
 {
 
+
     $cartContent_array = unserialize($_COOKIE['cartContent']);
-
-
     $updateFunction = <<<HTML
      <script>
         
-function updateTotalPrice(selectTag, product_price, totalPrice_of_all_product) {
-   var productPrice = product_price;
-  var quantity = selectTag.value;
+function updateTotalPrice(selectTag) {
+var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'getCartTotal_script.php', true);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onreadystatechange = function() {
+    
+  };
+  xhr.send('data=' + encodeURIComponent(selectTag));
+   /*var productPrice = product_price;
+  var quantity = selectTag.value;*/
 
   // calculate the new total price
-  var totalPrice = productPrice * quantity;
+  /*var totalPrice = productPrice * quantity;
 
   // update the total price cell in the table
   var totalCell = selectTag.parentNode.parentNode.querySelector('#total_product_price');
@@ -157,33 +163,32 @@ function updateTotalPrice(selectTag, product_price, totalPrice_of_all_product) {
 
   
   // update the total price of all products cell in the table
-  var totalPrice_of_all_product_cell = selectTag.parentNode.parentNode.querySelector('#totalPrice_of_all_product');
-  totalPrice_of_all_product_cell.innerHTML = totalPrice_of_all_product;
+//  var totalPrice_of_all_product_cell = selectTag.parentNode.parentNode.querySelector('#totalPrice_of_all_product');
+//   totalPrice_of_all_product_cell.innerHTML = totalPrice_of_all_product;
 
+var totalProducts_price_cookie = document.cookie.replace(/(?:(?:^|.*;\s*)totalProducts_price\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 
-var current_value = document.getElementById("hidden_totalPrice").value;
-current_value = current_value + totalPrice;
-  // Make an AJAX request to update the variable
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", "cart_script.php", true);
-  console.log("boo!");
-  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-        
-      // Update the hidden input field with the new value of the variable
-      document.getElementById("hidden_totalPrice").value = new_value;
-    }
-  };
-  xhr.send("totalPrice_of_all_products=" + new_value);
-
+totalProducts_price_cookie = parseFloat(totalProducts_price_cookie) + totalPrice;*/
 }
 </script>
     
 HTML;
 
     echo $updateFunction;
+
+    // retrieves new totalproductsPrice from $_POST
+    $totalPrice_of_all_product = 0;
+    if (isset($_POST['totalProducts_price'])) {
+        $totalPrice_of_all_product = $_POST['totalProducts_price'];
+        echo "<script> console.log('{$totalPrice_of_all_product}');</script>";
+    } else {
+
+    }
+    echo "<script> console.log('{$totalPrice_of_all_product}');</script>";
+
     foreach ($cartContent_array as $id => $in_cart) {
+
+
         $product_id = $in_cart[0];
         // product_description comes first before
         // product_name despite product_name 
@@ -197,7 +202,7 @@ HTML;
         // product
         $product_price = $in_cart[5];
         // total_product_price is the unit price * the amount in the cart
-        $total_product_price = $product_price * $cart_items_quantity;
+        $totalPrice_of_product = $product_price * $cart_items_quantity;
 
         $tableRowsData = <<<HTML
     <tr> 
@@ -210,8 +215,8 @@ HTML;
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_price</td>
         <td>
 
-        <input type="hidden" id="hidden_totalPrice" value="<?php echo $totalPrice_of_all_product; ?>">
-        <select name="select_quantity" id="select_quantity" onchange="updateTotalPrice(this, $product_price, $totalPrice_of_all_product)">
+        
+        <select name="select_quantity" id="select_quantity" onchange="updateTotalPrice(this)">
         <option value='${cart_items_quantity}' selected>${cart_items_quantity}</option>
         <option value=2>2</option>
         <option value=3>3</option>
@@ -221,11 +226,11 @@ HTML;
 
      
     </td>
-        <td id="total_product_price" style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $total_product_price</td>
+        <td id="total_product_price" style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $totalPrice_of_product</td>
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
        
         <a href="cart_script.php?delete_cartContent=true&prodid=${product_id}"> DELETE </a></td>
-           <td id="totalPrice_of_all_product"> Total price: $totalPrice_of_all_product</td>
+           <td id="totalPrice_of_all_product"> $totalPrice_of_all_product </td>
         
     </tr>
 HTML;
@@ -234,9 +239,6 @@ HTML;
 
 
     }
-
-
-
 
     echo "<td> <button>Place Order</button> </td>";
 
