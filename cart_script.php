@@ -53,11 +53,12 @@ function add_to_cart_cookie($dlink)
             // if any of the product matches with the prodid of the products in the cart
             // turn $is_in_cart to true to indicate the match
             // then grab the cart_id
-            if ($productList_id[0] == $cartContent_id[0]) {
+            if (isset($productList_id[0]) && isset($cartContent_id[0]) && $productList_id[0] == $cartContent_id[0]) {
                 $is_in_cart = true;
                 $cart_id = $productList_id[0];
             }
         }
+
 
 
     }
