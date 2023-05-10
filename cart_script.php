@@ -138,13 +138,12 @@ function displayCartContent()
 {
 
     $cartContent_array = unserialize($_COOKIE['cartContent']);
-    $totalPrice_of_all_product = $_POST['totalPrice_of_all_products'];
+
 
     $updateFunction = <<<HTML
      <script>
         
 function updateTotalPrice(selectTag, product_price, totalPrice_of_all_product) {
-    console.log(totalPrice_of_all_product);
    var productPrice = product_price;
   var quantity = selectTag.value;
 
@@ -167,14 +166,16 @@ current_value = current_value + totalPrice;
   // Make an AJAX request to update the variable
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "cart_script.php", true);
+  console.log("boo!");
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4 && xhr.status == 200) {
+        
       // Update the hidden input field with the new value of the variable
       document.getElementById("hidden_totalPrice").value = new_value;
     }
   };
-  xhr.send("new_value=" + new_value);
+  xhr.send("totalPrice_of_all_products=" + new_value);
 
 }
 </script>
