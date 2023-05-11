@@ -136,113 +136,80 @@ function updateTotalPrice()
 // displays cartContent to cart.php
 function displayCartContent()
 {
-
-
     $cartContent_array = unserialize($_COOKIE['cartContent']);
+    $totalPrice_of_all_product = 0;
+
     $updateFunction = <<<HTML
-     <script>
-        
-function updateTotalPrice(selectTag) {
-var xhr = new XMLHttpRequest();
+        <script>
+           function updateTotalPrice(selectTag, productId) {
+  var selectValue = selectTag.value;
+  var totalPriceOfProduct = selectTag.parentNode.parentNode.querySelector('#total_product_price');
+  var totalPriceOfAllProducts = document.querySelector('#totalPrice_of_all_products');
+  
+  var xhr = new XMLHttpRequest();
   xhr.open('POST', 'getCartTotal_script.php', true);
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      try {
+        var data = JSON.parse(xhr.responseText);
+        totalPriceOfProduct.innerHTML = data.totalPriceOfProduct;
+        totalPriceOfAllProducts.innerHTML = data.totalPriceOfAllProducts;
+      } catch (e) {
+        console.log(xhr.responseText);
+        alert('Error parsing server response.');
+      }
+    }}
     
-  };
-  xhr.send('data=' + encodeURIComponent(selectTag));
-   /*var productPrice = product_price;
-  var quantity = selectTag.value;*/
-
-  // calculate the new total price
-  /*var totalPrice = productPrice * quantity;
-
-  // update the total price cell in the table
-  var totalCell = selectTag.parentNode.parentNode.querySelector('#total_product_price');
-  totalCell.innerHTML = totalPrice;
-
-
-  
-  // update the total price of all products cell in the table
-//  var totalPrice_of_all_product_cell = selectTag.parentNode.parentNode.querySelector('#totalPrice_of_all_product');
-//   totalPrice_of_all_product_cell.innerHTML = totalPrice_of_all_product;
-
-var totalProducts_price_cookie = document.cookie.replace(/(?:(?:^|.*;\s*)totalProducts_price\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-
-totalProducts_price_cookie = parseFloat(totalProducts_price_cookie) + totalPrice;*/
+  xhr.send('productId=' + encodeURIComponent(productId) + '&selectValue=' + encodeURIComponent(selectValue));
 }
-</script>
-    
+
+        </script>
 HTML;
 
     echo $updateFunction;
 
-    // retrieves new totalproductsPrice from $_POST
-    $totalPrice_of_all_product = 0;
-    if (isset($_POST['totalProducts_price'])) {
-        $totalPrice_of_all_product = $_POST['totalProducts_price'];
-        echo "<script> console.log('{$totalPrice_of_all_product}');</script>";
-    } else {
-
-    }
-    echo "<script> console.log('{$totalPrice_of_all_product}');</script>";
-
     foreach ($cartContent_array as $id => $in_cart) {
-
-
         $product_id = $in_cart[0];
-        // product_description comes first before
-        // product_name despite product_name 
-        // being the first index before product_description
-        // will fix this soon
         $product_description = $in_cart[1];
         $product_name = $in_cart[2];
         $product_img = $in_cart[3];
         $cart_items_quantity = $in_cart[4];
-        // product_price is the unit price or the individual price of the 
-        // product
         $product_price = $in_cart[5];
-        // total_product_price is the unit price * the amount in the cart
         $totalPrice_of_product = $product_price * $cart_items_quantity;
+        $totalPrice_of_all_product += $totalPrice_of_product;
 
         $tableRowsData = <<<HTML
-    <tr> 
-        <td style="width: 0px; display:inline; margin-top:100px;">
-        <input type="checkbox" id="product_selector_checkbox" 
-        name="product_selector_checkbox" value="select_product" > </td>
-        <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> <img src="${product_img}"> </td>
-        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_name</td>
-        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_description</td>
-        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_price</td>
-        <td>
+            <tr> 
+                <td style="width: 0px; display:inline; margin-top:100px;">
+                    <input type="checkbox" id="product_selector_checkbox" name="product_selector_checkbox" value="select_product" >
+                </td>
+                <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;">
+                    <img src="${product_img}">
+                </td>
+                <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_name</td>
+                <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_description</td>
+                <td class="product_price" style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_price</td>
+                <td>
+                    <select name="select_quantity" onchange="updateTotalPrice(this, $product_id)">
+                        <option value='${cart_items_quantity}' selected>${cart_items_quantity}</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                    </select>
+                </td>
+                <td class="total_product_price" style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $totalPrice_of_product</td>
+                <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
+                    <a href="cart_script.php?delete_cartContent=true&prodid=${product_id}">DELETE</a>
 
-        
-        <select name="select_quantity" id="select_quantity" onchange="updateTotalPrice(this)">
-        <option value='${cart_items_quantity}' selected>${cart_items_quantity}</option>
-        <option value=2>2</option>
-        <option value=3>3</option>
-        <option value=4>4</option>
-        <option value=5>5</option>
-      </select value>
-
-     
-    </td>
-        <td id="total_product_price" style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $totalPrice_of_product</td>
-        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
-       
-        <a href="cart_script.php?delete_cartContent=true&prodid=${product_id}"> DELETE </a></td>
-           <td id="totalPrice_of_all_product"> $totalPrice_of_all_product </td>
-        
-    </tr>
+                </td>
+                 <td class="totalPrice_of_all_product" style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $totalPrice_of_all_product</td>
+            </tr>
 HTML;
+
         echo $tableRowsData;
-
-
-
     }
-
-    echo "<td> <button>Place Order</button> </td>";
-
-
 }
 
 $dlink = connectToDB();
