@@ -88,7 +88,7 @@ function add_to_cart_cookie($dlink)
         setcookie("cartContent", serialize($cartContent_array), time() + 86400, '/');
     }
 
-    //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+    echo '<meta http-equiv="refresh" content="0; url=cart.php">';
 
 }
 
@@ -109,7 +109,7 @@ function delete_from_cart_cookie()
 function updateQuantity($product_price, $prodid)
 {
     if (isset($_POST['quantity_amount'])) {
-
+        echo "<script> console.log('ngi');</script>";
         $selected_quantity = $_POST['quantity_amount'];
         $prodid = $_POST['prodid'];
         $cartContent_array[$prodid]['quantity'] = $selected_quantity;
@@ -119,119 +119,98 @@ function updateQuantity($product_price, $prodid)
     }
 }
 
-function updateTotalPrice()
-{
-    if (!isset($_GET['newTotalPrice'])) {
-        setcookie("newTotalPrice", (0), time() + 86400, '/');
-    } else {
-        setcookie("newTotalPrice", (0), time() + 86400, '/');
-    }
-
-    $newTotalPrice = ($_GET['newTotalPrice']);
-    setcookie("newTotalPrice", $newTotalPrice, time() + 86400, '/');
-}
-
 
 
 // displays cartContent to cart.php
 function displayCartContent()
 {
+
     $cartContent_array = unserialize($_COOKIE['cartContent']);
     $totalPrice_of_all_product = 0;
-
-    $updateFunction = <<<HTML
-        <script>
-        function updateTotalPrice(selectTag, product_price, totalPrice_of_all_product, product_id) {
-           
-  // get the price and quantity of the current product
-  var productPrice = product_price;
-  var quantity = selectTag.value;
-  // calculate the new total price
-  var newTotalPrice = productPrice * quantity;
-  // update the total price cell in the table
-  var b = 'totalPrice_of_product[' + product_id + ']';
-  console.log(b);
-  var totalCell = selectTag.parentNode.nextSibling;
-  totalCell.innerHTML = "boo";
- /* console.log(b);
-  var temp = document.getElementById('totalPrice_of_product[' + product_id + ']');
-      console.log(temp);*/
-    //document.getElementById('totalPrice_of_product[' + product_id + ']').innerHTML = newTotalPrice;
-
- // totalPrice.innerHTML = newTotalPrice;
-  // update the value of the selected option to match the new quantity
-  var newTotalPrice_of_all_product = totalPrice_of_all_product;
-  
-  newTotalPrice_of_all_product + newTotalPrice;
-  //console.log(newTotalPrice_of_all_product);
-  //document.getElementById("#totalPrice_of_all_product").innerHTML = "Total Price: " + newTotalPrice_of_all_product;
-  selectTag.value = quantity;
-  
- // get the price and quantity of the current product
-  var productPrice = product_price;
-  var quantity = selectTag.value;
-  // calculate the new total price
-  var newTotalPrice = productPrice * quantity;
-  // update the total price cell in the table
-
-  // update the value of the selected option to match the new quantity
-  selectTag.value = quantity;
-
-}
-
-        </script>
-HTML;
-
-    echo $updateFunction;
-
     foreach ($cartContent_array as $id => $in_cart) {
         $product_id = $in_cart[0];
+        // product_description comes first before
+        // product_name despite product_name 
+        // being the first index before product_description
+        // will fix this soon
         $product_description = $in_cart[1];
         $product_name = $in_cart[2];
         $product_img = $in_cart[3];
         $cart_items_quantity = $in_cart[4];
+        // product_price is the unit price or the individual price of the 
+        // product
         $product_price = $in_cart[5];
-        $totalPrice_of_product = $product_price * $cart_items_quantity;
-        $totalPrice_of_all_product += $totalPrice_of_product;
+        // total_product_price is the unit price * the amount in the cart
+        $total_product_price = $product_price * $cart_items_quantity;
 
         $tableRowsData = <<<HTML
-            <tr> 
-                <td style="width: 0px; display:inline; margin-top:100px;">
-                    <input type="checkbox" id="product_selector_checkbox" name="product_selector_checkbox" value="select_product" >
-                </td>
-                <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;">
-                    <img src="${product_img}">
-                </td>
-                <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_name</td>
-                <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_description</td>
-                <td id="#product_price" style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_price</td>
-                <td>
-                    <select name="select_quantity" onchange="updateTotalPrice(this, $product_price, $totalPrice_of_all_product, $product_id)">
-                        <option value='${cart_items_quantity}' selected>${cart_items_quantity}</option>
-                        <option value=2>2</option>
-                        <option value=3>3</option>
-                        <option value=4>4</option>
-                        <option value=5>5</option>
-                    </select>
-                </td>
-                <td id="#totalPrice_of_product[$product_id]" style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $totalPrice_of_product</td>
-                <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
-                    <a href="cart_script.php?delete_cartContent=true&prodid=${product_id}">DELETE</a>
+    <tr> 
+        <td style="width: 0px; display:inline; margin-top:100px;">
+        <input type="checkbox" id="product_selector_checkbox" 
+        name="product_selector_checkbox" value="select_product" > </td>
+        <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> <img src="${product_img}"> </td>
+        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_name</td>
+        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_description</td>
+        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_price</td>
+        <td>
 
-                </td>
-                 
-            </tr>
-            
+        <select name="select_quantity" id="select_quantity" onchange="updateTotalPrice(this, $product_price, $totalPrice_of_all_product)">
+        <option value='${cart_items_quantity}' selected>${cart_items_quantity}</option>
+        <option value=2>2</option>
+        <option value=3>3</option>
+        <option value=4>4</option>
+        <option value=5>5</option>
+      </select value>
+     <script>
+        
+function updateTotalPrice(selectTag, product_price, totalPrice_of_all_product) {
+  // get the price and quantity of the current product
+  var productPrice = product_price;
+  var quantity = selectTag.value;
+
+  // calculate the new total price
+  var totalPrice = productPrice * quantity;
+
+  // update the total price cell in the table
+  var totalCell = selectTag.parentNode.parentNode.querySelector('#total_product_price');
+  totalCell.innerHTML = totalPrice;
+
+
+
+
+
+
+   var newTotalPrice_of_all_product = totalPrice_of_all_product;
+  
+  newTotalPrice_of_all_product =+ totalPrice;
+  console.log(totalPrice);
+  console.log(newTotalPrice_of_all_product);
+  document.getElementById("#totalPrice_of_all_product").innerHTML = "Total Price: " + newTotalPrice_of_all_product;
+}
+</script>
+    
+     
+    </td>
+        <td id="total_product_price" style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $total_product_price</td>
+        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
+       
+        <a href="cart_script.php?delete_cartContent=true&prodid=${product_id}"> DELETE </a></td>
+    </tr>
 HTML;
-
-
         echo $tableRowsData;
-        $totalPrice = <<<HTML
-<td id="#totalPrice_of_all_product" style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> Total Price: $totalPrice_of_all_product</td>
-HTML;
+        $totalPrice_of_all_product += $total_product_price;
+
 
     }
-    echo $totalPrice;
+    $cart_bottom_part = <<<HTML
+        <td id="#totalPrice_of_all_product"> Total price: $totalPrice_of_all_product</td>
+        
+HTML;
+    echo $cart_bottom_part;
+
+    echo "<td> <button>Place Order</button> </td>";
+
+
 }
 
 $dlink = connectToDB();
