@@ -141,27 +141,42 @@ function displayCartContent()
 
     $updateFunction = <<<HTML
         <script>
-           function updateTotalPrice(selectTag, productId) {
-  var selectValue = selectTag.value;
-  var totalPriceOfProduct = selectTag.parentNode.parentNode.querySelector('#total_product_price');
-  var totalPriceOfAllProducts = document.querySelector('#totalPrice_of_all_products');
+        function updateTotalPrice(selectTag, product_price, totalPrice_of_all_product, product_id) {
+           
+  // get the price and quantity of the current product
+  var productPrice = product_price;
+  var quantity = selectTag.value;
+  // calculate the new total price
+  var newTotalPrice = productPrice * quantity;
+  // update the total price cell in the table
+  var b = 'totalPrice_of_product[' + product_id + ']';
+  console.log(b);
+  var totalCell = selectTag.parentNode.nextSibling;
+  totalCell.innerHTML = "boo";
+ /* console.log(b);
+  var temp = document.getElementById('totalPrice_of_product[' + product_id + ']');
+      console.log(temp);*/
+    //document.getElementById('totalPrice_of_product[' + product_id + ']').innerHTML = newTotalPrice;
+
+ // totalPrice.innerHTML = newTotalPrice;
+  // update the value of the selected option to match the new quantity
+  var newTotalPrice_of_all_product = totalPrice_of_all_product;
   
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'getCartTotal_script.php', true);
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      try {
-        var data = JSON.parse(xhr.responseText);
-        totalPriceOfProduct.innerHTML = data.totalPriceOfProduct;
-        totalPriceOfAllProducts.innerHTML = data.totalPriceOfAllProducts;
-      } catch (e) {
-        console.log(xhr.responseText);
-        alert('Error parsing server response.');
-      }
-    }}
-    
-  xhr.send('productId=' + encodeURIComponent(productId) + '&selectValue=' + encodeURIComponent(selectValue));
+  newTotalPrice_of_all_product + newTotalPrice;
+  //console.log(newTotalPrice_of_all_product);
+  //document.getElementById("#totalPrice_of_all_product").innerHTML = "Total Price: " + newTotalPrice_of_all_product;
+  selectTag.value = quantity;
+  
+ // get the price and quantity of the current product
+  var productPrice = product_price;
+  var quantity = selectTag.value;
+  // calculate the new total price
+  var newTotalPrice = productPrice * quantity;
+  // update the total price cell in the table
+
+  // update the value of the selected option to match the new quantity
+  selectTag.value = quantity;
+
 }
 
         </script>
@@ -189,9 +204,9 @@ HTML;
                 </td>
                 <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_name</td>
                 <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_description</td>
-                <td class="product_price" style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_price</td>
+                <td id="#product_price" style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_price</td>
                 <td>
-                    <select name="select_quantity" onchange="updateTotalPrice(this, $product_id)">
+                    <select name="select_quantity" onchange="updateTotalPrice(this, $product_price, $totalPrice_of_all_product, $product_id)">
                         <option value='${cart_items_quantity}' selected>${cart_items_quantity}</option>
                         <option value=2>2</option>
                         <option value=3>3</option>
@@ -199,17 +214,24 @@ HTML;
                         <option value=5>5</option>
                     </select>
                 </td>
-                <td class="total_product_price" style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $totalPrice_of_product</td>
+                <td id="#totalPrice_of_product[$product_id]" style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $totalPrice_of_product</td>
                 <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
                     <a href="cart_script.php?delete_cartContent=true&prodid=${product_id}">DELETE</a>
 
                 </td>
-                 <td class="totalPrice_of_all_product" style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $totalPrice_of_all_product</td>
+                 
             </tr>
+            
 HTML;
 
+
         echo $tableRowsData;
+        $totalPrice = <<<HTML
+<td id="#totalPrice_of_all_product" style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> Total Price: $totalPrice_of_all_product</td>
+HTML;
+
     }
+    echo $totalPrice;
 }
 
 $dlink = connectToDB();
