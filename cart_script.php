@@ -167,25 +167,26 @@ function updateTotalPrice(selectTag, product_price, totalPrice_of_all_product) {
   // get the price and quantity of the current product
   var productPrice = product_price;
   var quantity = selectTag.value;
-
-  // calculate the new total price
+;  // calculate the new total price
   var totalPrice = productPrice * quantity;
-
   // update the total price cell in the table
   var totalCell = selectTag.parentNode.parentNode.querySelector('#total_product_price');
   totalCell.innerHTML = totalPrice;
 
+  //document.getElementById("#totalPrice_of_all_product").innerHTML = "Total Price: " + totalPrice_of_all_product;
+
+const totalProductPriceCells = document.querySelectorAll("td#total_product_price");
+
+// Loop through the selected elements and extract their values
+let total = 0;
+totalProductPriceCells.forEach(cell => {
+  const value = parseFloat(cell.textContent.trim());
+  total += value;
+});
+
+  document.getElementById('#totalPrice_of_all_product').innerHTML = "Total Price: " + total;
 
 
-
-
-
-   var newTotalPrice_of_all_product = totalPrice_of_all_product;
-  
-  newTotalPrice_of_all_product =+ totalPrice;
-  console.log(totalPrice);
-  console.log(newTotalPrice_of_all_product);
-  document.getElementById("#totalPrice_of_all_product").innerHTML = "Total Price: " + newTotalPrice_of_all_product;
 }
 </script>
     
@@ -198,7 +199,7 @@ function updateTotalPrice(selectTag, product_price, totalPrice_of_all_product) {
     </tr>
 HTML;
         echo $tableRowsData;
-        $totalPrice_of_all_product += $total_product_price;
+        $totalPrice_of_all_product = $totalPrice_of_all_product + $total_product_price;
 
 
     }
