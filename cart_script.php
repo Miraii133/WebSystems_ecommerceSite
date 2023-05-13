@@ -106,19 +106,6 @@ function delete_from_cart_cookie()
     }
 }
 
-function updateQuantity($product_price, $prodid)
-{
-    if (isset($_POST['quantity_amount'])) {
-        echo "<script> console.log('ngi');</script>";
-        $selected_quantity = $_POST['quantity_amount'];
-        $prodid = $_POST['prodid'];
-        $cartContent_array[$prodid]['quantity'] = $selected_quantity;
-        $cartContent_array[$prodid]['lastprice'] = $product_price * $selected_quantity;
-        $selected_quantity = $_POST['quantity_amount'];
-        setcookie("cartContent", ($cartContent_array), time() + 86400, '/');
-    }
-}
-
 
 
 // displays cartContent to cart.php
@@ -154,16 +141,17 @@ function displayCartContent()
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_price</td>
         <td>
 
-        <select name="select_quantity" id="select_quantity" onchange="updateTotalPrice(this, $product_price, $totalPrice_of_all_product)">
+        <select name="select_quantity" id="select_quantity" onchange="updateTotalPrice(this, $product_price, $totalPrice_of_all_product, $product_id)">
         <option value='${cart_items_quantity}' selected>${cart_items_quantity}</option>
         <option value=2>2</option>
         <option value=3>3</option>
         <option value=4>4</option>
         <option value=5>5</option>
       </select value>
+
      <script>
         
-function updateTotalPrice(selectTag, product_price, totalPrice_of_all_product) {
+function updateTotalPrice(selectTag, product_price, totalPrice_of_all_product, product_id) {
   // get the price and quantity of the current product
   var productPrice = product_price;
   var quantity = selectTag.value;
@@ -172,8 +160,6 @@ function updateTotalPrice(selectTag, product_price, totalPrice_of_all_product) {
   // update the total price cell in the table
   var totalCell = selectTag.parentNode.parentNode.querySelector('#total_product_price');
   totalCell.innerHTML = totalPrice;
-
-  //document.getElementById("#totalPrice_of_all_product").innerHTML = "Total Price: " + totalPrice_of_all_product;
 
 const totalProductPriceCells = document.querySelectorAll("td#total_product_price");
 
@@ -184,8 +170,32 @@ totalProductPriceCells.forEach(cell => {
   total += value;
 });
 
-  document.getElementById('#totalPrice_of_all_product').innerHTML = "Total Price: " + total;
 
+
+  document.getElementById('#totalPrice_of_all_product').innerHTML = "Total Price: " + total;
+  const date = new Date();
+  date.setTime(date.getTime() +  (date.getDate() + (3 * 60 * 60 * 1000)));
+  let expires = "expires=" + date.toUTCString();
+  //expires=Thu, 01 Jan 2000 00:00:00 UTC
+
+  document.cookie = `banana=1234; expires=Thu, 01 Jan 2025 00:00:00 UTC; path=/;`;
+
+    const cDecoded = decodeURIComponent(document.cookie);
+    const cArray = cDecoded.split("; ");
+    let result = null;
+    
+    cArray.forEach(element => {
+        if(element.indexOf("cartContent") == 0){
+            result = element.substring(name.length);
+            // console.log(result);
+
+        }
+    })
+
+updateT
+
+
+     
 
 }
 </script>
