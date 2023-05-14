@@ -48,32 +48,22 @@ function add_to_cart_cookie($dlink)
 
     $cartContent_array = json_decode($cookie, true);
 
-
-
-
-    /*if ($cartContent_array['prodid'] == "1") {
-        $cartContent_array['prodid'] = "2";
-        $cartContent_JSON = json_encode($cartContent_array);
-        echo $cartContent_JSON;
-        setcookie("cartContent", $cartContent_JSON, time() + 86400, '/');
-
-    }*/
-
-
     foreach ($cartContent_array as $cartContent_id) {
 
+
         foreach ($get_all_products as $productList_id) {
-            // echo "<script> console.log(`prodid ${productList_id[0]}`);</script>";
-            // if any of the product matches with the prodid of the products in the cart
+            // if any of the product  matches with the prodid of the products in the cart
             // turn $is_in_cart to true to indicate the match
             // then grab the cart_id
-
             if (
-                isset($productList_id[0]) && isset($cartContent_id[0]) && $productList_id['prodid'] == $cartContent_id['prodid']
+                $productList_id['prodid'] == $cartContent_array['prodid']
+
             ) {
                 $is_in_cart = true;
-                $cart_id = $productList_id[0];
-                echo "<script> console.log(${cartContent_id});</script>";
+                echo "<script> console.log(`cartid ${cartContent_array['prodid']}`)</script>";
+                echo "<script> console.log(`prodid ${productList_id['prodid']}`)</script>";
+
+                echo "<script> console.log(`in cart $is_in_cart`)</script>";
 
             }
         }
@@ -81,8 +71,8 @@ function add_to_cart_cookie($dlink)
 
 
     }
-    // if prodcut is already in cart
-    if ($is_in_cart === false) {
+    // if product is already in cart
+    if ($is_in_cart == false) {
         $cartContent = array(
             "prodid" => $prodid,
             "productname" => $productname,
@@ -92,6 +82,7 @@ function add_to_cart_cookie($dlink)
             "lastprice" => $lastprice
 
         );
+        echo "<script>console.log('boo');</script>";
         $cartContentJSON = json_encode($cartContent);
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
 
@@ -100,7 +91,7 @@ function add_to_cart_cookie($dlink)
 
     } else {
         // [6] here is the $quantity column index of the array, $products_cart ( this might cause a problem later so)
-        $cartContent[$cart_id] = array(
+        $cartContent = array(
             "prodid" => $prodid,
             "productname" => $productname,
             "productdesc" => $productdesc,
@@ -109,11 +100,12 @@ function add_to_cart_cookie($dlink)
             "lastprice" => $lastprice
 
         );
+        echo "<script>console.log('baa');</script>";
         $cartContentJSON = json_encode($cartContent);
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
     }
 
-    // echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+    echo '<meta http-equiv="refresh" content="0; url=cart.php">';
 
 }
 
@@ -137,21 +129,21 @@ function delete_from_cart_cookie()
 function displayCartContent()
 {
 
-    $cartContent_array = unserialize($_COOKIE['cartContent']);
+    $cartContent_array = json_decode($_COOKIE['cartContent'], true);
     $totalPrice_of_all_product = 0;
-    foreach ($cartContent_array as $id => $in_cart) {
-        $product_id = $in_cart[0];
+    foreach ($cartContent_array as $in_cart) {
+        $product_id = $cartContent_array['prodid'];
         // product_description comes first before
         // product_name despite product_name 
         // being the first index before product_description
         // will fix this soon
-        $product_description = $in_cart[1];
-        $product_name = $in_cart[2];
-        $product_img = $in_cart[3];
-        $cart_items_quantity = $in_cart[4];
+        $product_description = $cartContent_array['productdesc'];
+        $product_name = $cartContent_array['productname'];
+        $product_img = $cartContent_array['productimage'];
+        $cart_items_quantity = $cartContent_array['quantity'];
         // product_price is the unit price or the individual price of the 
         // product
-        $product_price = $in_cart[5];
+        $product_price = $cartContent_array['lastprice'];
         // total_product_price is the unit price * the amount in the cart
         $total_product_price = $product_price * $cart_items_quantity;
 
