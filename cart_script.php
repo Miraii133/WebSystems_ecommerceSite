@@ -44,12 +44,14 @@ function add_to_cart_cookie($dlink)
     SELECT *
     FROM products";
     $get_all_products = mysqli_query($dlink, $get_all_products_query);
-    $cookie = $_COOKIE['cartContent'];
 
-    $cartContent_array = json_decode($cookie, true);
+    // checks if cartContent is already existing or not
+    // if cartContent is existing, decode it, if not, null
+    $cartContent_array = isset($_COOKIE['cartContent']) ?
+        json_decode($_COOKIE['cartContent'], true) : [];
+
 
     foreach ($cartContent_array as $cartContent_id) {
-
 
         foreach ($get_all_products as $productList_id) {
             // if any of the product  matches with the prodid of the products in the cart
@@ -57,13 +59,9 @@ function add_to_cart_cookie($dlink)
             // then grab the cart_id
             if (
                 $productList_id['prodid'] == $cartContent_array['prodid']
-
             ) {
                 $is_in_cart = true;
-                echo "<script> console.log(`cartid ${cartContent_array['prodid']}`)</script>";
-                echo "<script> console.log(`prodid ${productList_id['prodid']}`)</script>";
-
-                echo "<script> console.log(`in cart $is_in_cart`)</script>";
+                $cart_id = $productList_id['prodid'];
 
             }
         }
@@ -82,8 +80,10 @@ function add_to_cart_cookie($dlink)
             "lastprice" => $lastprice
 
         );
-        echo "<script>console.log('boo');</script>";
+
+        // $cartContentJSON = json_encode($boo);
         $cartContentJSON = json_encode($cartContent);
+        echo "<script> console.log(`baa`)</script>";
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
 
 
@@ -100,12 +100,15 @@ function add_to_cart_cookie($dlink)
             "lastprice" => $lastprice
 
         );
-        echo "<script>console.log('baa');</script>";
-        $cartContentJSON = json_encode($cartContent);
+
+        $newcartContent_array = array($cartContent, $cartContent_array);
+        print_r($newcartContent_array);
+        $cartContentJSON = json_encode($newcartContent_array);
+        // print_r($boo);
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
     }
 
-    echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+    //  echo '<meta http-equiv="refresh" content="0; url=cart.php">';
 
 }
 
@@ -131,19 +134,22 @@ function displayCartContent()
 
     $cartContent_array = json_decode($_COOKIE['cartContent'], true);
     $totalPrice_of_all_product = 0;
+
+    $counter = 0;
     foreach ($cartContent_array as $in_cart) {
-        $product_id = $cartContent_array['prodid'];
+
+        $product_id = $cartContent_array[$counter]['prodid'];
         // product_description comes first before
         // product_name despite product_name 
         // being the first index before product_description
         // will fix this soon
-        $product_description = $cartContent_array['productdesc'];
-        $product_name = $cartContent_array['productname'];
-        $product_img = $cartContent_array['productimage'];
-        $cart_items_quantity = $cartContent_array['quantity'];
+        $product_description = $cartContent_array[$counter]['productdesc'];
+        $product_name = $cartContent_array[$counter]['productname'];
+        $product_img = $cartContent_array[$counter]['productimage'];
+        $cart_items_quantity = $cartContent_array[$counter]['quantity'];
         // product_price is the unit price or the individual price of the 
         // product
-        $product_price = $cartContent_array['lastprice'];
+        $product_price = $cartContent_array[$counter]['lastprice'];
         // total_product_price is the unit price * the amount in the cart
         $total_product_price = $product_price * $cart_items_quantity;
 
@@ -206,6 +212,7 @@ HTML;
         $totalPrice_of_all_product = $totalPrice_of_all_product + $total_product_price;
 
 
+        $counter++;
     }
     $cart_bottom_part = <<<HTML
         <td id="#totalPrice_of_all_product"> Total price: $totalPrice_of_all_product</td>
