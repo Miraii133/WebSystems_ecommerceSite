@@ -46,7 +46,7 @@ function add_to_cart_cookie($dlink)
     $get_all_products = mysqli_query($dlink, $get_all_products_query);
 
     // checks if cartContent is already existing or not
-    // if cartContent is existing, decode it, if not, null
+    // if cartContent is existing, decode it, if not, empty array
     $cartContent_array = isset($_COOKIE['cartContent']) ?
         json_decode($_COOKIE['cartContent'], true) : [];
 
@@ -56,12 +56,8 @@ function add_to_cart_cookie($dlink)
         // counts all the prodid inside the cartContent cookie
         // so $prodid is looped through all of the products inside
         // the cartContent to detect duplicates.
-        // without this loop, entire product 
         $countOf_all_cartProducts = count((array) ($cartContent_array['prodid']));
         for ($i = 0; $i <= $countOf_all_cartProducts; $i++) {
-
-            //echo "<script> console.log('${prodid}'); </script>";
-            //echo "<script> console.log('${cartContent_id}'); </script>";
             if (
                 $prodid == $cartContent_id[$i]
             ) {
@@ -156,21 +152,15 @@ function displayCartContent()
     $product_name = $cartContent_array['productimage'][2];
     echo "<script> console.log(`prodname ${product_name}`); </script>";
     /* 
-    Example JSON file
-{
-"prodid": ["1","2","4"],
-"productname": ["Dog_food","Leash","Cat Food"],
-"productdesc": ["Food for dog","A tight leash","Delicious treat for your cats!"],
-"productimage": ["img\/product-4.png","img\/product-2.png","img\/product-3.png"],
-"quantity": ["5","3","100"],
-"lastprice": ["500","600","350"]}
-
+                    Example JSON file
+    {
+    "prodid": ["1","2","4"],
+    "productname": ["Dog_food","Leash","Cat Food"],
+    "productdesc": ["Food for dog","A tight leash","Delicious treat for your cats!"],
+    "productimage": ["img\/product-4.png","img\/product-2.png","img\/product-3.png"],
+    "quantity": ["5","3","100"],
+    "lastprice": ["500","600","350"]}
     */
-    // loops through all productColumns
-    //for ($i = 0; $i <= $countOf_all_productColumns; $i++) {
-    // loops through every single key and takes
-    // the keys so $product_name can use it to locate
-    // the specific key-value pairs.
 
 
     // loops through every single element in 
@@ -181,13 +171,11 @@ function displayCartContent()
             $product_name = $cartContent_array[$keys][$j];
             echo $product_name;
             echo "<script> console.log(`prodname ${product_name}`); </script>";
+
+
+
         }
     }
-
-    // if current loop is = 0 for product-id -> set to element in 0
-    // if current loop is = 1 for productname -> set to element 0
-    // if current loop is = 2 for productdesc -> set to element 0
-    //}
 
 
     /*$product_id = $in_cart[0];
@@ -205,61 +193,7 @@ function displayCartContent()
     // total_product_price is the unit price * the amount in the cart
     $total_product_price = $product_price * $cart_items_quantity;*/
 
-    $tableRowsData = <<<HTML
-    <tr> 
-        <td style="width: 0px; display:inline; margin-top:100px;">
-        <input type="checkbox" id="product_selector_checkbox" 
-        name="product_selector_checkbox" value="select_product" > </td>
-        <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> <img src="${product_img}"> </td>
-        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_name</td>
-        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_description</td>
-        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_price</td>
-        <td>
 
-        <select name="select_quantity" id="select_quantity" onchange="updateTotalPrice(this, $product_price, $totalPrice_of_all_product, $product_id)">
-        <option value='${cart_items_quantity}' selected>${cart_items_quantity}</option>
-        <option value=2>2</option>
-        <option value=3>3</option>
-        <option value=4>4</option>
-        <option value=5>5</option>
-      </select value>
-
-     <script>
-        
-function updateTotalPrice(selectTag, product_price, totalPrice_of_all_product, product_id) {
-  // get the price and quantity of the current product
-  var productPrice = product_price;
-  var quantity = selectTag.value;
-;  // calculate the new total price
-  var totalPrice = productPrice * quantity;
-  // update the total price cell in the table
-  var totalCell = selectTag.parentNode.parentNode.querySelector('#total_product_price');
-  totalCell.innerHTML = totalPrice;
-
-const totalProductPriceCells = document.querySelectorAll("td#total_product_price");
-
-// Loop through the selected elements and extract their values
-let total = 0;
-totalProductPriceCells.forEach(cell => {
-  const value = parseFloat(cell.textContent.trim());
-  total += value;
-});
-
-
-
-  document.getElementById('#totalPrice_of_all_product').innerHTML = "Total Price: " + total;
-
-}
-</script>
-    
-     
-    </td>
-        <td id="total_product_price" style="padding-left: 0px; padding-right: 0px;  padding-bottom: 100px;"> $total_product_price</td>
-        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
-       
-        <a href="cart_script.php?delete_cartContent=true&prodid=${product_id}"> DELETE </a></td>
-    </tr>
-HTML;
     echo $tableRowsData;
     $totalPrice_of_all_product = $totalPrice_of_all_product + $total_product_price;
 
