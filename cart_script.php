@@ -61,7 +61,6 @@ function add_to_cart_cookie($dlink)
                 $productList_id['prodid'] == $cartContent_array['prodid']
             ) {
                 $is_in_cart = true;
-                $cart_id = $productList_id['prodid'];
 
             }
         }
@@ -81,9 +80,8 @@ function add_to_cart_cookie($dlink)
 
         );
 
-        // $cartContentJSON = json_encode($boo);
-        $cartContentJSON = json_encode($cartContent);
-        echo "<script> console.log(`baa`)</script>";
+        $newcartContent_array = array($cartContent, $cartContent_array);
+        $cartContentJSON = json_encode($newcartContent_array);
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
 
 
@@ -102,13 +100,11 @@ function add_to_cart_cookie($dlink)
         );
 
         $newcartContent_array = array($cartContent, $cartContent_array);
-        print_r($newcartContent_array);
         $cartContentJSON = json_encode($newcartContent_array);
-        // print_r($boo);
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
     }
 
-    //  echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+    echo '<meta http-equiv="refresh" content="0; url=cart.php">';
 
 }
 
@@ -132,9 +128,22 @@ function delete_from_cart_cookie()
 function displayCartContent()
 {
 
-    $cartContent_array = json_decode($_COOKIE['cartContent'], true);
+    $cartContent_array = isset($_COOKIE['cartContent']) ?
+        json_decode($_COOKIE['cartContent'], true) : [];
     $totalPrice_of_all_product = 0;
+    /*$boo = $cartContent_array[0]["prodid"]; // Output: "4"
+    $baa = $cartContent_array[1][0]["prodid"]; // Output: "5"
+    $bee = $cartContent_array[1][1][0]["prodid"]; // Output: "1"
+    echo "<script> console.log('${boo}'); </script>";
+    echo "<script> console.log('${baa}'); </script>";
+    echo "<script> console.log('${bee}'); </script>";*/
 
+    $array = array("prodid':'4','productname':'Food for Dogg','productdesc':'Food for dog','productimage':'img\/product-3.png','quantity':'5','lastprice':'500'");
+    $array2 = array("prodid':'5','productname':'Brush','productdesc':'Food for dog','productimage':'img\/product-3.png','quantity':'5','lastprice':'500'");
+    $merged_array = array($array, $array2);
+    $boo = $cartContent_array[0]["prodid"]; // Output: "4"
+
+    $baa = $cartContent_array[1][0]["prodid"]; // Output: "5")
     $counter = 0;
     foreach ($cartContent_array as $in_cart) {
 
