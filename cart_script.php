@@ -51,10 +51,6 @@ function add_to_cart_cookie($dlink)
         json_decode($_COOKIE['cartContent'], true) : [];
 
 
-
-
-    // if prodid is in already in cart, increment it
-    // if prodid not in cart, add it
     $is_in_cart = false;
     foreach ($cartContent_array as $cartContent_id) {
         // counts all the prodid inside the cartContent cookie
@@ -147,42 +143,66 @@ function displayCartContent()
     $cartContent_array = isset($_COOKIE['cartContent']) ?
         json_decode($_COOKIE['cartContent'], true) : [];
     $totalPrice_of_all_product = 0;
-    /*$boo = $cartContent_array[0]["prodid"]; // Output: "4"
-    $baa = $cartContent_array[1][0]["prodid"]; // Output: "5"
-    $bee = $cartContent_array[1][1][0]["prodid"]; // Output: "1"
-    echo "<script> console.log('${boo}'); </script>";
-    echo "<script> console.log('${baa}'); </script>";
-    echo "<script> console.log('${bee}'); </script>";*/
-
-    /*$array = array("prodid':'4','productname':'Food for Dogg','productdesc':'Food for dog','productimage':'img\/product-3.png','quantity':'5','lastprice':'500'");
-    $array2 = array("prodid':'5','productname':'Brush','productdesc':'Food for dog','productimage':'img\/product-3.png','quantity':'5','lastprice':'500'");
-    $array3 = array("prodid':'6','productname':'Brush','productdesc':'Food for dog','productimage':'img\/product-3.png','quantity':'5','lastprice':'500'");
-    $merged_array = array_merge($array, $array2);
-    print_r($merged_array);
-    $merged_array2 = array_merge($merged_array, $array3);
-    print_r($merged_array2);*/
-    /*I$boo = $cartContent_array[0]["prodid"]; // Output: "4"
-
-    $baa = $cartContent_array[1][0]["prodid"]; // Output: "5")*/
     $counter = 0;
-    foreach ($cartContent_array as $in_cart) {
 
-        $product_id = $cartContent_array[$counter]['prodid'];
+
+    $keyOf_productColumns = array_keys($cartContent_array);
+    // retrieves the amount of columns a single
+    // product can have, such as prodid, quantity, productname, etc.
+    $countOf_all_productColumns = count($cartContent_array);
+    // retrieves the amount of all products inside a cart
+    // by using the amount of element in prodid as basis
+    $countOf_all_cartProducts = count((array) ($cartContent_array['prodid']));
+    $product_name = $cartContent_array['productimage'][2];
+    echo "<script> console.log(`prodname ${product_name}`); </script>";
+    /* 
+    Example JSON file
+{
+"prodid": ["1","2","4"],
+"productname": ["Dog_food","Leash","Cat Food"],
+"productdesc": ["Food for dog","A tight leash","Delicious treat for your cats!"],
+"productimage": ["img\/product-4.png","img\/product-2.png","img\/product-3.png"],
+"quantity": ["5","3","100"],
+"lastprice": ["500","600","350"]}
+
+    */
+    // loops through all productColumns
+    for ($i = 0; $i <= $countOf_all_productColumns; $i++) {
+        // loops through every single key and takes
+        // the keys so $product_name can use it to locate
+        // the specific key-value pairs.
+        foreach ($keyOf_productColumns as $keys) {
+            // loops through every single element in 
+            // a specific key, with the amount of loops
+            // determined by the amount of products in a cart
+            for ($j = 0; $j <= $countOf_all_cartProducts; $j++) {
+                $product_name = $cartContent_array[$keys][$j];
+                echo "<script> console.log(`prodname ${product_name}`); </script>";
+            }
+        }
+
+        // if current loop is = 0 for product-id -> set to element in 0
+        // if current loop is = 1 for productname -> set to element 0
+        // if current loop is = 2 for productdesc -> set to element 0
+    }
+
+
+    /*$product_id = $in_cart[0];
         // product_description comes first before
         // product_name despite product_name 
         // being the first index before product_description
         // will fix this soon
-        $product_description = $cartContent_array[$counter]['productdesc'];
-        $product_name = $cartContent_array[$counter]['productname'];
-        $product_img = $cartContent_array[$counter]['productimage'];
-        $cart_items_quantity = $cartContent_array[$counter]['quantity'];
-        // product_price is the unit price or the individual price of the 
-        // product
-        $product_price = $cartContent_array[$counter]['lastprice'];
-        // total_product_price is the unit price * the amount in the cart
-        $total_product_price = $product_price * $cart_items_quantity;
+        $product_description = $in_cart[1];
+        $product_name = $in_cart[2];
+        $product_img = $in_cart[3];
+        $cart_items_quantity = $in_cart[4];*/
+    // product_price is the unit price or the individual price of the 
+    // product
+    /*$product_price = $in_cart[5];
+    // total_product_price is the unit price * the amount in the cart
+    $total_product_price = $product_price * $cart_items_quantity;*/
 
-        $tableRowsData = <<<HTML
+    $tableRowsData = <<<HTML
     <tr> 
         <td style="width: 0px; display:inline; margin-top:100px;">
         <input type="checkbox" id="product_selector_checkbox" 
@@ -237,12 +257,12 @@ totalProductPriceCells.forEach(cell => {
         <a href="cart_script.php?delete_cartContent=true&prodid=${product_id}"> DELETE </a></td>
     </tr>
 HTML;
-        echo $tableRowsData;
-        $totalPrice_of_all_product = $totalPrice_of_all_product + $total_product_price;
+    echo $tableRowsData;
+    $totalPrice_of_all_product = $totalPrice_of_all_product + $total_product_price;
 
 
-        $counter++;
-    }
+    $counter++;
+
     $cart_bottom_part = <<<HTML
         <td id="#totalPrice_of_all_product"> Total price: $totalPrice_of_all_product</td>
         
