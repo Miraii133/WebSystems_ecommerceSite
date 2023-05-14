@@ -78,13 +78,17 @@ function add_to_cart_cookie($dlink)
             "lastprice" => $lastprice
 
         );
-        echo "<script> console.log('item is not in cart'); </script>";
+        /*echo "<script> console.log('item is not in cart'); </script>";
         $newcartContent_array = array_merge($cartContent, $cartContent_array);
         print_r($newcartContent_array);
         $cartContentJSON = json_encode($newcartContent_array);
+        setcookie("cartContent", $cartContentJSON, time() + 86400, '/');*/
+
+        /*print_r($cartContent_array);
+        print_r($cartContent);*/
+        $newcartContent_array = array_merge_recursive($cartContent_array, $cartContent);
+        $cartContentJSON = json_encode($newcartContent_array);
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
-
-
 
 
     } else {
@@ -99,7 +103,10 @@ function add_to_cart_cookie($dlink)
 
         );
 
+        //print_r($cartContent_array);
+        //print_r($cartContent);
         $newcartContent_array = array_merge($cartContent, $cartContent_array);
+        //print_r($newcartContent_array);
         $cartContentJSON = json_encode($newcartContent_array);
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
         echo "<script> console.log('item is in cart'); </script>";
