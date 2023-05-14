@@ -51,24 +51,23 @@ function add_to_cart_cookie($dlink)
         json_decode($_COOKIE['cartContent'], true) : [];
 
 
+
+    $is_in_cart = false;
+    // if prodid is in already in cart, increment it
+    // if prodid not in cart, add it
     foreach ($cartContent_array as $cartContent_id) {
-
-        foreach ($get_all_products as $productList_id) {
-            // if any of the product  matches with the prodid of the products in the cart
-            // turn $is_in_cart to true to indicate the match
-            // then grab the cart_id
-            if (
-                $productList_id['prodid'] == $cartContent_array['prodid']
-            ) {
-                $is_in_cart = true;
-
-            }
+        if (
+            $prodid == $cartContent_array['prodid']
+        ) {
+            $is_in_cart = true;
+            print_r($is_in_cart);
         }
 
 
 
+
     }
-    // if product is already in cart
+    // if product is not in cart
     if ($is_in_cart == false) {
         $cartContent = array(
             "prodid" => $prodid,
@@ -79,8 +78,9 @@ function add_to_cart_cookie($dlink)
             "lastprice" => $lastprice
 
         );
-
-        $newcartContent_array = array($cartContent, $cartContent_array);
+        echo "<script> console.log('item is not in cart'); </script>";
+        $newcartContent_array = array_merge($cartContent, $cartContent_array);
+        print_r($newcartContent_array);
         $cartContentJSON = json_encode($newcartContent_array);
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
 
@@ -99,12 +99,13 @@ function add_to_cart_cookie($dlink)
 
         );
 
-        $newcartContent_array = array($cartContent, $cartContent_array);
+        $newcartContent_array = array_merge($cartContent, $cartContent_array);
         $cartContentJSON = json_encode($newcartContent_array);
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
+        echo "<script> console.log('item is in cart'); </script>";
     }
 
-    echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+    //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
 
 }
 
@@ -138,12 +139,16 @@ function displayCartContent()
     echo "<script> console.log('${baa}'); </script>";
     echo "<script> console.log('${bee}'); </script>";*/
 
-    $array = array("prodid':'4','productname':'Food for Dogg','productdesc':'Food for dog','productimage':'img\/product-3.png','quantity':'5','lastprice':'500'");
+    /*$array = array("prodid':'4','productname':'Food for Dogg','productdesc':'Food for dog','productimage':'img\/product-3.png','quantity':'5','lastprice':'500'");
     $array2 = array("prodid':'5','productname':'Brush','productdesc':'Food for dog','productimage':'img\/product-3.png','quantity':'5','lastprice':'500'");
-    $merged_array = array($array, $array2);
-    $boo = $cartContent_array[0]["prodid"]; // Output: "4"
+    $array3 = array("prodid':'6','productname':'Brush','productdesc':'Food for dog','productimage':'img\/product-3.png','quantity':'5','lastprice':'500'");
+    $merged_array = array_merge($array, $array2);
+    print_r($merged_array);
+    $merged_array2 = array_merge($merged_array, $array3);
+    print_r($merged_array2);*/
+    /*I$boo = $cartContent_array[0]["prodid"]; // Output: "4"
 
-    $baa = $cartContent_array[1][0]["prodid"]; // Output: "5")
+    $baa = $cartContent_array[1][0]["prodid"]; // Output: "5")*/
     $counter = 0;
     foreach ($cartContent_array as $in_cart) {
 
