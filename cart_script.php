@@ -57,18 +57,29 @@ function add_to_cart_cookie($dlink)
     // if prodid not in cart, add it
     $is_in_cart = false;
     foreach ($cartContent_array as $cartContent_id) {
+        // counts all the prodid inside the cartContent cookie
+        // so $prodid is looped through all of the products inside
+        // the cartContent to detect duplicates.
+        // without this loop, entire product 
+        $countOf_all_cartProducts = count((array) ($cartContent_array['prodid']));
+        for ($i = 0; $i <= $countOf_all_cartProducts; $i++) {
 
-        //echo "<script> console.log('${prodid}'); </script>";
-        // echo "<script> console.log('${cartContent_id['prodid']}'); </script>";
-        if (
-            $prodid == $cartContent_array['prodid']
-        ) {
-            $is_in_cart = true;
-        } else {
-            $is_in_cart = false;
+            //echo "<script> console.log('${prodid}'); </script>";
+            //echo "<script> console.log('${cartContent_id}'); </script>";
+            if (
+                $prodid == $cartContent_id[$i]
+            ) {
+                $is_in_cart = true;
+                echo "<script> console.log('true'); </script>";
+                break 2;
+
+            } else {
+                $is_in_cart = false;
+                echo "<script> console.log('false'); </script>";
+            }
         }
-
     }
+
     // if product is not in cart
     if ($is_in_cart == false) {
         $cartContent = array(
@@ -110,7 +121,7 @@ function add_to_cart_cookie($dlink)
 
 
     }
-    echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+    echo '<meta http-equiv="refresh" content="0; url=product.php">';
 }
 
 function delete_from_cart_cookie()
