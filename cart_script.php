@@ -62,30 +62,36 @@ function add_to_cart_cookie($dlink)
 
 
     }
+    // if prodcut is already in cart
     if ($is_in_cart === false) {
-        $cartContent_array[] = [
-            $prodid,
-            $productname,
-            $productdesc,
-            $productimage,
-            $quantity,
-            $lastprice
+        $cartContent = array(
+            "prodid" => $prodid,
+            "productname" => $productname,
+            "productdesc" => $productdesc,
+            "productimage" => $productimage,
+            "quantity" => $quantity,
+            "lastprice" => $lastprice
 
-        ];
-        setcookie("cartContent", serialize($cartContent_array), time() + 86400, '/');
+        );
+        $cartContentJSON = json_encode($cartContent);
+        setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
+
+
+
+
     } else {
         // [6] here is the $quantity column index of the array, $products_cart ( this might cause a problem later so)
-        $cartContent_array[$cart_id] = [
-            $prodid,
-            $productname,
-            $productdesc,
-            $productimage,
-            $quantity + 1,
-            $lastprice
-        ];
+        $cartContent[$cart_id] = array(
+            "prodid" => $prodid,
+            "productname" => $productname,
+            "productdesc" => $productdesc,
+            "productimage" => $productimage,
+            "quantity" => $quantity + 1,
+            "lastprice" => $lastprice
 
-
-        setcookie("cartContent", serialize($cartContent_array), time() + 86400, '/');
+        );
+        $cartContentJSON = json_encode($cartContent);
+        setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
     }
 
     echo '<meta http-equiv="refresh" content="0; url=cart.php">';
@@ -173,29 +179,6 @@ totalProductPriceCells.forEach(cell => {
 
 
   document.getElementById('#totalPrice_of_all_product').innerHTML = "Total Price: " + total;
-  const date = new Date();
-  date.setTime(date.getTime() +  (date.getDate() + (3 * 60 * 60 * 1000)));
-  let expires = "expires=" + date.toUTCString();
-  //expires=Thu, 01 Jan 2000 00:00:00 UTC
-
-  document.cookie = `banana=1234; expires=Thu, 01 Jan 2025 00:00:00 UTC; path=/;`;
-
-    const cDecoded = decodeURIComponent(document.cookie);
-    const cArray = cDecoded.split("; ");
-    let result = null;
-    
-    cArray.forEach(element => {
-        if(element.indexOf("cartContent") == 0){
-            result = element.substring(name.length);
-            // console.log(result);
-
-        }
-    })
-
-updateT
-
-
-     
 
 }
 </script>
@@ -216,10 +199,25 @@ HTML;
     $cart_bottom_part = <<<HTML
         <td id="#totalPrice_of_all_product"> Total price: $totalPrice_of_all_product</td>
         
+
+         <td><button id="place_order">Place Order</button></td>
+    <script>
+        $('#place_order').click(function () {
+            product_id; // The product_id you want to match
+            quantity; // The new quantity you want to set
+
+            $.ajax({
+                type: "POST",
+                url: "update_product.php",
+                data: { product_id: product_id, new_quantity: new_quantity }
+            }).done(function (response) {
+                alert(response);
+            });
+        });
+    </script>
 HTML;
     echo $cart_bottom_part;
 
-    echo "<td> <button>Place Order</button> </td>";
 
 
 }
