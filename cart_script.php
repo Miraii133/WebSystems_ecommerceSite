@@ -167,24 +167,27 @@ function displayCartContent()
 
     */
     // loops through all productColumns
-    for ($i = 0; $i <= $countOf_all_productColumns; $i++) {
-        // loops through every single key and takes
-        // the keys so $product_name can use it to locate
-        // the specific key-value pairs.
-        foreach ($keyOf_productColumns as $keys) {
-            // loops through every single element in 
-            // a specific key, with the amount of loops
-            // determined by the amount of products in a cart
-            for ($j = 0; $j <= $countOf_all_cartProducts; $j++) {
-                $product_name = $cartContent_array[$keys][$j];
-                echo "<script> console.log(`prodname ${product_name}`); </script>";
-            }
-        }
+    //for ($i = 0; $i <= $countOf_all_productColumns; $i++) {
+    // loops through every single key and takes
+    // the keys so $product_name can use it to locate
+    // the specific key-value pairs.
 
-        // if current loop is = 0 for product-id -> set to element in 0
-        // if current loop is = 1 for productname -> set to element 0
-        // if current loop is = 2 for productdesc -> set to element 0
+
+    // loops through every single element in 
+    // a specific key, with the amount of loops
+    // determined by the amount of products in a cart
+    for ($j = 0; $j < $countOf_all_cartProducts; $j++) {
+        foreach ($keyOf_productColumns as $keys) {
+            $product_name = $cartContent_array[$keys][$j];
+            echo $product_name;
+            echo "<script> console.log(`prodname ${product_name}`); </script>";
+        }
     }
+
+    // if current loop is = 0 for product-id -> set to element in 0
+    // if current loop is = 1 for productname -> set to element 0
+    // if current loop is = 2 for productdesc -> set to element 0
+    //}
 
 
     /*$product_id = $in_cart[0];
