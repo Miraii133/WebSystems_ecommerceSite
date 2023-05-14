@@ -44,18 +44,37 @@ function add_to_cart_cookie($dlink)
     SELECT *
     FROM products";
     $get_all_products = mysqli_query($dlink, $get_all_products_query);
-    $cartContent_array = isset($_COOKIE['cartContent']) ? unserialize($_COOKIE['cartContent']) : [];
-    // loops through all cart content and gets all prodids to
-    // compare with all products prodids
-    $is_in_cart = false;
+    $cookie = $_COOKIE['cartContent'];
+
+    $cartContent_array = json_decode($cookie, true);
+
+
+
+
+    /*if ($cartContent_array['prodid'] == "1") {
+        $cartContent_array['prodid'] = "2";
+        $cartContent_JSON = json_encode($cartContent_array);
+        echo $cartContent_JSON;
+        setcookie("cartContent", $cartContent_JSON, time() + 86400, '/');
+
+    }*/
+
+
     foreach ($cartContent_array as $cartContent_id) {
+
         foreach ($get_all_products as $productList_id) {
+            // echo "<script> console.log(`prodid ${productList_id[0]}`);</script>";
             // if any of the product matches with the prodid of the products in the cart
             // turn $is_in_cart to true to indicate the match
             // then grab the cart_id
-            if (isset($productList_id[0]) && isset($cartContent_id[0]) && $productList_id[0] == $cartContent_id[0]) {
+
+            if (
+                isset($productList_id[0]) && isset($cartContent_id[0]) && $productList_id['prodid'] == $cartContent_id['prodid']
+            ) {
                 $is_in_cart = true;
                 $cart_id = $productList_id[0];
+                echo "<script> console.log(${cartContent_id});</script>";
+
             }
         }
 
@@ -94,7 +113,7 @@ function add_to_cart_cookie($dlink)
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
     }
 
-    echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+    // echo '<meta http-equiv="refresh" content="0; url=cart.php">';
 
 }
 
@@ -201,20 +220,7 @@ HTML;
         
 
          <td><button id="place_order">Place Order</button></td>
-    <script>
-        $('#place_order').click(function () {
-            product_id; // The product_id you want to match
-            quantity; // The new quantity you want to set
-
-            $.ajax({
-                type: "POST",
-                url: "update_product.php",
-                data: { product_id: product_id, new_quantity: new_quantity }
-            }).done(function (response) {
-                alert(response);
-            });
-        });
-    </script>
+    
 HTML;
     echo $cart_bottom_part;
 
