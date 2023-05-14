@@ -52,19 +52,21 @@ function add_to_cart_cookie($dlink)
 
 
 
-    $is_in_cart = false;
+
     // if prodid is in already in cart, increment it
     // if prodid not in cart, add it
+    $is_in_cart = false;
     foreach ($cartContent_array as $cartContent_id) {
+
+        //echo "<script> console.log('${prodid}'); </script>";
+        // echo "<script> console.log('${cartContent_id['prodid']}'); </script>";
         if (
             $prodid == $cartContent_array['prodid']
         ) {
             $is_in_cart = true;
-            print_r($is_in_cart);
+        } else {
+            $is_in_cart = false;
         }
-
-
-
 
     }
     // if product is not in cart
@@ -78,14 +80,7 @@ function add_to_cart_cookie($dlink)
             "lastprice" => $lastprice
 
         );
-        /*echo "<script> console.log('item is not in cart'); </script>";
-        $newcartContent_array = array_merge($cartContent, $cartContent_array);
-        print_r($newcartContent_array);
-        $cartContentJSON = json_encode($newcartContent_array);
-        setcookie("cartContent", $cartContentJSON, time() + 86400, '/');*/
-
-        /*print_r($cartContent_array);
-        print_r($cartContent);*/
+        echo "<script> console.log('item is not in cart'); </script>";
         $newcartContent_array = array_merge_recursive($cartContent_array, $cartContent);
         $cartContentJSON = json_encode($newcartContent_array);
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
@@ -105,15 +100,17 @@ function add_to_cart_cookie($dlink)
 
         //print_r($cartContent_array);
         //print_r($cartContent);
+        echo "<script> console.log('item is in cart'); </script>";
         $newcartContent_array = array_merge($cartContent, $cartContent_array);
         //print_r($newcartContent_array);
         $cartContentJSON = json_encode($newcartContent_array);
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
-        echo "<script> console.log('item is in cart'); </script>";
+
+
+
+
     }
-
-    //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
-
+    echo '<meta http-equiv="refresh" content="0; url=cart.php">';
 }
 
 function delete_from_cart_cookie()
