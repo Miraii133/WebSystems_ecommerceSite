@@ -193,7 +193,7 @@ function displayCartContent()
         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> $product_price</td>
         <td>
 
-        <select name="select_quantity" id="select_quantity" onchange="updateTotalPrice(this, $product_price, $totalPrice_of_all_product)">
+        <select name="select_quantity" id="select_quantity" onchange="updateTotalPrice(this, $product_price, $prodid, $totalPrice_of_all_product)">
         <option value='${cart_items_quantity}' selected>${cart_items_quantity}</option>
         <option value=2>2</option>
         <option value=3>3</option>
@@ -202,17 +202,17 @@ function displayCartContent()
       </select value>
      <script>
         
-function updateTotalPrice(selectTag, product_price, totalPrice_of_all_product) {
+function updateTotalPrice(selectTag, product_price, prodid, totalPrice_of_all_product) {
+
+    console.log(prodid);
   // get the price and quantity of the current product
   var productPrice = product_price;
   var quantity = selectTag.value;
-  // calculate the new total price
+  // calculate the new tot al price
   var totalPrice = productPrice * quantity;
   // update the total price cell in the table
   var totalCell = selectTag.parentNode.parentNode.querySelector('#total_product_price');
   totalCell.innerHTML = totalPrice;
-
-  //document.getElementById("#totalPrice_of_all_product").innerHTML = "Total Price: " + totalPrice_of_all_product;
 
 const totalProductPriceCells = document.querySelectorAll("td#total_product_price");
 
@@ -238,7 +238,7 @@ totalProductPriceCells.forEach(cell => {
     
     </tr>
 HTML;
-
+        $totalPrice_of_all_product += $total_product_price;
         echo $tableRowsData;
 
     }
