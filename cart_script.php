@@ -80,11 +80,10 @@ function add_to_cart_cookie($dlink)
             "productname" => $productname,
             "productdesc" => $productdesc,
             "productimage" => $productimage,
-            "quantity" => "1",
+            "quantity" => $quantity,
             "lastprice" => $lastprice
 
         );
-
         echo "<script> console.log('item is not in cart'); </script>";
         $newcartContent_array = array_merge_recursive($cartContent_array, $cartContent);
         $cartContentJSON = json_encode($newcartContent_array);
@@ -98,7 +97,7 @@ function add_to_cart_cookie($dlink)
             "productname" => $productname,
             "productdesc" => $productdesc,
             "productimage" => $productimage,
-            "quantity" => "1",
+            "quantity" => $quantity + 1,
             "lastprice" => $lastprice
 
         );
@@ -112,7 +111,7 @@ function add_to_cart_cookie($dlink)
 
 
     }
-    //echo '<meta http-equiv="refresh" content="0; url=product.php">';
+    echo '<meta http-equiv="refresh" content="0; url=product.php">';
 }
 
 function delete_from_cart_cookie()
@@ -137,13 +136,9 @@ function displayCartContent()
 
     $cartContent_array = isset($_COOKIE['cartContent']) ?
         json_decode($_COOKIE['cartContent'], true) : [];
-
     $totalPrice_of_all_product = 0;
 
-    print_r($cartContent_array['prodid'][0]);
-    // retrieves all of the columns in the cart
-    // so it can be used to dynamically search
-    // the arrays in $cartContent_array
+
     $keyOf_productColumns = array_keys($cartContent_array);
     // retrieves the amount of all products inside a cart
     // by using the amount of element in prodid as basis
@@ -163,14 +158,15 @@ function displayCartContent()
     // loops through every single element in 
     // a specific key, with the amount of loops
     // determined by the amount of products in a cart
+    $counter = 0;
+
     for ($j = 0; $j < $countOf_all_cartProducts; $j++) {
         // loops through all of keys, get the value in that key, and then
         // store it into an array
-
         $values_in_cart_array = array();
         foreach ($keyOf_productColumns as $keys) {
-            $value_in_column = $cartContent_array[$keys][$j];
 
+            $value_in_column = $cartContent_array[$keys][$j];
             array_push($values_in_cart_array, $value_in_column);
         }
         $prodid = $values_in_cart_array[0];
@@ -278,6 +274,9 @@ HTML;
         $totalPrice_of_all_product += $total_product_price;
         echo $tableRowsData;
 
+        // increments counter so loop can
+        // proceed to the next column/product to display
+        //$counter++;
     }
 
     $cart_bottom_part = <<<HTML
@@ -299,15 +298,23 @@ function processPlaceOrder($dlink)
     $cartContent_array = isset($_COOKIE['cartContent']) ?
         json_decode($_COOKIE['cartContent'], true) : [];
     $countOf_cartContent_products = sizeof($cartContent_array['prodid']);
+
     for ($i = 0; $i <= $countOf_cartContent_products; $i++) {
         $prodid = $cartContent_array['prodid'][$i];
-        $quantity = $cartContent_array['quantity'][$i];
+        $cartContent_quantity = $cartContent_array['quantity'][$i];
+        $getCurrent_productQuantity_sql = "
+        SELECT quantity FROM products WHERE prodid='$prodid';
+        ";
+        $current_productQuantity = mysqli_query($dlink, $getCurrent_productQuantity_sql);
+        mysqli_query($dlink, $getCurrent_productQuantity_sql);
+
+        $new_productQuantity = $current_productQuantity - $cartContent_quantity;
+        echo $new_productQuantity;
         $insertQuery_sql = "
         UPDATE products
-        SET quantity='${quantity}'
+        SET quantity='${new_productQuantity}'
         WHERE prodid='$prodid';
         ";
-        echo $insertQuery_sql;
         mysqli_query($dlink, $insertQuery_sql);
     }
 }
