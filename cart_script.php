@@ -57,7 +57,7 @@ function add_to_cart_cookie($dlink)
         // so $prodid is looped through all of the products inside
         // the cartContent to detect duplicates.
         $countOf_all_cartProducts = count((array) ($cartContent_array['prodid']));
-        for ($i = 0; $i <= $countOf_all_cartProducts; $i++) {
+        for ($i = 0; $i < $countOf_all_cartProducts; $i++) {
             if (
                 $prodid == $cartContent_id[$i]
             ) {
@@ -113,7 +113,7 @@ function add_to_cart_cookie($dlink)
 
 
     }
-    echo '<meta http-equiv="refresh" content="0; url=product.php">';
+    //echo '<meta http-equiv="refresh" content="0; url=product.php">';
 }
 
 function delete_from_cart_cookie()
