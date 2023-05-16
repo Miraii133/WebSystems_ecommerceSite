@@ -68,6 +68,7 @@ function add_to_cart_cookie($dlink)
             } else {
                 $is_in_cart = false;
                 echo "<script> console.log('false'); </script>";
+                //      echo "<script> console.log($cartContent_id[$i])</script>";
             }
         }
     }
@@ -100,9 +101,6 @@ function add_to_cart_cookie($dlink)
             "lastprice" => $lastprice
 
         );
-
-        //print_r($cartContent_array);
-        //print_r($cartContent);
         echo "<script> console.log('item is in cart'); </script>";
         $newcartContent_array = array_merge($cartContent, $cartContent_array);
         //print_r($newcartContent_array);
@@ -139,7 +137,6 @@ function displayCartContent()
     $cartContent_array = isset($_COOKIE['cartContent']) ?
         json_decode($_COOKIE['cartContent'], true) : [];
     $totalPrice_of_all_product = 0;
-    $counter = 0;
 
 
     $keyOf_productColumns = array_keys($cartContent_array);
@@ -181,7 +178,6 @@ function displayCartContent()
         $product_price = $values_in_cart_array[5];
 
         $total_product_price = $product_price * $cart_items_quantity;
-        //$totalPrice_of_all_product = $totalPrice_of_all_product + $total_product_price;
         $tableRowsData = <<<HTML
     <tr> 
         <td style="width: 0px; display:inline; margin-top:100px;">
@@ -201,10 +197,44 @@ function displayCartContent()
         <option value=5>5</option>
       </select value>
      <script>
+
+// updates cookies to new value in quantity
+function updateCookieToNewQuantity(prodid, quantity){
+
+var cartContent = document.cookie.replace(/(?:(?:^|.*;\s*)cartContent\s*=\s*([^;]*).*$)|^.*$/, "$1");
+var decodedCookieValue = decodeURIComponent(cartContent);
+
+const parsedCookie = JSON.parse(decodedCookieValue);
+let indexCounter = 0;
+let indexOfProdid = null;
+
+// loops through the entire prodid array
+// to get the index of the matching prodid in the array.
+// this is so function will know
+// which index in the array parsedCookie to overwrite
+// when a new quantity is selected by user.
+for (const index in parsedCookie['prodid']) {
+  if (parsedCookie['prodid'][indexCounter] == prodid) {
+    indexOfProdId = index;
+    break;
+  }
+  // increments to scan entire array elements
+  // in the prodid
+  indexCounter++;
+}
+
+parsedCookie["quantity"][indexOfProdId] = quantity;
+let stringify_parsedCookie = JSON.stringify(parsedCookie);
+let date = new Date();
+date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
+const expires = "expires=" + date.toUTCString();
+document.cookie = "cartContent" + "=" + stringify_parsedCookie + "; " + expires + "; path=/";
+console.log("boo");
+}
+
         
 function updateTotalPrice(selectTag, product_price, prodid, totalPrice_of_all_product) {
 
-    console.log(prodid);
   // get the price and quantity of the current product
   var productPrice = product_price;
   var quantity = selectTag.value;
@@ -225,6 +255,7 @@ totalProductPriceCells.forEach(cell => {
 
   document.getElementById('#totalPrice_of_all_product').innerHTML = "Total Price: " + total;
 
+  updateCookieToNewQuantity(prodid, quantity);
 
 }
 </script>
