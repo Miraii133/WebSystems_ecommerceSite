@@ -177,19 +177,18 @@ function displayCartContent()
             }
 
         }
-        $prodid = $values_in_cart_array[0];
+        $prodid = $values_in_cart_array[0][$j];
         // for some reason product_description comes first before product_name,
         // no idea why, but will take care of this later
-        $product_name = $values_in_cart_array[2];
-        $product_description = $values_in_cart_array[1];
-        $product_img = $values_in_cart_array[3];
-        $cart_items_quantity = $values_in_cart_array[4];
+        $product_name = $values_in_cart_array[2][$j];
+        $product_description = $values_in_cart_array[1][$j];
+        $product_img = $values_in_cart_array[3][$j];
+        $cart_items_quantity = $values_in_cart_array[4][$j];
         // product_price is the unit price or the individual price of the 
         // product
-        $product_price = $values_in_cart_array[5];
-        print_r($product_price);
+        $product_price = $values_in_cart_array[5][$j];
 
-        //  $total_product_price = $product_price * $cart_items_quantity;
+        $total_product_price = $product_price * $cart_items_quantity;
         $tableRowsData = <<<HTML
     <tr> 
         <td style="width: 0px; display:inline; margin-top:100px;">
