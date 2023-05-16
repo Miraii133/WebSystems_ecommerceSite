@@ -160,14 +160,22 @@ function displayCartContent()
     // determined by the amount of products in a cart
     $counter = 0;
 
+
     for ($j = 0; $j < $countOf_all_cartProducts; $j++) {
         // loops through all of keys, get the value in that key, and then
         // store it into an array
         $values_in_cart_array = array();
-        foreach ($keyOf_productColumns as $keys) {
 
-            $value_in_column = $cartContent_array[$keys][$j];
-            array_push($values_in_cart_array, $value_in_column);
+        foreach ($keyOf_productColumns as $keys) {
+            //print_r($j);
+            if ($j == 0) {
+                $value_in_column = $cartContent_array[$keys];
+                array_push($values_in_cart_array, $value_in_column);
+            } else {
+                $value_in_column = $cartContent_array[$keys][$j];
+                array_push($values_in_cart_array, $value_in_column);
+            }
+
         }
         $prodid = $values_in_cart_array[0];
         // for some reason product_description comes first before product_name,
@@ -179,8 +187,9 @@ function displayCartContent()
         // product_price is the unit price or the individual price of the 
         // product
         $product_price = $values_in_cart_array[5];
+        print_r($product_price);
 
-        $total_product_price = $product_price * $cart_items_quantity;
+        //  $total_product_price = $product_price * $cart_items_quantity;
         $tableRowsData = <<<HTML
     <tr> 
         <td style="width: 0px; display:inline; margin-top:100px;">
