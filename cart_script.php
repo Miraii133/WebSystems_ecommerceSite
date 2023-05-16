@@ -80,10 +80,11 @@ function add_to_cart_cookie($dlink)
             "productname" => $productname,
             "productdesc" => $productdesc,
             "productimage" => $productimage,
-            "quantity" => $quantity,
+            "quantity" => "1",
             "lastprice" => $lastprice
 
         );
+
         echo "<script> console.log('item is not in cart'); </script>";
         $newcartContent_array = array_merge_recursive($cartContent_array, $cartContent);
         $cartContentJSON = json_encode($newcartContent_array);
@@ -97,7 +98,7 @@ function add_to_cart_cookie($dlink)
             "productname" => $productname,
             "productdesc" => $productdesc,
             "productimage" => $productimage,
-            "quantity" => $quantity + 1,
+            "quantity" => "1",
             "lastprice" => $lastprice
 
         );
@@ -136,9 +137,13 @@ function displayCartContent()
 
     $cartContent_array = isset($_COOKIE['cartContent']) ?
         json_decode($_COOKIE['cartContent'], true) : [];
+
     $totalPrice_of_all_product = 0;
 
-
+    print_r($cartContent_array['prodid'][0]);
+    // retrieves all of the columns in the cart
+    // so it can be used to dynamically search
+    // the arrays in $cartContent_array
     $keyOf_productColumns = array_keys($cartContent_array);
     // retrieves the amount of all products inside a cart
     // by using the amount of element in prodid as basis
@@ -161,9 +166,11 @@ function displayCartContent()
     for ($j = 0; $j < $countOf_all_cartProducts; $j++) {
         // loops through all of keys, get the value in that key, and then
         // store it into an array
+
         $values_in_cart_array = array();
         foreach ($keyOf_productColumns as $keys) {
             $value_in_column = $cartContent_array[$keys][$j];
+
             array_push($values_in_cart_array, $value_in_column);
         }
         $prodid = $values_in_cart_array[0];
@@ -229,7 +236,6 @@ let date = new Date();
 date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
 const expires = "expires=" + date.toUTCString();
 document.cookie = "cartContent" + "=" + stringify_parsedCookie + "; " + expires + "; path=/";
-console.log("boo");
 }
 
         
@@ -278,14 +284,34 @@ HTML;
         <td id="#totalPrice_of_all_product"> Total price: $totalPrice_of_all_product</td>
         
 
-         <td><button id="place_order">Place Order</button></td>
+    <form method="post">
+        <td><input type="submit" name="place_order" value="place_order"/> </td>
+    </form>
     
 HTML;
     echo $cart_bottom_part;
-
-
-
 }
+
+
+
+function processPlaceOrder($dlink)
+{
+    $cartContent_array = isset($_COOKIE['cartContent']) ?
+        json_decode($_COOKIE['cartContent'], true) : [];
+    $countOf_cartContent_products = sizeof($cartContent_array['prodid']);
+    for ($i = 0; $i <= $countOf_cartContent_products; $i++) {
+        $prodid = $cartContent_array['prodid'][$i];
+        $quantity = $cartContent_array['quantity'][$i];
+        $insertQuery_sql = "
+        UPDATE products
+        SET quantity='${quantity}'
+        WHERE prodid='$prodid';
+        ";
+        echo $insertQuery_sql;
+        mysqli_query($dlink, $insertQuery_sql);
+    }
+}
+
 
 $dlink = connectToDB();
 if (isset($_REQUEST['add_to_cart']) && $_REQUEST['add_to_cart'] == 'true') {
@@ -298,6 +324,8 @@ if (isset($_REQUEST['add_to_cart']) && $_REQUEST['add_to_cart'] == 'true') {
 } else if (isset($_REQUEST['delete_cartContent']) && $_REQUEST['delete_cartContent'] == 'true') {
     delete_from_cart_cookie();
 
+} else if (isset($_POST['place_order'])) {
+    processPlaceOrder($dlink);
 } else {
     displayCartContent();
 }
