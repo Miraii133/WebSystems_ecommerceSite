@@ -110,53 +110,18 @@ function add_to_cart_cookie($dlink)
 
 function delete_from_cart_cookie()
 {
-    $cartContent_array = isset($_COOKIE['cartContent']) ?
-        json_decode($_COOKIE['cartContent'], true) : [];
-    if (isset($_GET['prodid'])) {
-        $remove_from_cart_prodid = $_GET['prodid'];
-    }
-    print_r($cartContent_array['prodid']);
-
-
-    $indexCounter = 0;
-    $indexOfProdId_to_delete = null;
-    // retrieves the index from cartContent_array that matches with the
-    // prodid that the user wants to delete
-    // this is so the function knows which indexes to remove
-    // as the cartContent is a merged-array
-
-    for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
-        if ($cartContent_array['prodid'][$i] == $remove_from_cart_prodid) {
-            $indexOfProdId_to_delete = $i;
-            echo $indexOfProdId_to_delete;
-            break;
+    $cartContent_array = unserialize($_COOKIE['cartContent']);
+    $remove_from_cart_prodid = $_REQUEST["prodid"] ?? 0;
+    foreach ($cartContent_array as $key => $product) {
+        if ($remove_from_cart_prodid == $product[0]) {
+            unset($cartContent_array[$key]);
+            setcookie("cartContent", serialize($cartContent_array), time() + 86400, '/');
+            echo '<meta http-equiv="refresh" content="0; url=cart.php">';
         }
         // increments to scan entire array elements
         // in the prodid
 
     }
-
-    $prodid_keys = array_keys($cartContent_array['prodid']);
-    // scans entire cartContent_array's prodid based on the index
-    // and then deletes it
-    print_r($cartContent_array);
-    for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
-        if ($remove_from_cart_prodid === $cartContent_array['prodid'][$prodid_keys[0]]) {
-            print_r($cartContent_array['prodid'][$prodid_keys[0]]);
-            unset($cartContent_array['prodid'][$prodid_keys[0]]);
-            $cartContent_array['prodid'] = array_values($cartContent_array['prodid']);
-            $cartContentJSON = json_encode($cartContent_array);
-            setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
-            //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
-        }
-    }
-
-
-
-
-
-
-    // print_r($cartContent_array);
 }
 
 
