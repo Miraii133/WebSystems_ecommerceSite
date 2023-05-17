@@ -116,54 +116,42 @@ function delete_from_cart_cookie()
         $remove_from_cart_prodid = $_GET['prodid'];
     }
 
-    /*
-    let indexCounter = 0;
-    let indexOfProdid = null;
-
-    // loops through the entire prodid array
-    // to get the index of the matching prodid in the array.
-    // this is so function will know
-    // which index in the array parsedCookie to overwrite
-    // when a new quantity is selected by user.
-    for (const index in parsedCookie['prodid']) {
-      if (parsedCookie['prodid'][indexCounter] == prodid) {
-        indexOfProdId = index;
-        break;
-      }
-      // increments to scan entire array elements
-      // in the prodid
-      indexCounter++;
-    }
-    */
 
     $indexCounter = 0;
     $indexOfProdId_to_delete = null;
-    echo $cartContent_array['prodid'][0];
-    echo $remove_from_cart_prodid;
-    foreach ($cartContent_array as $index) {
-        if ($cartContent_array['prodid'] == $remove_from_cart_prodid) {
-            $indexOfProdId_to_delete = $indexCounter;
-            echo "boo";
+    // retrieves the index from cartContent_array that matches with the
+    // prodid that the user wants to delete
+    // this is so the function knows which indexes to remove
+    // as the cartContent is a merged-array
+
+    for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
+        if ($cartContent_array['prodid'][$i] == $remove_from_cart_prodid) {
+            $indexOfProdId_to_delete = $i;
+            echo $indexOfProdId_to_delete;
             break;
         }
         // increments to scan entire array elements
         // in the prodid
-        $indexCounter++;
 
     }
 
 
-    foreach ($cartContent_array as $cartContent) {
-        //print_r($indexOfProdId_to_delete);
-
-        if ($remove_from_cart_prodid === $cartContent_array['prodid']) {
-            //unset($cartContent_array['prodid'][$indexOfProdId_to_delete]);
+    // scans entire cartContent_array's prodid based on the index
+    // and then deletes it
+    for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
+        if ($remove_from_cart_prodid === $cartContent_array['prodid'][$i]) {
+            unset($cartContent_array['prodid']);
             $cartContentJSON = json_encode($cartContent_array);
             setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
             //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
         }
-
     }
+
+
+
+
+
+
     // print_r($cartContent_array);
 }
 
@@ -208,6 +196,8 @@ function displayCartContent()
             // because array_push does not turn 
             // array into 2d array
             // until the cart has 2 or more products
+            // as such, adding [$j] when the cart is not yet
+            // a 2d array causes error
             if ($countOf_all_cartProducts == 1) {
                 $value_in_column = $cartContent_array[$keys];
                 array_push($values_in_cart_array, $value_in_column);
@@ -229,20 +219,14 @@ function displayCartContent()
             $product_description = $values_in_cart_array[1];
             $product_img = $values_in_cart_array[3];
             $cart_items_quantity = $values_in_cart_array[4];
-            // product_price is the unit price or the individual price of the 
-            // product
             $product_price = $values_in_cart_array[5];
             (int) $total_product_price = (int) $product_price * (int) $cart_items_quantity;
         } else {
             $prodid = $values_in_cart_array[0];
-            // for some reason product_description comes first before product_name,
-            // no idea why, but will take care of this later
             $product_name = $values_in_cart_array[2];
             $product_description = $values_in_cart_array[1];
             $product_img = $values_in_cart_array[3];
             $cart_items_quantity = $values_in_cart_array[4];
-            // product_price is the unit price or the individual price of the 
-            // product
             $product_price = $values_in_cart_array[5];
             (int) $total_product_price = (int) $product_price * (int) $cart_items_quantity;
         }
