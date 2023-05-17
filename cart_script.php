@@ -116,19 +116,55 @@ function delete_from_cart_cookie()
         $remove_from_cart_prodid = $_GET['prodid'];
     }
 
-    foreach ($cartContent_array as $cartContent) {
-        echo gettype($cartContent);
-        echo $cartContent_array[0];
-        echo "---";
-        if ($remove_from_cart_prodid == $cartContent[0]) {
+    /*
+    let indexCounter = 0;
+    let indexOfProdid = null;
+
+    // loops through the entire prodid array
+    // to get the index of the matching prodid in the array.
+    // this is so function will know
+    // which index in the array parsedCookie to overwrite
+    // when a new quantity is selected by user.
+    for (const index in parsedCookie['prodid']) {
+      if (parsedCookie['prodid'][indexCounter] == prodid) {
+        indexOfProdId = index;
+        break;
+      }
+      // increments to scan entire array elements
+      // in the prodid
+      indexCounter++;
+    }
+    */
+
+    $indexCounter = 0;
+    $indexOfProdId_to_delete = null;
+    echo $cartContent_array['prodid'][0];
+    echo $remove_from_cart_prodid;
+    foreach ($cartContent_array as $index) {
+        if ($cartContent_array['prodid'] == $remove_from_cart_prodid) {
+            $indexOfProdId_to_delete = $indexCounter;
             echo "boo";
-            unset($cartContent_array[$key]);
+            break;
+        }
+        // increments to scan entire array elements
+        // in the prodid
+        $indexCounter++;
+
+    }
+
+
+    foreach ($cartContent_array as $cartContent) {
+        //print_r($indexOfProdId_to_delete);
+
+        if ($remove_from_cart_prodid === $cartContent_array['prodid']) {
+            //unset($cartContent_array['prodid'][$indexOfProdId_to_delete]);
             $cartContentJSON = json_encode($cartContent_array);
             setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
             //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
         }
 
     }
+    // print_r($cartContent_array);
 }
 
 
