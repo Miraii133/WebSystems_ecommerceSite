@@ -40,10 +40,6 @@ function add_to_cart_cookie($dlink)
     }
 
     // loop through all products list and see if it matches any of the $prodid
-    $get_all_products_query = "
-    SELECT *
-    FROM products";
-    $get_all_products = mysqli_query($dlink, $get_all_products_query);
 
     // checks if cartContent is already existing or not
     // if cartContent is existing, decode it, if not, empty array
@@ -91,7 +87,6 @@ function add_to_cart_cookie($dlink)
 
 
     } else {
-        // [6] here is the $quantity column index of the array, $products_cart ( this might cause a problem later so)
         $cartContent = array(
             "prodid" => $prodid,
             "productname" => $productname,
@@ -103,7 +98,6 @@ function add_to_cart_cookie($dlink)
         );
         echo "<script> console.log('item is in cart'); </script>";
         $newcartContent_array = array_merge($cartContent, $cartContent_array);
-        //print_r($newcartContent_array);
         $cartContentJSON = json_encode($newcartContent_array);
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
 
@@ -116,16 +110,53 @@ function add_to_cart_cookie($dlink)
 
 function delete_from_cart_cookie()
 {
-    $cartContent_array = unserialize($_COOKIE['cartContent']);
-    $remove_from_cart_prodid = $_REQUEST["prodid"] ?? 0;
-    foreach ($cartContent_array as $key => $product) {
-        if ($remove_from_cart_prodid == $product[0]) {
-            unset($cartContent_array[$key]);
-            setcookie("cartContent", serialize($cartContent_array), time() + 86400, '/');
-            echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+    $cartContent_array = isset($_COOKIE['cartContent']) ?
+        json_decode($_COOKIE['cartContent'], true) : [];
+    if (isset($_GET['prodid'])) {
+        $remove_from_cart_prodid = $_GET['prodid'];
+    }
+    print_r($cartContent_array['prodid']);
+
+
+    $indexCounter = 0;
+    $indexOfProdId_to_delete = null;
+    // retrieves the index from cartContent_array that matches with the
+    // prodid that the user wants to delete
+    // this is so the function knows which indexes to remove
+    // as the cartContent is a merged-array
+
+    for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
+        if ($cartContent_array['prodid'][$i] == $remove_from_cart_prodid) {
+            $indexOfProdId_to_delete = $i;
+            echo $indexOfProdId_to_delete;
+            break;
         }
+        // increments to scan entire array elements
+        // in the prodid
 
     }
+
+    $prodid_keys = array_keys($cartContent_array['prodid']);
+    // scans entire cartContent_array's prodid based on the index
+    // and then deletes it
+    print_r($cartContent_array);
+    for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
+        if ($remove_from_cart_prodid === $cartContent_array['prodid'][$prodid_keys[0]]) {
+            print_r($cartContent_array['prodid'][$prodid_keys[0]]);
+            unset($cartContent_array['prodid'][$prodid_keys[0]]);
+            $cartContent_array['prodid'] = array_values($cartContent_array['prodid']);
+            $cartContentJSON = json_encode($cartContent_array);
+            setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
+            //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+        }
+    }
+
+
+
+
+
+
+    // print_r($cartContent_array);
 }
 
 
@@ -158,37 +189,55 @@ function displayCartContent()
     // loops through every single element in 
     // a specific key, with the amount of loops
     // determined by the amount of products in a cart
-    $counter = 0;
-
 
     for ($j = 0; $j < $countOf_all_cartProducts; $j++) {
         // loops through all of keys, get the value in that key, and then
-        // store it into an array
+        // store it into this array
         $values_in_cart_array = array();
 
         foreach ($keyOf_productColumns as $keys) {
-            //print_r($j);
-            if ($j == 0) {
+            // checks if there are only 1 product in ccart
+            // because array_push does not turn 
+            // array into 2d array
+            // until the cart has 2 or more products
+            // as such, adding [$j] when the cart is not yet
+            // a 2d array causes error
+            if ($countOf_all_cartProducts == 1) {
                 $value_in_column = $cartContent_array[$keys];
                 array_push($values_in_cart_array, $value_in_column);
+
             } else {
                 $value_in_column = $cartContent_array[$keys][$j];
                 array_push($values_in_cart_array, $value_in_column);
             }
 
         }
-        $prodid = $values_in_cart_array[0][$j];
-        // for some reason product_description comes first before product_name,
-        // no idea why, but will take care of this later
-        $product_name = $values_in_cart_array[2][$j];
-        $product_description = $values_in_cart_array[1][$j];
-        $product_img = $values_in_cart_array[3][$j];
-        $cart_items_quantity = $values_in_cart_array[4][$j];
-        // product_price is the unit price or the individual price of the 
-        // product
-        $product_price = $values_in_cart_array[5][$j];
 
-        $total_product_price = $product_price * $cart_items_quantity;
+        if ($countOf_all_cartProducts == 1) {
+            // 0 = prodid, 1 = product_description, 2 = product_name, 3 = product_img
+            // 4 = cart_items_quantity, 5 = product_price
+            $prodid = $values_in_cart_array[0];
+            // for some reason product_description comes first before product_name,
+            // no idea why, but will take care of this later
+            $product_name = $values_in_cart_array[2];
+            $product_description = $values_in_cart_array[1];
+            $product_img = $values_in_cart_array[3];
+            $cart_items_quantity = $values_in_cart_array[4];
+            $product_price = $values_in_cart_array[5];
+            (int) $total_product_price = (int) $product_price * (int) $cart_items_quantity;
+        } else {
+            $prodid = $values_in_cart_array[0];
+            $product_name = $values_in_cart_array[2];
+            $product_description = $values_in_cart_array[1];
+            $product_img = $values_in_cart_array[3];
+            $cart_items_quantity = $values_in_cart_array[4];
+            $product_price = $values_in_cart_array[5];
+            (int) $total_product_price = (int) $product_price * (int) $cart_items_quantity;
+        }
+
+
+
+
         $tableRowsData = <<<HTML
     <tr> 
         <td style="width: 0px; display:inline; margin-top:100px;">
@@ -285,6 +334,8 @@ HTML;
         // increments counter so loop can
         // proceed to the next column/product to display
         //$counter++;
+
+
     }
 
     $cart_bottom_part = <<<HTML
