@@ -110,6 +110,8 @@ function add_to_cart_cookie($dlink)
 
 function delete_from_cart_cookie()
 {
+
+
     $cartContent_array = isset($_COOKIE['cartContent']) ?
         json_decode($_COOKIE['cartContent'], true) : [];
     if (isset($_GET['prodid'])) {
@@ -127,7 +129,6 @@ function delete_from_cart_cookie()
     for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
         if ($cartContent_array['prodid'][$i] == $remove_from_cart_prodid) {
             $indexOfProdId_to_delete = $i;
-            echo $indexOfProdId_to_delete;
             break;
         }
         // increments to scan entire array elements
@@ -139,20 +140,26 @@ function delete_from_cart_cookie()
     // scans entire cartContent_array's prodid based on the index
     // and then deletes it
     for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
+        print_r($cartContent_array['prodid'][$i]);
         if ($remove_from_cart_prodid === $cartContent_array['prodid'][$i]) {
-            unset($cartContent_array['prodid']);
-            $cartContentJSON = json_encode($cartContent_array);
+            unset($cartContent_array['prodid'][$i]);
+            unset($cartContent_array['productname'][$i]);
+            unset($cartContent_array['productdesc'][$i]);
+            unset($cartContent_array['productimage'][$i]);
+            unset($cartContent_array['quantity'][$i]);
+            unset($cartContent_array['lastprice'][$i]);
+            $reindexed_cartContent_array = array_map("array_values", $cartContent_array);
+            // converted reindexed_cartContent_array back to 1D
+            // array because when you only have 1 product, the array is
+            // still a 1d array until a new product added.
+
+            $cartContentJSON = json_encode($reindexed_cartContent_array);
             setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
             //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
         }
     }
 
 
-
-
-
-
-    // print_r($cartContent_array);
 }
 
 
@@ -171,22 +178,11 @@ function displayCartContent()
     // by using the amount of element in prodid as basis
     //!! Note: can replace with sizeof() function instead
     $countOf_all_cartProducts = count((array) ($cartContent_array['prodid']));
-    /* 
-                    Example JSON file
-    {
-    "prodid": ["1","2","4"],
-    "productname": ["Dog_food","Leash","Cat Food"],
-    "productdesc": ["Food for dog","A tight leash","Delicious treat for your cats!"],
-    "productimage": ["img\/product-4.png","img\/product-2.png","img\/product-3.png"],
-    "quantity": ["5","3","100"],
-    "lastprice": ["500","600","350"]}
-    */
 
 
     // loops through every single element in 
     // a specific key, with the amount of loops
     // determined by the amount of products in a cart
-
     for ($j = 0; $j < $countOf_all_cartProducts; $j++) {
         // loops through all of keys, get the value in that key, and then
         // store it into this array
@@ -210,6 +206,8 @@ function displayCartContent()
 
         }
 
+        // assigns the variables to be used by the actual HTML tags 
+        // determined by the amount of products in the cart
         if ($countOf_all_cartProducts == 1) {
             // 0 = prodid, 1 = product_description, 2 = product_name, 3 = product_img
             // 4 = cart_items_quantity, 5 = product_price
