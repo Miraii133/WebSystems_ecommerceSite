@@ -147,10 +147,8 @@ function delete_from_cart_cookie()
         unset($cartContent_array['productimage']);
         unset($cartContent_array['quantity']);
         unset($cartContent_array['lastprice']);
+        // reindexes cartContent_array after deleting one product
         $reindexed_cartContent_array = array_map("array_values", $cartContent_array);
-        // converts reindexed_cartContent_array back to 1D
-        // array because when you only have 1 product, the array is
-        // still a 1d array until a new product added.
         $cartContentJSON = json_encode($reindexed_cartContent_array);
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
         echo '<meta http-equiv="refresh" content="0; url=cart.php">';
@@ -160,8 +158,6 @@ function delete_from_cart_cookie()
         // use the index to unset the specific element
         // of that column.
     } else {
-
-
         // Find the index of the element to be removed
         $key = array_search($remove_from_cart_prodid, $cartContent_array['prodid']);
 
@@ -393,25 +389,38 @@ function processPlaceOrder($dlink)
 {
     $cartContent_array = isset($_COOKIE['cartContent']) ?
         json_decode($_COOKIE['cartContent'], true) : [];
-    $countOf_cartContent_products = sizeof($cartContent_array['prodid']);
 
-    for ($i = 0; $i <= $countOf_cartContent_products; $i++) {
+    if (!is_array($cartContent_array['prodid'])) {
+        $countOf_cartContent_products = 0;
+    } else {
+        $countOf_cartContent_products = sizeof($cartContent_array);
+    }
+
+
+
+    for ($i = 0; $i < $countOf_cartContent_products; $i++) {
         $prodid = $cartContent_array['prodid'][$i];
         $cartContent_quantity = $cartContent_array['quantity'][$i];
         $getCurrent_productQuantity_sql = "
-        SELECT quantity FROM products WHERE prodid='$prodid';
-        ";
+                SELECT quantity FROM products WHERE prodid='$prodid';
+                ";
         $current_productQuantity = mysqli_query($dlink, $getCurrent_productQuantity_sql);
-        mysqli_query($dlink, $getCurrent_productQuantity_sql);
+        // loops through entire quantity of all product quantity
+        // from the database
+        // and then substracts the quantity amount from database
+        // to the quantity selected by user
+        while ($value_of_productQuantity = $current_productQuantity->fetch_assoc()) {
+            $new_productQuantity = $value_of_productQuantity['quantity'] - $cartContent_quantity;
+            print_r($new_productQuantity);
+            $insertQuery_sql = "
+             UPDATE products
+             SET quantity='${new_productQuantity}'
+             WHERE prodid='$prodid';
+             ";
+            mysqli_query($dlink, $insertQuery_sql);
+        }
+        setcookie("cartContent", "", -1);
 
-        $new_productQuantity = $current_productQuantity - $cartContent_quantity;
-        echo $new_productQuantity;
-        $insertQuery_sql = "
-        UPDATE products
-        SET quantity='${new_productQuantity}'
-        WHERE prodid='$prodid';
-        ";
-        mysqli_query($dlink, $insertQuery_sql);
     }
 }
 
