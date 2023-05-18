@@ -118,48 +118,63 @@ function delete_from_cart_cookie()
         $remove_from_cart_prodid = $_GET['prodid'];
     }
 
-
-    $indexCounter = 0;
     $indexOfProdId_to_delete = null;
     // retrieves the index from cartContent_array that matches with the
     // prodid that the user wants to delete
     // this is so the function knows which indexes to remove
     // as the cartContent is a merged-array
 
-    for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
-        if ($cartContent_array['prodid'][$i] == $remove_from_cart_prodid) {
-            $indexOfProdId_to_delete = $i;
-            break;
-        }
-        // increments to scan entire array elements
-        // in the prodid
 
+    if (is_array($cartContent_array['prodid'])) {
+        for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
+            if ($cartContent_array['prodid'][$i] == $remove_from_cart_prodid) {
+                $indexOfProdId_to_delete = $i;
+                break;
+            }
+        }
+    } else {
+        $indexOfProdId_to_delete = $cartContent_array['prodid'];
     }
 
 
-    // scans entire cartContent_array's prodid based on the index
-    // and then deletes it
-    for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
-        print_r($cartContent_array['prodid'][$i]);
-        if ($remove_from_cart_prodid === $cartContent_array['prodid'][$i]) {
-            unset($cartContent_array['prodid'][$i]);
-            unset($cartContent_array['productname'][$i]);
-            unset($cartContent_array['productdesc'][$i]);
-            unset($cartContent_array['productimage'][$i]);
-            unset($cartContent_array['quantity'][$i]);
-            unset($cartContent_array['lastprice'][$i]);
-            $reindexed_cartContent_array = array_map("array_values", $cartContent_array);
-            // converted reindexed_cartContent_array back to 1D
-            // array because when you only have 1 product, the array is
-            // still a 1d array until a new product added.
 
-            $cartContentJSON = json_encode($reindexed_cartContent_array);
-            setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
-            //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+
+    if (!is_array($cartContent_array['prodid'])) {
+        echo "baa!";
+        unset($cartContent_array['prodid']);
+        unset($cartContent_array['productname']);
+        unset($cartContent_array['productdesc']);
+        unset($cartContent_array['productimage']);
+        unset($cartContent_array['quantity']);
+        unset($cartContent_array['lastprice']);
+        $reindexed_cartContent_array = array_map("array_values", $cartContent_array);
+        // converts reindexed_cartContent_array back to 1D
+        // array because when you only have 1 product, the array is
+        // still a 1d array until a new product added.
+        $cartContentJSON = json_encode($reindexed_cartContent_array);
+        setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
+        //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+
+    } else {
+        for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
+            echo "boo!";
+            if ($remove_from_cart_prodid === $cartContent_array['prodid'][$i]) {
+                unset($cartContent_array['prodid'][$i]);
+                unset($cartContent_array['productname'][$i]);
+                unset($cartContent_array['productdesc'][$i]);
+                unset($cartContent_array['productimage'][$i]);
+                unset($cartContent_array['quantity'][$i]);
+                unset($cartContent_array['lastprice'][$i]);
+                $reindexed_cartContent_array = array_map("array_values", $cartContent_array);
+                // converts reindexed_cartContent_array back to 1D
+                // array because when you only have 1 product, the array is
+                // still a 1d array until a new product added.
+                $cartContentJSON = json_encode($reindexed_cartContent_array);
+                setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
+                //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+            }
         }
     }
-
-
 }
 
 
@@ -167,6 +182,7 @@ function delete_from_cart_cookie()
 // displays cartContent to cart.php
 function displayCartContent()
 {
+
 
     $cartContent_array = isset($_COOKIE['cartContent']) ?
         json_decode($_COOKIE['cartContent'], true) : [];
