@@ -116,6 +116,20 @@ function delete_from_cart_cookie()
         $remove_from_cart_prodid = $_GET['prodid'];
     }
 
+    //print_r(array_values($cartContent_array));
+    //echo "    boo   ";
+    /*print_r($cartContent_array);
+    print_r("=============================================");
+    unset($cartContent_array['prodid'][0]);
+    unset($cartContent_array['productname'][0]);
+    unset($cartContent_array['productdesc'][0]);
+    unset($cartContent_array['productimage'][0]);
+    unset($cartContent_array['quantity'][0]);
+    unset($cartContent_array['lastprice'][0]);
+    $arr = array_map("array_values", $cartContent_array);
+    print_r($arr);*/
+
+
 
     $indexCounter = 0;
     $indexOfProdId_to_delete = null;
@@ -127,7 +141,6 @@ function delete_from_cart_cookie()
     for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
         if ($cartContent_array['prodid'][$i] == $remove_from_cart_prodid) {
             $indexOfProdId_to_delete = $i;
-            echo $indexOfProdId_to_delete;
             break;
         }
         // increments to scan entire array elements
@@ -139,9 +152,16 @@ function delete_from_cart_cookie()
     // scans entire cartContent_array's prodid based on the index
     // and then deletes it
     for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
+        print_r($cartContent_array['prodid'][$i]);
         if ($remove_from_cart_prodid === $cartContent_array['prodid'][$i]) {
-            unset($cartContent_array['prodid']);
-            $cartContentJSON = json_encode($cartContent_array);
+            unset($cartContent_array['prodid'][$i]);
+            unset($cartContent_array['productname'][$i]);
+            unset($cartContent_array['productdesc'][$i]);
+            unset($cartContent_array['productimage'][$i]);
+            unset($cartContent_array['quantity'][$i]);
+            unset($cartContent_array['lastprice'][$i]);
+            $reindexed_cartContent_array = array_map("array_values", $cartContent_array);
+            $cartContentJSON = json_encode($reindexed_cartContent_array);
             setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
             //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
         }
@@ -169,6 +189,7 @@ function displayCartContent()
     $keyOf_productColumns = array_keys($cartContent_array);
     // retrieves the amount of all products inside a cart
     // by using the amount of element in prodid as basis
+    //!! Note: can replace with sizeof() function instead
     $countOf_all_cartProducts = count((array) ($cartContent_array['prodid']));
     /* 
                     Example JSON file
