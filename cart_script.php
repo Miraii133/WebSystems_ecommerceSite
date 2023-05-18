@@ -138,7 +138,8 @@ function delete_from_cart_cookie()
 
 
 
-
+    // if there is only one cart product
+    // then 
     if (!is_array($cartContent_array['prodid'])) {
         echo "baa!";
         unset($cartContent_array['prodid']);
@@ -155,23 +156,30 @@ function delete_from_cart_cookie()
         setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
         //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
 
+        // if there is more than one product, check its size,
+        // use the size as the loop index then
+        // use the index to unset the specific element
+        // of that column.
     } else {
         for ($i = 0; $i < sizeof($cartContent_array['prodid']); $i++) {
-            echo "boo!";
             if ($remove_from_cart_prodid === $cartContent_array['prodid'][$i]) {
+                print_r($i);
+                print_r($remove_from_cart_prodid);
+                print_r($cartContent_array['prodid'][$i]);
                 unset($cartContent_array['prodid'][$i]);
                 unset($cartContent_array['productname'][$i]);
                 unset($cartContent_array['productdesc'][$i]);
                 unset($cartContent_array['productimage'][$i]);
                 unset($cartContent_array['quantity'][$i]);
                 unset($cartContent_array['lastprice'][$i]);
-                $reindexed_cartContent_array = array_map("array_values", $cartContent_array);
+                //$reindexed_cartContent_array = array_map("array_values", $cartContent_array);
                 // converts reindexed_cartContent_array back to 1D
                 // array because when you only have 1 product, the array is
                 // still a 1d array until a new product added.
-                $cartContentJSON = json_encode($reindexed_cartContent_array);
+                $data = array_map('array_shift', $cartContent_array);
+                $cartContentJSON = json_encode($data);
                 setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
-                //echo '<meta http-equiv="refresh" content="0; url=cart.php">';
+                // echo '<meta http-equiv="refresh" content="0; url=cart.php">';
             }
         }
     }
@@ -187,8 +195,6 @@ function displayCartContent()
     $cartContent_array = isset($_COOKIE['cartContent']) ?
         json_decode($_COOKIE['cartContent'], true) : [];
     $totalPrice_of_all_product = 0;
-
-
     $keyOf_productColumns = array_keys($cartContent_array);
     // retrieves the amount of all products inside a cart
     // by using the amount of element in prodid as basis
@@ -204,6 +210,8 @@ function displayCartContent()
         // store it into this array
         $values_in_cart_array = array();
 
+        // retrieves all keys from cartContent_array
+        // to dynamically retrieve contents
         foreach ($keyOf_productColumns as $keys) {
             // checks if there are only 1 product in ccart
             // because array_push does not turn 
