@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 function connectToDB()
 {
     $hostname = "localhost";
@@ -94,7 +94,6 @@ function add_to_cart_cookie($dlink)
             "productimage" => $productimage,
             "quantity" => $quantity + 1,
             "lastprice" => $lastprice
-
         );
         echo "<script> console.log('item is in cart'); </script>";
         $newcartContent_array = array_merge($cartContent, $cartContent_array);
@@ -111,7 +110,7 @@ function add_to_cart_cookie($dlink)
 function delete_from_cart_cookie()
 {
 
-
+    setcookie("cartContent", '', -1);
     $cartContent_array = isset($_COOKIE['cartContent']) ?
         json_decode($_COOKIE['cartContent'], true) : [];
     if (isset($_GET['prodid'])) {
@@ -199,15 +198,13 @@ function delete_from_cart_cookie()
 
 
             // Convert the array to JSON
-            print_r($cartContentJSON);
             setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
             echo '<meta http-equiv="refresh" content="0; url=cart.php">';
         }
 
     }
+
 }
-
-
 
 // displays cartContent to cart.php
 function displayCartContent()
@@ -393,18 +390,35 @@ HTML;
 }
 
 
+function removeAllCartContentValues($cartContent_array)
+{
+    if (!is_array($cartContent_array)) {
+        return $cartContent_array;
+    }
+
+    foreach ($cartContent_array as $key => $value) {
+        if (is_array($value)) {
+            $cartContent_array[$key] = removeAllCartContentValues($value); // Recursively clear nested arrays
+        } else {
+            $cartContent_array[$key] = null; // Clear the value
+        }
+    }
+    return $cartContent_array; // Return an empty array
+
+}
+
 
 function processPlaceOrder($dlink)
 {
+
     $cartContent_array = isset($_COOKIE['cartContent']) ?
         json_decode($_COOKIE['cartContent'], true) : [];
 
     if (!is_array($cartContent_array['prodid'])) {
         $countOf_cartContent_products = 0;
     } else {
-        $countOf_cartContent_products = sizeof($cartContent_array);
+        $countOf_cartContent_products = sizeof($cartContent_array['prodid']);
     }
-
 
 
     for ($i = 0; $i < $countOf_cartContent_products; $i++) {
@@ -428,10 +442,14 @@ function processPlaceOrder($dlink)
              ";
             mysqli_query($dlink, $insertQuery_sql);
         }
-        setcookie("cartContent", "", -1);
+
+
 
     }
+    setcookie("cartContent", '', -1, '/');
 }
+
+
 
 
 $dlink = connectToDB();
@@ -445,10 +463,12 @@ if (isset($_REQUEST['add_to_cart']) && $_REQUEST['add_to_cart'] == 'true') {
 } else if (isset($_REQUEST['delete_cartContent']) && $_REQUEST['delete_cartContent'] == 'true') {
     delete_from_cart_cookie();
 
-} else if (isset($_POST['place_order'])) {
+} else if (isset($_REQUEST['place_order'])) {
     processPlaceOrder($dlink);
+
 } else {
     displayCartContent();
 }
 
+ob_end_flush();
 ?>

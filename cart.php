@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<?php
+ob_start();
+?>
+
 <head>
     <meta charset="utf-8">
     <title>PET SHOP - Pet Shop Website Template</title>
@@ -94,8 +98,6 @@
                     echo "<a href='logout_script.php'  class='nav-item nav-link'>Logout</a>";
                 }
                 ?>
-                <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact
-                    <i class="bi bi-arrow-right"></i></a>
             </div>
         </div>
     </nav>
@@ -223,3 +225,7 @@
 </body>
 
 </html>
+
+<?php
+ob_end_flush();
+?>
