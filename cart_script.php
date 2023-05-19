@@ -184,14 +184,22 @@ function delete_from_cart_cookie()
             // having more than one product and then removing the rest
             // until one is left, turn the entire array from 2d array
             // to 1d array so displayCartContent() can easily parse it
+
             if ($currentSize_of_array == 1) {
-                $data = array_map('array_shift', $cartContent_array);
+                $data = [];
+                foreach ($cartContent_array as $key => $item) {
+                    $data[$key] = array_shift($item);
+                }
+
+
                 $cartContentJSON = json_encode($data);
             } else if ($currentSize_of_array > 1) {
                 $cartContentJSON = json_encode($cartContent_array);
             }
 
+
             // Convert the array to JSON
+            print_r($cartContentJSON);
             setcookie("cartContent", $cartContentJSON, time() + 86400, '/');
             echo '<meta http-equiv="refresh" content="0; url=cart.php">';
         }
@@ -214,6 +222,7 @@ function displayCartContent()
     // by using the amount of element in prodid as basis
     //!! Note: can replace with sizeof() function instead
     $countOf_all_cartProducts = count((array) ($cartContent_array['prodid']));
+
 
 
     // loops through every single element in 
