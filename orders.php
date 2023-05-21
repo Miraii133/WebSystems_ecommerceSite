@@ -106,17 +106,12 @@
         include "order_status_script.php";
         ?>
         <!-- picture -> description -> name -> quantity -> price -> "delete" button -->
-        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">Image</th>
-        <th>Description</th>
-        <th>Name</th>
-        <th>Unit Price</th>
-        <th>Quantity</th>
-        <th>Total Price</th>
-        <th>Action</th>
+        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">Product</th>
+        <th style="width: 50px; padding-left: 150px; padding-right: 0px; padding-bottom: 100px;">Description</th>
+        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">Total</th>
+        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">Date Ordered</th>
+        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">Status</th>
 
-        <?php
-        include "cart_script.php";
-        ?>
 
     </table>
 

@@ -329,7 +329,6 @@ let date = new Date();
 date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
 const expires = "expires=" + date.toUTCString();
 document.cookie = "cartContent" + "=" + stringify_parsedCookie + "; " + expires + "; path=/";
-console.log(stringify_parsedCookie);
 }
 
         
@@ -444,6 +443,7 @@ function processPlaceOrder($dlink)
 
     }
     setcookie("cartContent", '', -1, '/');
+    echo '<meta http-equiv="refresh" content="0; url=orders.php">';
 }
 
 
