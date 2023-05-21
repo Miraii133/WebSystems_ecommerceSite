@@ -1,6 +1,5 @@
 <?php
 $data = $_POST['data'];
 // creates new $_POST data to be passed to cart_script.php
-
-header("Location: product.php?hasNewTotalPrice=true&totalProducts_price=${data}");
+echo "<script> console.log('{$data}');</script>";
 ?>

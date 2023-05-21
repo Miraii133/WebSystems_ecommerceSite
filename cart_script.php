@@ -290,6 +290,7 @@ function displayCartContent()
 
         <select name="select_quantity" id="select_quantity" onchange="updateTotalPrice(this, $product_price, $prodid, $totalPrice_of_all_product)">
         <option value='${cart_items_quantity}' selected>${cart_items_quantity}</option>
+        <option value=1>1</option>
         <option value=2>2</option>
         <option value=3>3</option>
         <option value=4>4</option>
@@ -306,7 +307,7 @@ var decodedCookieValue = decodeURIComponent(cartContent);
 const parsedCookie = JSON.parse(decodedCookieValue);
 let indexCounter = 0;
 let indexOfProdid = null;
-
+ 
 // loops through the entire prodid array
 // to get the index of the matching prodid in the array.
 // this is so function will know
@@ -328,6 +329,7 @@ let date = new Date();
 date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
 const expires = "expires=" + date.toUTCString();
 document.cookie = "cartContent" + "=" + stringify_parsedCookie + "; " + expires + "; path=/";
+console.log(stringify_parsedCookie);
 }
 
         
@@ -369,11 +371,6 @@ totalProductPriceCells.forEach(cell => {
 HTML;
         $totalPrice_of_all_product += $total_product_price;
         echo $tableRowsData;
-
-        // increments counter so loop can
-        // proceed to the next column/product to display
-        //$counter++;
-
 
     }
 

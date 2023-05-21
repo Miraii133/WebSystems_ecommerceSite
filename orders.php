@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php
-ob_start();
-?>
-
 <head>
     <meta charset="utf-8">
     <title>PET SHOP - Pet Shop Website Template</title>
@@ -94,11 +90,10 @@ ob_start();
                     echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
                     echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
                 } else {
-                    echo "<a href='cart.php' class='nav-item nav-link active'>Cart</a>";
-                    echo "<a href='orders.php' class='nav-item nav-link'>My Orders</a>";
+                    echo "<a href='cart.php' class='nav-item nav-link'>Cart</a>";
+                    echo "<a href='orders.php'  class='nav-item nav-link active'>My Orders</a>";
                     echo "<a href='logout_script.php'  class='nav-item nav-link'>Logout</a>";
                 }
-
                 ?>
                 <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact
                     <i class="bi bi-arrow-right"></i></a>
@@ -107,6 +102,9 @@ ob_start();
     </nav>
     <!-- Navbar End -->
     <table class="table">
+        <?php
+        include "order_status_script.php";
+        ?>
         <!-- picture -> description -> name -> quantity -> price -> "delete" button -->
         <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">Image</th>
         <th>Description</th>
@@ -229,7 +227,3 @@ ob_start();
 </body>
 
 </html>
-
-<?php
-ob_end_flush();
-?>

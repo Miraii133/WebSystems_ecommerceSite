@@ -96,6 +96,7 @@
                     echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
                 } else {
                     echo "<a href='cart.php' class='nav-item nav-link'>Cart</a>";
+                    echo "<a href='orders.php' class='nav-item nav-link'>My Orders</a>";
                     echo "<a href='logout_script.php'  class='nav-item nav-link'>Logout</a>";
                 }
                 ?>
