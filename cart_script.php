@@ -443,7 +443,7 @@ function processPlaceOrder($dlink)
     }
 
     publishCookieDataToDB($dlink);
-    echo '<meta http-equiv="refresh" content="0; url=orders.php">';
+    // echo '<meta http-equiv="refresh" content="0; url=orders.php">';
 }
 
 
@@ -465,12 +465,15 @@ function publishCookieDataToDB($dlink)
     for ($i = 0; $i < $countOf_all_cartProducts; $i++) {
         $prodid = $cartContent_array['prodid'][$i];
         $quantity = $cartContent_array['quantity'][$i];
-        $dateToday = date("Y/m/d");
+        $dateToday = date("Y-m-d");
+
         // userid, prodid, quantity, date, status
         $publish_sql = <<<SQL
-        INSERT INTO purchase VALUES($user_id, $prodid, $quantity, $dateToday, "pending");
+        INSERT INTO purchase VALUES($user_id, $prodid, $quantity, '${dateToday}', "pending");
     SQL;
+
         mysqli_query($dlink, $publish_sql);
+
     }
 
     deletecartContentCookie();

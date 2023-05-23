@@ -61,7 +61,8 @@ function getAllAvailableProduct($dlink)
         </div>
 HTML;
                 // if user viewing product.php is logged in, add to cart button
-            } else if (isset($_COOKIE['email']) && $product_row['quantity'] != 0) {
+                // and if current product is not out of stock
+            } else if (isset($_COOKIE['email']) && $product_row['quantity'] > 0) {
                 $product_info_html = <<<HTML
  <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
             <img class="rounded mx-auto d-block" src="{$product_row['productimage']}" alt="">
@@ -88,7 +89,8 @@ HTML;
         </div>
 HTML;
 
-            } else if (isset($_COOKIE['email']) && $product_row['quantity'] == 0) { {
+                // if current product to be displayed is empty
+            } else if (isset($_COOKIE['email']) && $product_row['quantity'] <= 0) { {
                     $product_info_html = <<<HTML
  <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
             <img class="rounded mx-auto d-block" src="{$product_row['productimage']}" alt="">
