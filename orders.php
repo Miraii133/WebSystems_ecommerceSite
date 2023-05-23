@@ -73,7 +73,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="collapse navbar-collapse">
             <div class="navbar-nav ms-auto py-0">
                 <?php
                 if (isset($_COOKIE['email'])) {
@@ -106,15 +106,18 @@
         include "order_status_script.php";
         ?>
         <!-- picture -> description -> name -> quantity -> price -> "delete" button -->
-        <th id="product_th" style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">Product
+        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">
+            Product
         </th>
-        <th id="description_th" style="width: 50px; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;">
+        <th style="width: 50px; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;">
             Description</th>
-        <th id="total_th" style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">Total
+        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">
+            Total
         </th>
-        <th id="date_ordered_th" style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">
+        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">
             Date Ordered</th>
-        <th id="status_th" style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">Status
+        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">
+            Status
         </th>
 
         <?php

@@ -20,18 +20,73 @@ function connectToDB()
     // to avoid cpu leak 
     return $dlink;
 }
+function changeStatusMenuQuantity($dlink)
+{
+
+    // can definitely turn this to for loop to shorten
+    // code, but lacking of time
+    $get_pendingQuantity_sql = <<<SQL
+        SELECT COUNT(prodid) as quantity FROM Purchase WHERE status='pending' ;
+    SQL;
+    $get_acceptedQuantity_sql = <<<SQL
+        SELECT COUNT(prodid) as quantity FROM Purchase WHERE status='accepted' ;
+    SQL;
+    $get_completedQuantity_sql = <<<SQL
+        SELECT COUNT(prodid) as quantity FROM Purchase WHERE status='completed' ;
+    SQL;
+    $get_refundedQuantity_sql = <<<SQL
+        SELECT COUNT(prodid) as quantity FROM Purchase WHERE status='returned/refunded' ;
+    SQL;
+    $pending_statusMenuQuantity = mysqli_query($dlink, $get_pendingQuantity_sql);
+    $accepted_statusMenuQuantity = mysqli_query($dlink, $get_acceptedQuantity_sql);
+    $completed_statusMenuQuantity = mysqli_query($dlink, $get_completedQuantity_sql);
+    $refunded_statusMenuQuantity = mysqli_query($dlink, $get_refundedQuantity_sql);
+    // retrieves all of the data
+    // which matches the prodid of the current pendingOrders_rows
+
+    $allQuantity = null;
+    $pendingQuantity = null;
+    $acceptedQuantity = null;
+    $completedQuantity = null;
+    $refundedQuantity = null;
+    while ($rows = $pending_statusMenuQuantity->fetch_assoc()) {
+        $pendingQuantity = $rows['quantity'];
+    }
+    while ($rows = $pending_statusMenuQuantity->fetch_assoc()) {
+        $pendingQuantity = $rows['quantity'];
+    }
+    while ($rows = $accepted_statusMenuQuantity->fetch_assoc()) {
+        $acceptedQuantity = $rows['quantity'];
+    }
+    while ($rows = $completed_statusMenuQuantity->fetch_assoc()) {
+        $completedQuantity = $rows['quantity'];
+    }
+    while ($rows = $refunded_statusMenuQuantity->fetch_assoc()) {
+        $refundedQuantity = $rows['quantity'];
+    }
+    // no need to query for the total of all statuses, just add
+    // all their quantities together
+    $allQuantity = $pendingQuantity + $acceptedQuantity + $completedQuantity + $refundedQuantity;
+    $displayStatusMenuQuantity_HTML = <<<HTML
+    <script>
+    document.getElementById('#th_all').innerHTML = "All(" + $allQuantity + ")";
+    document.getElementById('#th_pending').innerHTML = "Pending(" + $pendingQuantity + ")";
+    document.getElementById('#th_accepted').innerHTML = "Accepted(" + $acceptedQuantity + ")";
+    document.getElementById('#th_completed').innerHTML = "Completed(" + $completedQuantity + ")";
+    document.getElementById('#th_refunded').innerHTML = "Refunded/Returned(" + $refundedQuantity + ")";
+        
+    </script>
+HTML;
+
+    echo $displayStatusMenuQuantity_HTML;
+
+}
 
 function displayPendingOrders($dlink)
 {
-
-
-
-    $get_productDescription_sql = <<<SQL
-    SELECT * FROM purchase WHERE status="pending";
-    SQL;
-
+    changeStatusMenuQuantity($dlink);
     $get_PendingOrders_sql = <<<SQL
-    SELECT userid, prodid FROM purchase WHERE status="pending";
+    SELECT * FROM purchase WHERE status="pending";
     SQL;
 
     // retrieves all pending orders arrays and loops through 
@@ -48,18 +103,16 @@ function displayPendingOrders($dlink)
         SELECT * FROM products WHERE prodid=$row_prodid;
         SQL;
         $specificOrders_details = mysqli_query($dlink, $get_allDataFrom_userIds_sql);
+        // retrieves all of the data
+        // which matches the prodid of the current pendingOrders_rows
         while ($rows = $specificOrders_details->fetch_assoc()) {
-            echo $rows['productname'];
-            echo $rows['ourprice'];
             $product_info_html = <<<HTML
-          
-
   <tr> 
          <td style="width: 0px; display:inline; margin-top:100px;">
          <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
          <img src="img/product-1.png"> </td>
          <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
-         <p> {$rows['productname']} x{$rows['productprice']}</p>
+         <p> {$rows['productname']} x{$rows['ourprice']}</p>
      </td>
          
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$pendingOrders_rows['quantity']}</td>
@@ -69,14 +122,13 @@ function displayPendingOrders($dlink)
     
  HTML;
             echo $product_info_html;
-            // if user viewing product.php is logged in, add to cart button
-
         }
     }
 }
 
 function displayAcceptedOrders($dlink)
 {
+    changeStatusMenuQuantity($dlink);
     $get_productDescription_sql = <<<SQL
     SELECT * FROM purchase WHERE status="accepted";
     SQL;
@@ -110,6 +162,7 @@ HTML;
 
 function displayCompletedOrders($dlink)
 {
+    changeStatusMenuQuantity($dlink);
     $get_productDescription_sql = <<<SQL
     SELECT * FROM purchase WHERE status="completed";
     SQL;
@@ -144,6 +197,7 @@ HTML;
 
 function displayReturnedOrders($dlink)
 {
+    changeStatusMenuQuantity($dlink);
     $get_productDescription_sql = <<<SQL
     SELECT * FROM purchase WHERE status="returned/refunded";
     SQL;

@@ -7,27 +7,27 @@ function displayStatusOptions()
 <div style="display: flex; align-items: center; justify-content: center; columns: 100px 3;">
     
 <a href="?status=all">
-        <p style="text-align: center; font-size: large; font-weight: 100; padding-left: 120px; padding-right: 120px; padding-bottom: 25px;">
+        <p id="#th_all" style="text-align: center; font-size: large; font-weight: 100; padding-left: 120px; padding-right: 120px; padding-bottom: 25px;">
         All
        </p>
     </a>
 <a href="?status=pending">
-        <p style="text-align: center; font-size: large; font-weight: 100; padding-left: 120px; padding-right: 120px; padding-bottom: 25px;">
+        <p id="#th_pending" style="text-align: center; font-size: large; font-weight: 100; padding-left: 120px; padding-right: 120px; padding-bottom: 25px;">
         Pending
        </p>
     </a>
     <a href="?status=accepted">
-        <p style="text-align: center; font-size: large; font-weight: 100; padding-left: 120px; padding-right: 120px; padding-bottom: 25px;">
+        <p id="#th_accepted" style="text-align: center; font-size: large; font-weight: 100; padding-left: 120px; padding-right: 120px; padding-bottom: 25px;">
         Accepted
        </p>
     </a>
     <a href="?status=Completed">
-        <p style="text-align: center; font-size: large; font-weight: 100; padding-left: 120px; padding-right: 120px; padding-bottom: 25px;">
+        <p id="#th_completed" style="text-align: center; font-size: large; font-weight: 100; padding-left: 120px; padding-right: 120px; padding-bottom: 25px;">
         Completed
        </p>
     </a>
     <a href="?status=Refunded">
-        <p style="text-align: center; font-size: large; font-weight: 100; padding-left: 120px; padding-right: 120px; padding-bottom: 25px;">
+        <p id="#th_refunded" style="text-align: center; font-size: large; font-weight: 100; padding-left: 120px; padding-right: 120px; padding-bottom: 25px;">
         Refunded
        </p>
     </a>
