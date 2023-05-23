@@ -21,12 +21,12 @@ function displayStatusOptions()
         Accepted
        </p>
     </a>
-    <a href="?status=Completed">
+    <a href="?status=completed">
         <p id="#th_completed" style="text-align: center; font-size: large; font-weight: 100; padding-left: 120px; padding-right: 120px; padding-bottom: 25px;">
         Completed
        </p>
     </a>
-    <a href="?status=Refunded">
+    <a href="?status=refunded">
         <p id="#th_refunded" style="text-align: center; font-size: large; font-weight: 100; padding-left: 120px; padding-right: 120px; padding-bottom: 25px;">
         Refunded
        </p>
