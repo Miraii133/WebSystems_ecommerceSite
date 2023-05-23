@@ -61,7 +61,7 @@ function getAllAvailableProduct($dlink)
         </div>
 HTML;
                 // if user viewing product.php is logged in, add to cart button
-            } else {
+            } else if (isset($_COOKIE['email']) && $product_row['quantity'] != 0) {
                 $product_info_html = <<<HTML
  <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
             <img class="rounded mx-auto d-block" src="{$product_row['productimage']}" alt="">
@@ -88,6 +88,21 @@ HTML;
         </div>
 HTML;
 
+            } else if (isset($_COOKIE['email']) && $product_row['quantity'] == 0) { {
+                    $product_info_html = <<<HTML
+ <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
+            <img class="rounded mx-auto d-block" src="{$product_row['productimage']}" alt="">
+            <h6 class="text-uppercase">{$product_row['productname']}</h6>
+            <h5 class="text-primary mb-0">{$product_row['lastprice']}</h5>
+            <h6 class="text-primary mb-0">Quantity: OUT OF STOCK!</h6>
+            <div class="btn-action d-flex justify-content-center">
+
+               
+                <a class="btn btn-primary py-2 px-3" href=""><i class="bi bi-eye"></i></a>
+            </div>
+        </div>
+HTML;
+                }
             }
             echo $product_info_html;
 
