@@ -430,7 +430,6 @@ function processPlaceOrder($dlink)
         // to the quantity selected by user
         while ($value_of_productQuantity = $current_productQuantity->fetch_assoc()) {
             $new_productQuantity = $value_of_productQuantity['quantity'] - $cartContent_quantity;
-            print_r($new_productQuantity);
             $insertQuery_sql = "
              UPDATE products
              SET quantity='${new_productQuantity}'
@@ -442,11 +441,40 @@ function processPlaceOrder($dlink)
 
 
     }
-    setcookie("cartContent", '', -1, '/');
+
+    publishCookieDataToDB($dlink);
     echo '<meta http-equiv="refresh" content="0; url=orders.php">';
 }
 
 
+// moves cartContent cookie data to actual purchase DB.
+function deletecartContentCookie()
+{
+    setcookie("cartContent", '', -1, '/');
+}
+
+
+function publishCookieDataToDB($dlink)
+{
+
+    $user_id = $_COOKIE['userid'];
+    $cartContent_array = isset($_COOKIE['cartContent']) ?
+        json_decode($_COOKIE['cartContent'], true) : [];
+    $countOf_all_cartProducts = count((array) ($cartContent_array['prodid']));
+
+    for ($i = 0; $i < $countOf_all_cartProducts; $i++) {
+        $prodid = $cartContent_array['prodid'][$i];
+        $quantity = $cartContent_array['quantity'][$i];
+        $dateToday = date("Y/m/d");
+        // userid, prodid, quantity, date, status
+        $publish_sql = <<<SQL
+        INSERT INTO purchase VALUES($user_id, $prodid, $quantity, $dateToday, "pending");
+    SQL;
+        mysqli_query($dlink, $publish_sql);
+    }
+
+    deletecartContentCookie();
+}
 
 
 $dlink = connectToDB();
