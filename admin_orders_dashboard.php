@@ -103,7 +103,7 @@
     <!-- Navbar End -->
     <table class="table">
         <?php
-        include "order_status_script.php";
+        include "admin_orders_status_script.php";
         ?>
         <!-- picture -> description -> name -> quantity -> price -> "delete" button -->
         <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">
@@ -121,7 +121,7 @@
         </th>
 
         <?php
-        include "orders_script.php"
+        include "admin_orders_script.php"
             ?>
     </table>
 
