@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
     <meta charset="utf-8">
     <title>PET SHOP - Pet Shop Website Template</title>
@@ -74,158 +73,57 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="collapse navbar-collapse">
             <div class="navbar-nav ms-auto py-0">
                 <?php
-                // adds Welcome message when user is logged in
                 if (isset($_COOKIE['email'])) {
                     $email = $_COOKIE['email'];
                     $userType = $_COOKIE['userType'];
-                    echo "<h4 class='py-4 ' >Welcome ${userType}, ${email} </h4>";
+                    echo "<h4 class='py-4 nav-item '>Welcome ${userType}, ${email} </h4>";
                 }
                 ?>
                 <a href="index.php" class="nav-item nav-link">Home</a>
-                <a href="product.php" class="nav-item nav-link active">Product</a>
+                <a href="product.php" class="nav-item nav-link">Product</a>
 
                 <?php
-                // shows register and login when not logged in,
-                // shows cart and logout when logged in as only logged in users should
-                // be able to see.
                 if (!isset($_COOKIE['email'])) {
                     echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
                     echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
                 } else {
                     echo "<a href='cart.php' class='nav-item nav-link'>Cart</a>";
-                    echo "<a href='orders.php' class='nav-item nav-link'>My Orders</a>";
+                    echo "<a href='orders.php'  class='nav-item nav-link active'>My Orders</a>";
                     echo "<a href='logout_script.php'  class='nav-item nav-link'>Logout</a>";
                 }
                 ?>
-                <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">
-                    Contact <i class="bi bi-arrow-right"></i></a>
+                <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact
+                    <i class="bi bi-arrow-right"></i></a>
             </div>
         </div>
     </nav>
     <!-- Navbar End -->
-    <?php
-    function connectToDB()
-    {
-        $hostname = "localhost";
-        $database = "Shopee";
-        $db_login = "root";
-        $db_pass = "";
+    <table class="table">
+        <?php
+        include "order_status_script.php";
+        ?>
+        <!-- picture -> description -> name -> quantity -> price -> "delete" button -->
+        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">
+            Product
+        </th>
+        <th style="width: 50px; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;">
+            Description</th>
+        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">
+            Total
+        </th>
+        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">
+            Date Ordered</th>
+        <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">
+            Status
+        </th>
 
-        /*
-        MYSQLI_REPORT_ERROR	    Report errors from mysqli function calls
-        MYSQLI_REPORT_STRICT	Throw mysqli_sql_exception for errors instead of warnings
-        */
-        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-        $dlink = mysqli_connect($hostname, $db_login, $db_pass, $database);
-        mysqli_select_db($dlink, $database);
-        // returns $dlink so other functions can use the same connection
-        // should probably terminate it at some point
-        // to avoid cpu leak 
-        return $dlink;
-    }
-
-
-    function displayCalendar($dlink)
-    {
-
-
-        // Get the current year and month
-        $year = date('Y');
-        $month = date('m');
-
-        $get_currentDate_sql = "SELECT DATE_FORMAT( DATE, '%d' ) AS date_only, COUNT( * ) AS count FROM Purchase WHERE DATE_FORMAT( DATE, '%m' ) = MONTH( NOW( ) ) GROUP BY date_only HAVING COUNT( * ) >=1";
-        $month_date_result = mysqli_query($dlink, $get_currentDate_sql);
-
-        // Get the number of days in the current month
-        $num_days = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-
-        // Get the name of the current month, F in format('F') means the full name of the month
-        $date = new DateTime("$year-$month-01");
-        $month_name = $date->format('F');
-
-        // Get the index of the first day of the month (0 = Sunday, 1 = Monday, etc.)
-//The first argument, 'w', specifies that we want to retrieve the day of the week as a numeric value (0 for Sunday, 1 for Monday, and so on).
-//strtotime function creates a timestamp representing the first day of the given month and year.
-        $first_day_index = (int) date('w', strtotime("$year-$month-01"));
-
-        // Start the table and print the month name
-        echo "<table width=100% border=1><caption>$month_name $year</caption>";
-
-        // Print the table headers (days of the week)
-        echo "<tr>";
-        $tableHeadersHTML = <<<HTML
-        <th style="text-align: center;">SUN</th>
-        <th style="text-align: center;">MON</th>
-        <th style="text-align: center;">TUE</th>
-        <th style="text-align: center;">WED</th>
-        <th style="text-align: center;">THUR</th>
-        <th style="text-align: center;">FRI</th>
-        <th style="text-align: center;">SAT</th>
-    HTML;
-        echo $tableHeadersHTML;
-        echo "</tr>";
-
-        // Start a new row for the first week
-        echo "<tr>";
-
-        // Print blank cells for the days before the first day of the month
-        for ($i = 0; $i < $first_day_index; $i++) {
-            echo "<td></td>";
-        }
-
-        $date_with_orders = array();
-        $count_of_orders_in_a_date = array();
-        while ($row2 = mysqli_fetch_array($month_date_result)) {
-            $date_with_orders[] = $row2['date_only'];
-            $count_of_orders_in_a_date[] = $row2['count'];
-        }
-        $count_of_days_with_orders = sizeof($date_with_orders);
-
-        // starts loop with 0 to follow loop standards
-        for ($day = 0; $day < $num_days; $day++) {
-            // skips day 0 and proceeds to day 1
-            // this is needed otherwise 0 is added to calendar
-            // which is not desirable
-            if ($day == 0)
-                continue;
-            // Start a new row at the beginning of each week
-            if ($day > 1 && ($day - 1 + $first_day_index) % 7 == 0) {
-                echo "</tr><tr>";
-            }
-
-            $dayHasOrders = false;
-            // loops through all the days with orders
-            // and adds a clickable anchor tag
-            for ($i = 0; $i < $count_of_days_with_orders; $i++) {
-                if ($date_with_orders[$i] == $day) {
-                    $dayHasOrders = true;
-                    echo "<td align=center> <a href=admin_orders_dashboard.php?date_selected=${day}&quantity=${count_of_orders_in_a_date[$i]}> $day($count_of_orders_in_a_date[$i]) </a></td>";
-                    break;
-                }
-            }
-            // if a day has no orders
-            // just print it as a normal text
-            if (!$dayHasOrders) {
-                echo "<td align=center> $day</td>";
-            }
-
-        }
-
-        // Print blank cells for the days after the last day of the month
-        for ($i = $num_days + $first_day_index; $i < 35; $i++) {
-            echo "<td></td>";
-        }
-
-        // End the last row and the table
-        echo "</tr></table>";
-    }
-
-    $dlink = connectToDB();
-    displayCalendar($dlink);
-    ?>
+        <?php
+        include "orders_script.php"
+            ?>
+    </table>
 
 
     <!-- Footer Start -->
@@ -323,8 +221,8 @@
 
 
     <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></scrip >
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
