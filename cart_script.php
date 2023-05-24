@@ -209,8 +209,6 @@ function delete_from_cart_cookie()
 // displays cartContent to cart.php
 function displayCartContent()
 {
-
-
     $cartContent_array = isset($_COOKIE['cartContent']) ?
         json_decode($_COOKIE['cartContent'], true) : [];
     $totalPrice_of_all_product = 0;
@@ -218,7 +216,11 @@ function displayCartContent()
     // retrieves the amount of all products inside a cart
     // by using the amount of element in prodid as basis
     //!! Note: can replace with sizeof() function instead
-    $countOf_all_cartProducts = count((array) ($cartContent_array['prodid']));
+    $countOf_all_cartProducts = 0;
+    if (isset($cartContent_array['prodid'])) {
+        $countOf_all_cartProducts = count((array) ($cartContent_array['prodid']));
+    }
+
 
 
 
@@ -443,7 +445,7 @@ function processPlaceOrder($dlink)
     }
 
     publishCookieDataToDB($dlink);
-    // echo '<meta http-equiv="refresh" content="0; url=orders.php">';
+    echo '<meta http-equiv="refresh" content="0; url=orders.php">';
 }
 
 

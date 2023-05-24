@@ -80,6 +80,7 @@ require "login_script.php";
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <?php
+
                 if (isset($_COOKIE['email'])) {
                     $email = $_COOKIE['email'];
                     $userType = $_COOKIE['userType'];
@@ -88,12 +89,28 @@ require "login_script.php";
                 ?>
 
                 <a href="index.php" class="nav-item nav-link active">Home</a>
-                <a href="product.php" class="nav-item nav-link">Product</a>
                 <?php
+
+                // if client is not logged in
                 if (!isset($_COOKIE['email'])) {
+                    echo "<a href='product.php' class='nav-item nav-link'>Product</a>";
                     echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
                     echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
-                } else {
+
+                    // if client is admin
+                } else if (
+                    isset($_COOKIE['userType']) &&
+                    $_COOKIE['userType'] == 'admin'
+                ) {
+                    echo "<a href='calendar.php' class='nav-item nav-link'>Calendar</a>";
+                    echo "<a href=# class='nav-item nav-link'>!!!</a>";
+                    echo "<a href='logout_script.php' class='nav-item nav-link'>Logout</a>";
+
+                    // if client is user
+                } else if (
+                    isset($_COOKIE['userType']) &&
+                    $_COOKIE['userType'] == 'user'
+                ) {
                     echo "<a href='cart.php' class='nav-item nav-link'>Cart</a>";
                     echo "<a href='orders.php' class='nav-item nav-link'>My Orders</a>";
                     //<!-- goes back to login page when logged out -->

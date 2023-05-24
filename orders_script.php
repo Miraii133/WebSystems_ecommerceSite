@@ -28,7 +28,6 @@ function changeStatusMenuQuantity($dlink, $user_id)
     $get_pendingQuantity_sql = <<<SQL
         SELECT COUNT(prodid) as quantity FROM Purchase WHERE status='pending' AND userid=$user_id ;
     SQL;
-    echo $get_pendingQuantity_sql;
     $get_acceptedQuantity_sql = <<<SQL
         SELECT COUNT(prodid) as quantity FROM Purchase WHERE status='accepted' AND userid=$user_id;
     SQL;
@@ -105,7 +104,7 @@ SQL;
    <tr> 
          <td style="width: 0px; display:inline; margin-top:100px;">
          <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
-         <img src="img/product-1.png"> </td>
+         <img src="${AllOrders_rows['productimage']}"> </td>
          <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
          <p> {$AllOrders_rows['productname']} x{$AllOrders_rows['ourprice']}</p>
      </td>
@@ -140,7 +139,7 @@ SQL;
    <tr> 
          <td style="width: 0px; display:inline; margin-top:100px;">
          <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
-         <img src="img/product-1.png"> </td>
+         <img src="${AllOrders_rows['productimage']}"> </td>
          <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
          <p> {$AllOrders_rows['productname']} x{$AllOrders_rows['ourprice']}</p>
      </td>
@@ -176,7 +175,7 @@ SQL;
    <tr> 
          <td style="width: 0px; display:inline; margin-top:100px;">
          <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
-         <img src="img/product-1.png"> </td>
+         <img src="${AcceptedOrders_rows['productimage']}"> </td>
          <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
          <p> {$AcceptedOrders_rows['productname']} x{$AcceptedOrders_rows['ourprice']}</p>
      </td>
@@ -212,7 +211,7 @@ SQL;
    <tr> 
          <td style="width: 0px; display:inline; margin-top:100px;">
          <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
-         <img src="img/product-1.png"> </td>
+         <img src="${CompletedOrders_rows['productimage']}"> </td>
          <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
          <p> {$CompletedOrders_rows['productname']} x{$CompletedOrders_rows['ourprice']}</p>
      </td>
@@ -232,12 +231,11 @@ HTML;
 
 function displayReturned_RefundedOrders($dlink, $user_id)
 {
-    echo "boo";
     changeStatusMenuQuantity($dlink, $user_id);
     $get_AllOrders_sql = <<<SQL
     SELECT * FROM products, purchase WHERE products.prodid=purchase.prodid AND purchase.userid=$user_id AND status='returned';
 SQL;
-    echo $get_AllOrders_sql;
+
 
     // retrieves all pending orders arrays and loops through 
     // all to get Array objects. This in turn allows
