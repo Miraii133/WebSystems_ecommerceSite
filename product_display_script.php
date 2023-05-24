@@ -21,6 +21,8 @@ function connectToDB()
     return $dlink;
 }
 
+//function get
+
 function getAllAvailableProduct($dlink)
 {
     // retrieves DISTINCT prodcategories
@@ -32,7 +34,7 @@ function getAllAvailableProduct($dlink)
     $result = mysqli_query($dlink, $get_unique_category_query);
     while ($row = mysqli_fetch_assoc($result)) {
         $prod_cat_html = <<<HTML
-        <h1 class="text-center">{$row['prodcat']}</h1>;
+        <h1 class="text-center"> <a href="product.php?categorySelected={$row['prodcat']}"> {$row['prodcat']} </a></h1>;
         HTML;
         echo $prod_cat_html;
         // gets all products that have the same category as the one being looped in $row
@@ -47,7 +49,7 @@ function getAllAvailableProduct($dlink)
         $product_info_result = mysqli_query($dlink, $product_info_query);
         // loops through entire rows that matches the current category
         foreach ($product_info_result as $product_row) {
-            // if user viewing product.php is not logged in, remove add to cart button
+            // if user viewing product.php is not logged in, no add-to-cart button
             if (!isset($_COOKIE['email'])) {
                 $product_info_html = <<<HTML
  <div class="product-item position-relative  bg-light d-inline-flex flex-column text-center">
@@ -60,7 +62,7 @@ function getAllAvailableProduct($dlink)
             </div>
         </div>
 HTML;
-                // if user viewing product.php is logged in, add to cart button
+                // if user viewing product.php is logged in, include add-to-cart button
                 // and if current product is not out of stock
             } else if (isset($_COOKIE['email']) && $product_row['quantity'] > 0) {
                 $product_info_html = <<<HTML
@@ -112,7 +114,13 @@ HTML;
 
 
 
-
+    }
+    if ($_GET['categorySelected'] == 'Food') {
+        print_r("food");
+    } else if ($_GET['categorySelected'] == 'Cleaning Equipment') {
+        print_r("cleaning");
+    } else if ($_GET['categorySelected'] == 'Bird food') {
+        print_r("bird_food");
     }
 }
 
