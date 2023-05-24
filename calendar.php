@@ -176,43 +176,50 @@
             echo "<td></td>";
         }
 
+        $date_with_orders = array();
+        $count_of_orders_in_a_date = array();
+        while ($row2 = mysqli_fetch_array($month_date_result)) {
+            $date_with_orders[] = $row2['date_only'];
+            $count_of_orders_in_a_date[] = $row2['count'];
+        }
+        $count_of_days_with_orders = sizeof($date_with_orders);
 
-        // Print the cells for the days of the month
-        for ($day = 1; $day <= $num_days; $day++) {
+        // starts loop with 0 to follow loop standards
+        for ($day = 0; $day < $num_days; $day++) {
+            // skips day 0 and proceeds to day 1
+            // this is needed otherwise 0 is added to calendar
+            // which is not desirable
+            if ($day == 0)
+                continue;
             // Start a new row at the beginning of each week
             if ($day > 1 && ($day - 1 + $first_day_index) % 7 == 0) {
                 echo "</tr><tr>";
             }
 
             $dayHasOrders = false;
-            // Print the cell for the current day
-            while ($row2 = mysqli_fetch_array($month_date_result)) {
-                //print_r($row2);
-                /*print_r("Date:");
-                print_r($day);
-                print_r(" ");
-                print_r($row2['count']);
-                print_r(" ");
-                print_r($row2['date_only']);
-                print_r(" ");*/
-                // $amount_of_orders_in_day[] = $row2['count'];
-                $date_with_orders[] = $row2['date_only'];
-                /*print_r($day);
-                print_r(" ");
-                print_r($row2['date_only']);
-                print_r(" ");*/
-
-
+            for ($i = 0; $i < $count_of_days_with_orders; $i++) {
+                if ($date_with_orders[$i] == $day) {
+                    $dayHasOrders = true;
+                    echo "<td align=center> <a href=#> $day($count_of_orders_in_a_date[$i]) </a></td>";
+                    break;
+                }
             }
-            //print_r($amount_of_orders_in_day);
-            //print_r($date_with_orders);
-            if ($dayHasOrders) {
-                //echo "<td align=center> <a> $day($amount_of_orders_in_day) </a></td>";
-            } else {
+            if (!$dayHasOrders) {
                 echo "<td align=center> $day</td>";
             }
 
-
+            //   echo "<td align=center> $day</td>";
+    
+            //  print_r($date_with_orders[0]);
+            // print_r($date_with_orders[1]);
+            //print_r($date_with_orders[2]);
+            /* if ($date_with_orders[$day] == $day) {
+                  echo "<td align=center> <a> $day($count_of_orders_in_a_date[$day]) </a></td>";
+              } else {
+                  echo "<td align=center> $day</td>";
+              }
+*/
+            // echo "<td align=center> $day</td>";
         }
 
         // Print blank cells for the days after the last day of the month
