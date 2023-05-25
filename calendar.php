@@ -181,11 +181,13 @@
         while ($row2 = mysqli_fetch_array($month_date_result)) {
             $date_with_orders[] = $row2['date_only'];
             $count_of_orders_in_a_date[] = $row2['count'];
+
         }
         $count_of_days_with_orders = sizeof($date_with_orders);
-
+        print_r($count_of_orders_in_a_date);
         // starts loop with 0 to follow loop standards
         for ($day = 0; $day < $num_days; $day++) {
+
             // skips day 0 and proceeds to day 1
             // this is needed otherwise 0 is added to calendar
             // which is not desirable
