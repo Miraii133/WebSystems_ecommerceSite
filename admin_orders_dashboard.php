@@ -98,7 +98,45 @@
     <!-- Navbar End -->
     <table class="table">
         <?php
+        $date_selected = $_GET['date_selected'];
+        $AjaxPayload_JS = <<<HTML
+
+            <script>
+            // creates an AJAX payload to move selectedDate sent from
+            // since user needs to see admin_orders_dashboard
+            // as well as admin_orders_script needing the date_selected
+            function send_date_selected(date_selected) {
+           var xhr = new XMLHttpRequest();
+
+            // Prepare the Ajax request
+            xhr.open("POST", "admin_orders_status_script.php", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+            // Define the callback function to handle the response
+            xhr.onload = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                // Handle the response from the server
+                var response = xhr.responseText;
+                console.log(response);
+                // ...
+            } else {
+                // Error handling
+            }
+            };
+
+            // Prepare the data to be sent
+            var data = "date_selected=" + encodeURIComponent(date_selected);
+
+            // Send the Ajax request
+            xhr.send(data);
+
+            }
+           send_date_selected($date_selected);
+            </script>
+HTML;
+
         include "admin_orders_status_script.php";
+        echo $AjaxPayload_JS;
         ?>
         <!-- picture -> description -> name -> quantity -> price -> "delete" button -->
         <th style="width: 50px; padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">

@@ -81,7 +81,6 @@ HTML;
     echo $displayStatusMenuQuantity_HTML;
 
 }
-// cookie value for use
 
 function changeProductStatus($dlink)
 {
@@ -173,12 +172,14 @@ HTML;
     }
 }
 
-function displayPendingOrders($dlink)
+function displayPendingOrders($dlink, $date_selected)
 {
     changeStatusMenuQuantity($dlink);
     $get_AllOrders_sql = <<<SQL
-    SELECT * FROM products, purchase WHERE products.prodid=purchase.prodid AND status='pending';
+    SELECT * FROM products, purchase 
+    WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='pending';
 SQL;
+
 
 
     // retrieves all pending orders arrays and loops through 
@@ -237,13 +238,13 @@ HTML;
 }
 
 
-function displayAcceptedOrders($dlink)
+function displayAcceptedOrders($dlink, $date_selected)
 {
     changeStatusMenuQuantity($dlink);
     $get_AcceptedOrders_sql = <<<SQL
-    SELECT * FROM products, purchase WHERE products.prodid=purchase.prodid AND status='accepted';
+    SELECT * FROM products, purchase 
+    WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='accepted';
 SQL;
-
     // retrieves all pending orders arrays and loops through 
     // all to get Array objects. This in turn allows
     // retrieval of all userid and prodid which
@@ -295,11 +296,12 @@ HTML;
     }
 }
 
-function displayCompletedOrders($dlink)
+function displayCompletedOrders($dlink, $date_selected)
 {
     changeStatusMenuQuantity($dlink);
     $get_CompletedOrders_sql = <<<SQL
-    SELECT * FROM products, purchase WHERE products.prodid=purchase.prodid AND status='completed';
+    SELECT * FROM products, purchase 
+    WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='completed';
 SQL;
 
     // retrieves all pending orders arrays and loops through 
@@ -357,11 +359,12 @@ HTML;
     }
 }
 
-function displayReturned_RefundedOrders($dlink)
+function displayReturned_RefundedOrders($dlink, $date_selected)
 {
     changeStatusMenuQuantity($dlink);
     $get_CompletedOrders_sql = <<<SQL
-    SELECT * FROM products, purchase WHERE products.prodid=purchase.prodid AND status='refunded';
+    SELECT * FROM products, purchase 
+    WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='refunded';
 SQL;
 
 
@@ -422,24 +425,25 @@ HTML;
 
 
 $dlink = connectToDB();
-if (isset($_REQUEST['status']) && $_REQUEST['status'] == 'pending') {
-    displayPendingOrders($dlink);
-} else if (isset($_REQUEST['status']) && $_REQUEST['status'] == 'accepted') {
-    displayAcceptedOrders($dlink);
-} else if (isset($_REQUEST['status']) && $_REQUEST['status'] == 'completed') {
-    displayCompletedOrders($dlink);
-} else if (isset($_REQUEST['status']) && $_REQUEST['status'] == 'refunded') {
-    displayReturned_RefundedOrders($dlink);
+if (
+    isset($_REQUEST['status']) &&
+    $_REQUEST['status'] == 'pending' &&
+    isset($_GET['date_selected'])
+) {
+    displayPendingOrders($dlink, $_GET['date_selected']);
+} else if (isset($_REQUEST['status']) && $_REQUEST['status'] == 'accepted' && isset($_GET['date_selected'])) {
+    displayAcceptedOrders($dlink, $_GET['date_selected']);
+} else if (isset($_REQUEST['status']) && $_REQUEST['status'] == 'completed' && isset($_GET['date_selected'])) {
+    displayCompletedOrders($dlink, $_GET['date_selected']);
+} else if (isset($_REQUEST['status']) && $_REQUEST['status'] == 'refunded' && isset($_GET['date_selected'])) {
+    displayReturned_RefundedOrders($dlink, $_GET['date_selected']);
+} else if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['date_selected'])) {
+    displayAllOrders($dlink, $_GET['date_selected']);
 }
-
 // checks if a new post value is created, might
 // have some bugs if this is triggered by other
 // post values
-
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['date_selected'])) {
-    displayAllOrders($dlink, $_GET['date_selected']);
-
-} else if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     changeProductStatus($dlink);
 }
 
