@@ -136,7 +136,6 @@
 
 
         $get_currentDate_sql = "SELECT DATE_FORMAT( DATE, '%d' ) AS date_only, COUNT( * ) AS count FROM purchase WHERE DATE_FORMAT( DATE, '%m' ) = MONTH( NOW( ) ) GROUP BY date_only HAVING COUNT( * ) >=1";
-        print_r($get_currentDate_sql);
         $month_date_result = mysqli_query($dlink, $get_currentDate_sql);
 
         // Get the number of days in the current month

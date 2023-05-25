@@ -26,21 +26,16 @@ function changeStatusMenuQuantity($dlink, $date_selected)
     // can definitely turn this to for loop to shorten
     // code, but lacking of time
     $get_pendingQuantity_sql = <<<SQL
-       SELECT COUNT(purchase.prodid) as quantity FROM products, purchase 
-    WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='pending';
-SQL;
-
+        SELECT COUNT(prodid) as quantity FROM Purchase WHERE DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='pending';
+    SQL;
     $get_acceptedQuantity_sql = <<<SQL
-        SELECT COUNT(purchase.prodid) as quantity FROM products, purchase 
-    WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='accepted';
+        SELECT COUNT(prodid) as quantity FROM Purchase WHERE DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='accepted';
 SQL;
     $get_completedQuantity_sql = <<<SQL
-       SELECT COUNT(purchase.prodid) as quantity FROM products, purchase 
-    WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='completed';
+        SELECT COUNT(prodid) as quantity FROM Purchase WHERE DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='completed';
 SQL;
     $get_refundedQuantity_sql = <<<SQL
-        SELECT COUNT(purchase.prodid) as quantity FROM products, purchase 
-    WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='refunded';
+        SELECT COUNT(prodid) as quantity FROM Purchase WHERE DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='refunded';
 SQL;
     $pending_statusMenuQuantity = mysqli_query($dlink, $get_pendingQuantity_sql);
     $accepted_statusMenuQuantity = mysqli_query($dlink, $get_acceptedQuantity_sql);
@@ -89,7 +84,7 @@ HTML;
 
 function changeProductStatus($dlink)
 {
-    if (isset($_POST["status"]) && isset($_POST["prodid"])) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['status']) && isset($_POST['prodid'])) {
         // Get the selected value from the form
         $status = $_POST["status"];
         $prodid = $_POST["prodid"];
@@ -109,6 +104,8 @@ function changeProductStatus($dlink)
     }
 }
 
+
+
 function displayAllOrders($dlink, $date_selected)
 {
     changeStatusMenuQuantity($dlink, $date_selected);
@@ -116,6 +113,9 @@ function displayAllOrders($dlink, $date_selected)
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d') = $date_selected;
 SQL;
+
+    // 
+
 
     // retrieves all pending orders arrays and loops through 
     // all to get Array objects. This in turn allows
@@ -127,63 +127,67 @@ SQL;
         $userid = $AllOrders_rows['userid'];
 
         $product_info_html = <<<HTML
-   <tr> 
-         <td style="width: 0px; display:inline; margin-top:100px;">
-         <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
-         <img src="${AllOrders_rows['productimage']}"> </td>
-         <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
-         <p> {$AllOrders_rows['productname']} x{$AllOrders_rows['ourprice']}</p>
-     </td>
-         
-         <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AllOrders_rows['quantity']}</td>
-         <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AllOrders_rows['date']}</td>
-         <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">
-         <select name="statusSelect" id="#statusSelect_${userid}_${prodid}" onchange="updateProductStatus($prodid, $userid)">
-        <option value="${AllOrders_rows['status']}" selected> ${AllOrders_rows['status']}</option>
-        <option value=pending>pending</option>
-        <option value=accepted>accepted</option>
-        <option value=completed>completed</option>
-        <option value=refunded>returned/refunded</option>
-      </select value>
+    <tr> 
+        <td style="width: 0px; display:inline; margin-top:100px;">
+        <td style="width: 0px; display:inline; padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
+        <img src="${AllOrders_rows['productimage']}"> </td>
+        <td style="padding-left: 0px; padding-right: 0px; padding-bottom: 100px;"> 
+        <p> {$AllOrders_rows['productname']} x{$AllOrders_rows['ourprice']}</p>
     </td>
-
-    <script> 
-    function updateProductStatus(userid, prodid) {
-      var selectedValue = document.getElementById("#statusSelect_${userid}_${prodid}").value;
-      console.log("status" + selectedValue);
-      console.log("userid" + userid);
-       console.log(document.getElementById("#statusSelect_${userid}_${prodid}"));
-      // Send the selected value to the server using AJAX
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "admin_orders_script.php", true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-          // Request successful, display the response
-          console.log(xhr.responseText);
-        }
-      };
-      xhr.send("status=" + selectedValue + "&prodid=" + prodid);
-    }
         
-    </script>
-    </td>
+        <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AllOrders_rows['quantity']}</td>
+        <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AllOrders_rows['date']}</td>
+        <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">
+        <select name="statusSelect" id="statusSelect_${userid}_${prodid}" onchange="updateProductStatus(${userid}, ${prodid})">
+            <option value="${AllOrders_rows['status']}" selected> ${AllOrders_rows['status']}</option>
+            <option value="accepted">accepted</option>
+            <option value="completed">completed</option>
+            <option value="refunded">returned/refunded</option>
+        </select>
+        </td>
+    </tr>
 
-    
 HTML;
-        echo $product_info_html;
 
+        echo $product_info_html;
     }
+
+    $Ajax_for_status_update = <<<JS
+<script>
+function updateProductStatus(userid, prodid) {
+    console.log(userid);
+    console.log(prodid);
+    console.log(document.getElementById("statusSelect_" + userid + "_" + prodid));
+    var selectElement = document.getElementById("statusSelect_" + userid + "_" + prodid);
+    var selectedValue = selectElement.value;
+    
+    // Send the selected value to the server using AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "admin_orders_script.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            // Request successful, display the response
+            console.log(xhr.responseText);
+        }
+    };
+    xhr.send("status=" + selectedValue + "&prodid=" + prodid);
+}
+</script>
+JS;
+
+    echo $Ajax_for_status_update;
+
+
 }
 
 function displayPendingOrders($dlink, $date_selected)
 {
     changeStatusMenuQuantity($dlink, $date_selected);
-
     $get_AllOrders_sql = <<<SQL
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='pending';
-    SQL;
+SQL;
 
 
 
@@ -193,6 +197,7 @@ function displayPendingOrders($dlink, $date_selected)
     // has pending state
     $AllOrders_result = mysqli_query($dlink, $get_AllOrders_sql);
     foreach ($AllOrders_result as $AllOrders_rows) {
+
         $prodid = $AllOrders_rows['prodid'];
         $userid = $AllOrders_rows['userid'];
         $product_info_html = <<<HTML
@@ -207,46 +212,41 @@ function displayPendingOrders($dlink, $date_selected)
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AllOrders_rows['quantity']}</td>
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AllOrders_rows['date']}</td>
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">  
-         <select name="statusSelect" id="#statusSelect_pending_${userid}_${prodid}" onchange="updateProductStatus($prodid, $userid)">
+         <select name="statusSelect" id="statusSelect_${userid}_${prodid}" onchange="updateProductStatus(${userid}, ${prodid})">
         <option value="${AllOrders_rows['status']}" selected> ${AllOrders_rows['status']}</option>
-        <option value=pending>pending</option>
         <option value=accepted>accepted</option>
         <option value=completed>completed</option>
         <option value=refunded>returned/refunded</option>
       </select value>
 
-    <script> 
-    function updateProductStatus(prodid, userid) {
-            
-      
-      var selectedValue = document.getElementById("#statusSelect_pending_${userid}_${prodid}").value;
-        console.log(document.getElementById("#statusSelect_pending_${userid}_${prodid}"));
-       console.log("userid" + userid);
-       console.log("status" + selectedValue);
-        // Send the status selected value to the server using AJAX 
-      // so changeProductStatus can run mySQL query to update
-      // status of product in purchase table.
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "admin_orders_script.php", true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-          // Request successful, display the response
-          console.log(xhr.responseText);
-        }
-      };
-      xhr.send("status=" + selectedValue + "&prodid=" + prodid);
-    }
-        
-    </script>
-
 HTML;
 
-
-
         echo $product_info_html;
-
     }
+
+    $Ajax_for_status_update = <<<JS
+<script>
+function updateProductStatus(userid, prodid) {
+    var selectElement = document.getElementById("statusSelect_" + userid + "_" + prodid);
+    var selectedValue = selectElement.value;
+    
+    // Send the selected value to the server using AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "admin_orders_script.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            // Request successful, display the response
+            console.log(xhr.responseText);
+        }
+    };
+    xhr.send("status=" + selectedValue + "&prodid=" + prodid);
+}
+</script>
+JS;
+
+    echo $Ajax_for_status_update;
+
 }
 
 
@@ -256,7 +256,7 @@ function displayAcceptedOrders($dlink, $date_selected)
     $get_AcceptedOrders_sql = <<<SQL
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='accepted';
-    SQL;
+SQL;
     // retrieves all pending orders arrays and loops through 
     // all to get Array objects. This in turn allows
     // retrieval of all userid and prodid which
@@ -264,6 +264,7 @@ function displayAcceptedOrders($dlink, $date_selected)
     $AcceptedOrders_result = mysqli_query($dlink, $get_AcceptedOrders_sql);
     foreach ($AcceptedOrders_result as $AcceptedOrders_rows) {
         $prodid = $AcceptedOrders_rows['prodid'];
+        $userid = $AcceptedOrders_rows['userid'];
         $product_info_html = <<<HTML
    <tr> 
          <td style="width: 0px; display:inline; margin-top:100px;">
@@ -276,39 +277,43 @@ function displayAcceptedOrders($dlink, $date_selected)
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AcceptedOrders_rows['quantity']}</td>
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AcceptedOrders_rows['date']}</td>
                   <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">  
-         <select name="statusSelect" id="#statusSelect_accepted" onchange="updateProductStatus($prodid)">
+         <select name="statusSelect" id="statusSelect_${userid}_${prodid}" onchange="updateProductStatus(${userid}, ${prodid})">
         <option value="${AcceptedOrders_rows['status']}" selected> ${AcceptedOrders_rows['status']}</option>
         <option value=pending>pending</option>
-        <option value=accepted>accepted</option>
         <option value=completed>completed</option>
         <option value=refunded>returned/refunded</option>
       </select value>
 
-    <script> 
-    function updateProductStatus(prodid) {
-      var selectedValue = document.getElementById("#statusSelect_accepted").value;
-
-         // Send the status selected value to the server using AJAX 
-      // so changeProductStatus can run mySQL query to update
-      // status of product in purchase table.
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "admin_orders_script.php", true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-          // Request successful, display the response
-          console.log(xhr.responseText);
-        }
-      };
-      xhr.send("status=" + selectedValue + "&prodid=" + prodid);
-    }
-        
-    </script>
 HTML;
         echo $product_info_html;
-
-
     }
+    $Ajax_for_status_update = <<<JS
+<script>
+function updateProductStatus(userid, prodid) {
+    console.log(userid);
+    console.log(prodid);
+    console.log(document.getElementById("statusSelect_" + userid + "_" + prodid));
+    var selectElement = document.getElementById("statusSelect_" + userid + "_" + prodid);
+    var selectedValue = selectElement.value;
+    
+    // Send the selected value to the server using AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "admin_orders_script.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            // Request successful, display the response
+            console.log(xhr.responseText);
+        }
+    };
+    xhr.send("status=" + selectedValue + "&prodid=" + prodid);
+}
+</script>
+JS;
+
+    echo $Ajax_for_status_update;
+
+
 }
 
 function displayCompletedOrders($dlink, $date_selected)
@@ -317,7 +322,7 @@ function displayCompletedOrders($dlink, $date_selected)
     $get_CompletedOrders_sql = <<<SQL
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='completed';
-    SQL;
+SQL;
 
     // retrieves all pending orders arrays and loops through 
     // all to get Array objects. This in turn allows
@@ -326,6 +331,7 @@ function displayCompletedOrders($dlink, $date_selected)
     $CompletedOrders_result = mysqli_query($dlink, $get_CompletedOrders_sql);
     foreach ($CompletedOrders_result as $CompletedOrders_rows) {
         $prodid = $CompletedOrders_rows['prodid'];
+        $userid = $CompletedOrders_rows['userid'];
 
         $product_info_html = <<<HTML
    <tr> 
@@ -339,35 +345,12 @@ function displayCompletedOrders($dlink, $date_selected)
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$CompletedOrders_rows['quantity']}</td>
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$CompletedOrders_rows['date']}</td>
                   <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">  
-         <select name="statusSelect" id="#statusSelect_completed" onchange="updateProductStatus($prodid)">
+         <select name="statusSelect" id="statusSelect_${userid}_${prodid}" onchange="updateProductStatus(${userid}, ${prodid})">
         <option value="${CompletedOrders_rows['status']}" selected> ${CompletedOrders_rows['status']}</option>
         <option value=pending>pending</option>
         <option value=accepted>accepted</option>
-        <option value=completed>completed</option>
         <option value=refunded>returned/refunded</option>
       </select value>
-
-    <script> 
-    function updateProductStatus(prodid) {
-      var selectedValue = document.getElementById("#statusSelect_completed").value;
-
-      // Send the status selected value to the server using AJAX 
-      // so changeProductStatus can run mySQL query to update
-      // status of product in purchase table.
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "admin_orders_script.php", true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-          // Request successful, display the response
-          console.log(xhr.responseText);
-        }
-      };
-      xhr.send("status=" + selectedValue + "&prodid=" + prodid);
-    }
-        
-    </script>
-
     
 HTML;
         echo $product_info_html;
@@ -375,6 +358,29 @@ HTML;
         // if user viewing product.php is logged in, add to cart button
 
     }
+    $Ajax_for_status_update = <<<JS
+<script>
+function updateProductStatus(userid, prodid) {
+    var selectElement = document.getElementById("statusSelect_" + userid + "_" + prodid);
+    var selectedValue = selectElement.value;
+    
+    // Send the selected value to the server using AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "admin_orders_script.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            // Request successful, display the response
+            console.log(xhr.responseText);
+        }
+    };
+    xhr.send("status=" + selectedValue + "&prodid=" + prodid);
+}
+</script>
+JS;
+
+    echo $Ajax_for_status_update;
+
 }
 
 function displayReturned_RefundedOrders($dlink, $date_selected)
@@ -383,7 +389,7 @@ function displayReturned_RefundedOrders($dlink, $date_selected)
     $get_CompletedOrders_sql = <<<SQL
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='refunded';
-    SQL;
+SQL;
 
 
     // retrieves all pending orders arrays and loops through 
@@ -393,6 +399,7 @@ function displayReturned_RefundedOrders($dlink, $date_selected)
     $CompletedOrders_result = mysqli_query($dlink, $get_CompletedOrders_sql);
     foreach ($CompletedOrders_result as $CompletedOrders_rows) {
         $prodid = $CompletedOrders_rows['prodid'];
+        $userid = $CompletedOrders_rows['userid'];
         $product_info_html = <<<HTML
    <tr> 
          <td style="width: 0px; display:inline; margin-top:100px;">
@@ -405,44 +412,41 @@ function displayReturned_RefundedOrders($dlink, $date_selected)
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$CompletedOrders_rows['quantity']}</td>
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$CompletedOrders_rows['date']}</td>
         <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">  
-         <select name="statusSelect" id="#statusSelect_refunded" onchange="updateProductStatus($prodid)">
+         <select name="statusSelect" id="statusSelect_${userid}_${prodid}" onchange="updateProductStatus(${userid}, ${prodid})">
         <option value="${CompletedOrders_rows['status']}" selected> ${CompletedOrders_rows['status']}</option>
-        <option value=pending>pending</option>
         <option value=accepted>accepted</option>
-        <option value=completed>comzpleted</option>
+        <option value=completed>completed</option>
         <option value=refunded>returned/refunded</option>
       </select value>
-
-    <script> 
-
-    function updateProductStatus(prodid) {
-      var selectedValue = document.getElementById("#statusSelect_refunded").value;
-
-         // Send the status selected value to the server using AJAX 
-      // so changeProductStatus can run mySQL query to update
-      // status of product in purchase table.
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "admin_orders_script.php", true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-          // Request successful, display the response
-          console.log(xhr.responseText);
-        }
-      };
-      console.log(selectedValue);
-      console.log(prodid);
-      xhr.send("status=" + selectedValue + "&prodid=" + prodid);
-    }
-        
-    </script>
-    
 HTML;
         echo $product_info_html;
 
         // if user viewing product.php is logged in, add to cart button
 
     }
+    $Ajax_for_status_update = <<<JS
+<script>
+function updateProductStatus(userid, prodid) {
+    var selectElement = document.getElementById("statusSelect_" + userid + "_" + prodid);
+    var selectedValue = selectElement.value;
+    
+    // Send the selected value to the server using AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "admin_orders_script.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            // Request successful, display the response
+            console.log(xhr.responseText);
+        }
+    };
+    xhr.send("status=" + selectedValue + "&prodid=" + prodid);
+}
+</script>
+JS;
+
+    echo $Ajax_for_status_update;
+
 }
 
 
@@ -450,7 +454,9 @@ HTML;
 
 $dlink = connectToDB();
 if (
-    isset($_REQUEST['status']) && $_REQUEST['status'] == 'pending' && isset($_GET['date_selected'])
+    isset($_REQUEST['status']) &&
+    $_REQUEST['status'] == 'pending' &&
+    isset($_GET['date_selected'])
 ) {
     displayPendingOrders($dlink, $_GET['date_selected']);
 } else if (isset($_REQUEST['status']) && $_REQUEST['status'] == 'accepted' && isset($_GET['date_selected'])) {
