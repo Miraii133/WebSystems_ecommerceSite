@@ -20,23 +20,23 @@ function connectToDB()
     // to avoid cpu leak 
     return $dlink;
 }
-function changeStatusMenuQuantity($dlink)
+function changeStatusMenuQuantity($dlink, $date_selected)
 {
 
     // can definitely turn this to for loop to shorten
     // code, but lacking of time
     $get_pendingQuantity_sql = <<<SQL
-        SELECT COUNT(prodid) as quantity FROM Purchase WHERE status='pending';
+        SELECT COUNT(prodid) as quantity FROM Purchase WHERE DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='pending';
     SQL;
     $get_acceptedQuantity_sql = <<<SQL
-        SELECT COUNT(prodid) as quantity FROM Purchase WHERE status='accepted';
-    SQL;
+        SELECT COUNT(prodid) as quantity FROM Purchase WHERE DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='accepted';
+SQL;
     $get_completedQuantity_sql = <<<SQL
-        SELECT COUNT(prodid) as quantity FROM Purchase WHERE status='completed';
-    SQL;
+        SELECT COUNT(prodid) as quantity FROM Purchase WHERE DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='completed';
+SQL;
     $get_refundedQuantity_sql = <<<SQL
-        SELECT COUNT(prodid) as quantity FROM Purchase WHERE status='refunded';
-    SQL;
+        SELECT COUNT(prodid) as quantity FROM Purchase WHERE DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='refunded';
+SQL;
     $pending_statusMenuQuantity = mysqli_query($dlink, $get_pendingQuantity_sql);
     $accepted_statusMenuQuantity = mysqli_query($dlink, $get_acceptedQuantity_sql);
     $completed_statusMenuQuantity = mysqli_query($dlink, $get_completedQuantity_sql);
@@ -104,11 +104,9 @@ function changeProductStatus($dlink)
     }
 }
 
-
-
 function displayAllOrders($dlink, $date_selected)
 {
-    changeStatusMenuQuantity($dlink);
+    changeStatusMenuQuantity($dlink, $date_selected);
     $get_AllOrders_sql = <<<SQL
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d') = $date_selected;
@@ -174,7 +172,7 @@ HTML;
 
 function displayPendingOrders($dlink, $date_selected)
 {
-    changeStatusMenuQuantity($dlink);
+    changeStatusMenuQuantity($dlink, $date_selected);
     $get_AllOrders_sql = <<<SQL
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='pending';
@@ -213,7 +211,9 @@ SQL;
     function updateProductStatus(prodid) {
       var selectedValue = document.getElementById("#statusSelect").value;
 
-      // Send the selected value to the server using AJAX
+        // Send the status selected value to the server using AJAX 
+      // so changeProductStatus can run mySQL query to update
+      // status of product in purchase table.
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "admin_orders_script.php", true);
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -240,7 +240,7 @@ HTML;
 
 function displayAcceptedOrders($dlink, $date_selected)
 {
-    changeStatusMenuQuantity($dlink);
+    changeStatusMenuQuantity($dlink, $date_selected);
     $get_AcceptedOrders_sql = <<<SQL
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='accepted';
@@ -275,7 +275,9 @@ SQL;
     function updateProductStatus(prodid) {
       var selectedValue = document.getElementById("#statusSelect").value;
 
-      // Send the selected value to the server using AJAX
+         // Send the status selected value to the server using AJAX 
+      // so changeProductStatus can run mySQL query to update
+      // status of product in purchase table.
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "admin_orders_script.php", true);
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -298,7 +300,7 @@ HTML;
 
 function displayCompletedOrders($dlink, $date_selected)
 {
-    changeStatusMenuQuantity($dlink);
+    changeStatusMenuQuantity($dlink, $date_selected);
     $get_CompletedOrders_sql = <<<SQL
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='completed';
@@ -335,7 +337,9 @@ SQL;
     function updateProductStatus(prodid) {
       var selectedValue = document.getElementById("#statusSelect").value;
 
-      // Send the selected value to the server using AJAX
+      // Send the status selected value to the server using AJAX 
+      // so changeProductStatus can run mySQL query to update
+      // status of product in purchase table.
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "admin_orders_script.php", true);
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -361,7 +365,7 @@ HTML;
 
 function displayReturned_RefundedOrders($dlink, $date_selected)
 {
-    changeStatusMenuQuantity($dlink);
+    changeStatusMenuQuantity($dlink, $date_selected);
     $get_CompletedOrders_sql = <<<SQL
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='refunded';
@@ -395,10 +399,13 @@ SQL;
       </select value>
 
     <script> 
+
     function updateProductStatus(prodid) {
       var selectedValue = document.getElementById("#statusSelect").value;
 
-      // Send the selected value to the server using AJAX
+         // Send the status selected value to the server using AJAX 
+      // so changeProductStatus can run mySQL query to update
+      // status of product in purchase table.
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "admin_orders_script.php", true);
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");

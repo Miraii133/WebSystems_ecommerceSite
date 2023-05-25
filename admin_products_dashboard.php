@@ -93,10 +93,12 @@
                     isset($_COOKIE['userType']) &&
                     $_COOKIE['userType'] == 'admin'
                 ) {
-                    echo "<a href='calendar.php' class='nav-item nav-link active'> Calendar </a>";
-                    echo "<a href='admin_products_dashboard.php' class='nav-item nav-link'>Product</a>";
-                    //<!-- goes back to login page when logged out -->
+
+                    echo "<a href='calendar.php' class='nav-item nav-link'>Calendar</a>";
+                    echo "<a href=# class='nav-item nav-link active'>Products</a>";
                     echo "<a href='logout_script.php' class='nav-item nav-link'>Logout</a>";
+
+                    // if client is user
                 }
 
                 ?>
@@ -106,127 +108,25 @@
         </div>
     </nav>
     <!-- Navbar End -->
-    <?php
-    function connectToDB()
-    {
-        $hostname = "localhost";
-        $database = "Shopee";
-        $db_login = "root";
-        $db_pass = "";
-
-        /*
-        MYSQLI_REPORT_ERROR	    Report errors from mysqli function calls
-        MYSQLI_REPORT_STRICT	Throw mysqli_sql_exception for errors instead of warnings
-        */
-        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-        $dlink = mysqli_connect($hostname, $db_login, $db_pass, $database);
-        mysqli_select_db($dlink, $database);
-        // returns $dlink so other functions can use the same connection
-        // should probably terminate it at some point
-        // to avoid cpu leak 
-        return $dlink;
-    }
 
 
-    function displayCalendar($dlink)
-    {
 
 
-        // Get the current year and month
-        $year = date('Y');
-        $month = date('m');
+    <!-- Product Category Start -->
+    <div class="mx-auto">
 
-        $get_currentDate_sql = "SELECT DATE_FORMAT( DATE, '%d' ) AS date_only, COUNT( * ) AS count FROM Purchase WHERE DATE_FORMAT( DATE, '%m' ) = MONTH( NOW( ) ) GROUP BY date_only HAVING COUNT( * ) >=1";
-        $month_date_result = mysqli_query($dlink, $get_currentDate_sql);
+        <?php
+        // embeds all the HTML tags inside
+        // product_display_script to enable
+        // dynamic dispaly of products from
+        // database
+        include "product_display_script.php";
+        ?>
 
-        // Get the number of days in the current month
-        $num_days = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 
-        // Get the name of the current month, F in format('F') means the full name of the month
-        $date = new DateTime("$year-$month-01");
-        $month_name = $date->format('F');
+    </div>
+    <!-- Product Category End -->
 
-        // Get the index of the first day of the month (0 = Sunday, 1 = Monday, etc.)
-//The first argument, 'w', specifies that we want to retrieve the day of the week as a numeric value (0 for Sunday, 1 for Monday, and so on).
-//strtotime function creates a timestamp representing the first day of the given month and year.
-        $first_day_index = (int) date('w', strtotime("$year-$month-01"));
-
-        // Start the table and print the month name
-        echo "<table width=100% border=1><caption>$month_name $year</caption>";
-
-        // Print the table headers (days of the week)
-        echo "<tr>";
-        $tableHeadersHTML = <<<HTML
-        <th style="text-align: center;">SUN</th>
-        <th style="text-align: center;">MON</th>
-        <th style="text-align: center;">TUE</th>
-        <th style="text-align: center;">WED</th>
-        <th style="text-align: center;">THUR</th>
-        <th style="text-align: center;">FRI</th>
-        <th style="text-align: center;">SAT</th>
-    HTML;
-        echo $tableHeadersHTML;
-        echo "</tr>";
-
-        // Start a new row for the first week
-        echo "<tr>";
-
-        // Print blank cells for the days before the first day of the month
-        for ($i = 0; $i < $first_day_index; $i++) {
-            echo "<td></td>";
-        }
-
-        $date_with_orders = array();
-        $count_of_orders_in_a_date = array();
-        while ($row2 = mysqli_fetch_array($month_date_result)) {
-            $date_with_orders[] = $row2['date_only'];
-            $count_of_orders_in_a_date[] = $row2['count'];
-        }
-        $count_of_days_with_orders = sizeof($date_with_orders);
-        // starts loop with 0 to follow loop standards
-        for ($day = 0; $day < $num_days; $day++) {
-
-            // skips day 0 and proceeds to day 1
-            // this is needed otherwise 0 is added to calendar
-            // which is not desirable
-            if ($day == 0)
-                continue;
-            // Start a new row at the beginning of each week
-            if ($day > 1 && ($day - 1 + $first_day_index) % 7 == 0) {
-                echo "</tr><tr>";
-            }
-
-            $dayHasOrders = false;
-            // loops through all the days with orders
-            // and adds a clickable anchor tag
-            for ($i = 0; $i < $count_of_days_with_orders; $i++) {
-                if ($date_with_orders[$i] == $day) {
-                    $dayHasOrders = true;
-                    //print_r($count_of_orders_in_a_date[$i]);
-                    echo "<td align=center> <a href=admin_orders_dashboard.php?date_selected=${day}&quantity=${count_of_orders_in_a_date[$i]}> $day($count_of_orders_in_a_date[$i]) </a></td>";
-                    break;
-                }
-            }
-            // if a day has no orders
-            // just print it as a normal text
-            if (!$dayHasOrders) {
-                echo "<td align=center> $day</td>";
-            }
-
-        }
-
-        // Print blank cells for the days after the last day of the month
-        for ($i = $num_days + $first_day_index; $i < 35; $i++) {
-            echo "<td></td>";
-        }
-
-        // End the last row and the table
-        echo "</tr></table>";
-    }
-
-    $dlink = connectToDB();
-    displayCalendar($dlink);
-    ?>
 
 
     <!-- Footer Start -->
