@@ -120,7 +120,7 @@
         // product_display_script to enable
         // dynamic dispaly of products from
         // database
-        include "product_display_script.php";
+        include "admin_products_display_script.php";
         ?>
 
 

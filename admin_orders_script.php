@@ -186,7 +186,6 @@ SQL;
     // has pending state
     $AllOrders_result = mysqli_query($dlink, $get_AllOrders_sql);
     foreach ($AllOrders_result as $AllOrders_rows) {
-
         $prodid = $AllOrders_rows['prodid'];
         $product_info_html = <<<HTML
    <tr> 
