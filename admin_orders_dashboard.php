@@ -116,9 +116,48 @@
         </th>
 
         <?php
-        include "admin_orders_script.php"
+        $date_selected = $_GET['date_selected'];
+        $AjaxPayload_JS = <<<HTML
 
-            ?>
+            <script>
+                // creates an AJAX payload to move selectedDate sent from
+            // since user needs to see admin_orders_dashboard
+            // as well as admin_orders_script needing the date_selected
+            function send_date_selected(date_selected) {
+           var xhr = new XMLHttpRequest();
+
+            // Prepare the Ajax request
+            xhr.open("POST", "admin_orders_script", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+            // Define the callback function to handle the response
+            xhr.onload = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                // Handle the response from the server
+                var response = xhr.responseText;
+                console.log(response);
+                // ...
+            } else {
+                // Error handling
+            }
+            };
+
+            // Prepare the data to be sent
+            var data = "date_selected=" + encodeURIComponent(date_selected);
+
+            // Send the Ajax request
+            xhr.send(data);
+
+            }
+           send_date_selected($date_selected);
+            </script>
+HTML;
+
+
+
+        include "admin_orders_script.php";
+        echo $AjaxPayload_JS;
+        ?>
     </table>
 
 
@@ -217,8 +256,8 @@
 
 
     <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>

@@ -105,13 +105,18 @@ function changeProductStatus($dlink)
     }
 }
 
-function displayAllOrders($dlink)
+
+
+function displayAllOrders($dlink, $date_selected)
 {
     changeStatusMenuQuantity($dlink);
     $get_AllOrders_sql = <<<SQL
-    SELECT * FROM products, purchase WHERE products.prodid=purchase.prodid;
+    SELECT * FROM products, purchase 
+    WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d') = $date_selected;
 SQL;
-    print_r($get_AllOrders_sql);
+
+    // 
+
 
     // retrieves all pending orders arrays and loops through 
     // all to get Array objects. This in turn allows
@@ -425,14 +430,17 @@ if (isset($_REQUEST['status']) && $_REQUEST['status'] == 'pending') {
     displayCompletedOrders($dlink);
 } else if (isset($_REQUEST['status']) && $_REQUEST['status'] == 'refunded') {
     displayReturned_RefundedOrders($dlink);
-} else {
-    displayAllOrders($dlink);
 }
 
 // checks if a new post value is created, might
 // have some bugs if this is triggered by other
 // post values
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['date_selected'])) {
+    displayAllOrders($dlink, $_GET['date_selected']);
+
+} else if ($_SERVER["REQUEST_METHOD"] == "POST") {
     changeProductStatus($dlink);
 }
+
 ?>

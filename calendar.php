@@ -219,7 +219,7 @@
                 if ($date_with_orders[$i] == $day) {
                     $dayHasOrders = true;
                     //print_r($count_of_orders_in_a_date[$i]);
-                    echo "<td align=center> <a href=admin_orders_script.php?date_selected=${day}&quantity=${count_of_orders_in_a_date[$i]}> $day($count_of_orders_in_a_date[$i]) </a></td>";
+                    echo "<td align=center> <a href=admin_orders_dashboard.php?date_selected=${day}&quantity=${count_of_orders_in_a_date[$i]}> $day($count_of_orders_in_a_date[$i]) </a></td>";
                     break;
                 }
             }
