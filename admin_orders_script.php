@@ -27,7 +27,7 @@ function changeStatusMenuQuantity($dlink, $date_selected)
     // code, but lacking of time
     $get_pendingQuantity_sql = <<<SQL
        SELECT COUNT(purchase.prodid) as quantity FROM products, purchase 
-        WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='pending';
+    WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='pending';
 SQL;
 
     $get_acceptedQuantity_sql = <<<SQL
@@ -89,7 +89,7 @@ HTML;
 
 function changeProductStatus($dlink)
 {
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["status"]) && isset($_POST["prodid"])) {
         // Get the selected value from the form
         $status = $_POST["status"];
         $prodid = $_POST["prodid"];
@@ -117,9 +117,6 @@ function displayAllOrders($dlink, $date_selected)
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d') = $date_selected;
 SQL;
 
-    // 
-
-
     // retrieves all pending orders arrays and loops through 
     // all to get Array objects. This in turn allows
     // retrieval of all userid and prodid which
@@ -127,6 +124,7 @@ SQL;
     $AllOrders_result = mysqli_query($dlink, $get_AllOrders_sql);
     foreach ($AllOrders_result as $AllOrders_rows) {
         $prodid = $AllOrders_rows['prodid'];
+        $userid = $AllOrders_rows['userid'];
 
         $product_info_html = <<<HTML
    <tr> 
@@ -140,8 +138,9 @@ SQL;
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AllOrders_rows['quantity']}</td>
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AllOrders_rows['date']}</td>
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">
-         <select name="statusSelect" id="#statusSelect" onchange="updateProductStatus($prodid)">
+         <select name="statusSelect" id="#statusSelect_${userid}_${prodid}" onchange="updateProductStatus($prodid, $userid)">
         <option value="${AllOrders_rows['status']}" selected> ${AllOrders_rows['status']}</option>
+        <option value=pending>pending</option>
         <option value=accepted>accepted</option>
         <option value=completed>completed</option>
         <option value=refunded>returned/refunded</option>
@@ -149,9 +148,11 @@ SQL;
     </td>
 
     <script> 
-    function updateProductStatus(prodid) {
-      var selectedValue = document.getElementById("#statusSelect").value;
-
+    function updateProductStatus(userid, prodid) {
+      var selectedValue = document.getElementById("#statusSelect_${userid}_${prodid}").value;
+      console.log("status" + selectedValue);
+      console.log("userid" + userid);
+       console.log(document.getElementById("#statusSelect_${userid}_${prodid}"));
       // Send the selected value to the server using AJAX
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "admin_orders_script.php", true);
@@ -178,10 +179,11 @@ HTML;
 function displayPendingOrders($dlink, $date_selected)
 {
     changeStatusMenuQuantity($dlink, $date_selected);
+
     $get_AllOrders_sql = <<<SQL
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='pending';
-SQL;
+    SQL;
 
 
 
@@ -192,6 +194,7 @@ SQL;
     $AllOrders_result = mysqli_query($dlink, $get_AllOrders_sql);
     foreach ($AllOrders_result as $AllOrders_rows) {
         $prodid = $AllOrders_rows['prodid'];
+        $userid = $AllOrders_rows['userid'];
         $product_info_html = <<<HTML
    <tr> 
          <td style="width: 0px; display:inline; margin-top:100px;">
@@ -204,17 +207,22 @@ SQL;
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AllOrders_rows['quantity']}</td>
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AllOrders_rows['date']}</td>
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">  
-         <select name="statusSelect" id="#statusSelect" onchange="updateProductStatus($prodid)">
+         <select name="statusSelect" id="#statusSelect_pending_${userid}_${prodid}" onchange="updateProductStatus($prodid, $userid)">
         <option value="${AllOrders_rows['status']}" selected> ${AllOrders_rows['status']}</option>
+        <option value=pending>pending</option>
         <option value=accepted>accepted</option>
         <option value=completed>completed</option>
         <option value=refunded>returned/refunded</option>
       </select value>
 
     <script> 
-    function updateProductStatus(prodid) {
-      var selectedValue = document.getElementById("#statusSelect").value;
-
+    function updateProductStatus(prodid, userid) {
+            
+      
+      var selectedValue = document.getElementById("#statusSelect_pending_${userid}_${prodid}").value;
+        console.log(document.getElementById("#statusSelect_pending_${userid}_${prodid}"));
+       console.log("userid" + userid);
+       console.log("status" + selectedValue);
         // Send the status selected value to the server using AJAX 
       // so changeProductStatus can run mySQL query to update
       // status of product in purchase table.
@@ -248,7 +256,7 @@ function displayAcceptedOrders($dlink, $date_selected)
     $get_AcceptedOrders_sql = <<<SQL
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='accepted';
-SQL;
+    SQL;
     // retrieves all pending orders arrays and loops through 
     // all to get Array objects. This in turn allows
     // retrieval of all userid and prodid which
@@ -268,16 +276,17 @@ SQL;
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AcceptedOrders_rows['quantity']}</td>
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$AcceptedOrders_rows['date']}</td>
                   <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">  
-         <select name="statusSelect" id="#statusSelect" onchange="updateProductStatus($prodid)">
+         <select name="statusSelect" id="#statusSelect_accepted" onchange="updateProductStatus($prodid)">
         <option value="${AcceptedOrders_rows['status']}" selected> ${AcceptedOrders_rows['status']}</option>
         <option value=pending>pending</option>
+        <option value=accepted>accepted</option>
         <option value=completed>completed</option>
         <option value=refunded>returned/refunded</option>
       </select value>
 
     <script> 
     function updateProductStatus(prodid) {
-      var selectedValue = document.getElementById("#statusSelect").value;
+      var selectedValue = document.getElementById("#statusSelect_accepted").value;
 
          // Send the status selected value to the server using AJAX 
       // so changeProductStatus can run mySQL query to update
@@ -308,7 +317,7 @@ function displayCompletedOrders($dlink, $date_selected)
     $get_CompletedOrders_sql = <<<SQL
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='completed';
-SQL;
+    SQL;
 
     // retrieves all pending orders arrays and loops through 
     // all to get Array objects. This in turn allows
@@ -330,16 +339,17 @@ SQL;
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$CompletedOrders_rows['quantity']}</td>
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$CompletedOrders_rows['date']}</td>
                   <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">  
-         <select name="statusSelect" id="#statusSelect" onchange="updateProductStatus($prodid)">
+         <select name="statusSelect" id="#statusSelect_completed" onchange="updateProductStatus($prodid)">
         <option value="${CompletedOrders_rows['status']}" selected> ${CompletedOrders_rows['status']}</option>
         <option value=pending>pending</option>
         <option value=accepted>accepted</option>
+        <option value=completed>completed</option>
         <option value=refunded>returned/refunded</option>
       </select value>
 
     <script> 
     function updateProductStatus(prodid) {
-      var selectedValue = document.getElementById("#statusSelect").value;
+      var selectedValue = document.getElementById("#statusSelect_completed").value;
 
       // Send the status selected value to the server using AJAX 
       // so changeProductStatus can run mySQL query to update
@@ -373,7 +383,7 @@ function displayReturned_RefundedOrders($dlink, $date_selected)
     $get_CompletedOrders_sql = <<<SQL
     SELECT * FROM products, purchase 
     WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='refunded';
-SQL;
+    SQL;
 
 
     // retrieves all pending orders arrays and loops through 
@@ -395,17 +405,18 @@ SQL;
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$CompletedOrders_rows['quantity']}</td>
          <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;"> {$CompletedOrders_rows['date']}</td>
         <td style="padding-left: 100px; padding-right: 0px; padding-bottom: 100px;">  
-         <select name="statusSelect" id="#statusSelect" onchange="updateProductStatus($prodid)">
+         <select name="statusSelect" id="#statusSelect_refunded" onchange="updateProductStatus($prodid)">
         <option value="${CompletedOrders_rows['status']}" selected> ${CompletedOrders_rows['status']}</option>
+        <option value=pending>pending</option>
         <option value=accepted>accepted</option>
-        <option value=completed>completed</option>
+        <option value=completed>comzpleted</option>
         <option value=refunded>returned/refunded</option>
       </select value>
 
     <script> 
 
     function updateProductStatus(prodid) {
-      var selectedValue = document.getElementById("#statusSelect").value;
+      var selectedValue = document.getElementById("#statusSelect_refunded").value;
 
          // Send the status selected value to the server using AJAX 
       // so changeProductStatus can run mySQL query to update
@@ -419,6 +430,8 @@ SQL;
           console.log(xhr.responseText);
         }
       };
+      console.log(selectedValue);
+      console.log(prodid);
       xhr.send("status=" + selectedValue + "&prodid=" + prodid);
     }
         
@@ -437,9 +450,7 @@ HTML;
 
 $dlink = connectToDB();
 if (
-    isset($_REQUEST['status']) &&
-    $_REQUEST['status'] == 'pending' &&
-    isset($_GET['date_selected'])
+    isset($_REQUEST['status']) && $_REQUEST['status'] == 'pending' && isset($_GET['date_selected'])
 ) {
     displayPendingOrders($dlink, $_GET['date_selected']);
 } else if (isset($_REQUEST['status']) && $_REQUEST['status'] == 'accepted' && isset($_GET['date_selected'])) {

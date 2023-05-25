@@ -87,8 +87,6 @@
 
                 <a href="index.php" class="nav-item nav-link">Home</a>
                 <?php
-
-                // if client is not logged in
                 if (
                     isset($_COOKIE['userType']) &&
                     $_COOKIE['userType'] == 'admin'
