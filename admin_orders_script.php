@@ -26,16 +26,21 @@ function changeStatusMenuQuantity($dlink, $date_selected)
     // can definitely turn this to for loop to shorten
     // code, but lacking of time
     $get_pendingQuantity_sql = <<<SQL
-        SELECT COUNT(prodid) as quantity FROM Purchase WHERE DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='pending';
-    SQL;
+       SELECT COUNT(purchase.prodid) as quantity FROM products, purchase 
+        WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='pending';
+SQL;
+
     $get_acceptedQuantity_sql = <<<SQL
-        SELECT COUNT(prodid) as quantity FROM Purchase WHERE DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='accepted';
+        SELECT COUNT(purchase.prodid) as quantity FROM products, purchase 
+    WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='accepted';
 SQL;
     $get_completedQuantity_sql = <<<SQL
-        SELECT COUNT(prodid) as quantity FROM Purchase WHERE DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='completed';
+       SELECT COUNT(purchase.prodid) as quantity FROM products, purchase 
+    WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='completed';
 SQL;
     $get_refundedQuantity_sql = <<<SQL
-        SELECT COUNT(prodid) as quantity FROM Purchase WHERE DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='refunded';
+        SELECT COUNT(purchase.prodid) as quantity FROM products, purchase 
+    WHERE products.prodid = purchase.prodid AND DATE_FORMAT(purchase.date, '%d')=$date_selected AND status='refunded';
 SQL;
     $pending_statusMenuQuantity = mysqli_query($dlink, $get_pendingQuantity_sql);
     $accepted_statusMenuQuantity = mysqli_query($dlink, $get_acceptedQuantity_sql);

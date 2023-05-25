@@ -86,7 +86,7 @@
 
                 <?php
                 echo "<a href='calendar.php' class='nav-item nav-link'> Calendar </a>";
-                echo "<a href='product.php' class='nav-item nav-link active'>Product</a>";
+                echo "<a href='admin_products_dashboard.php' class='nav-item nav-link active'>Products</a>";
                 echo "<a href='logout_script.php'  class='nav-item nav-link'>Logout</a>";
 
                 ?>

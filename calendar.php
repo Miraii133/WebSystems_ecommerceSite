@@ -94,7 +94,7 @@
                     $_COOKIE['userType'] == 'admin'
                 ) {
                     echo "<a href='calendar.php' class='nav-item nav-link active'> Calendar </a>";
-                    echo "<a href='admin_products_dashboard.php' class='nav-item nav-link'>Product</a>";
+                    echo "<a href='admin_products_dashboard.php' class='nav-item nav-link'>Products</a>";
                     //<!-- goes back to login page when logged out -->
                     echo "<a href='logout_script.php' class='nav-item nav-link'>Logout</a>";
                 }
@@ -136,7 +136,9 @@
         $year = date('Y');
         $month = date('m');
 
-        $get_currentDate_sql = "SELECT DATE_FORMAT( DATE, '%d' ) AS date_only, COUNT( * ) AS count FROM Purchase WHERE DATE_FORMAT( DATE, '%m' ) = MONTH( NOW( ) ) GROUP BY date_only HAVING COUNT( * ) >=1";
+
+        $get_currentDate_sql = "SELECT DATE_FORMAT( DATE, '%d' ) AS date_only, COUNT( * ) AS count FROM purchase WHERE DATE_FORMAT( DATE, '%m' ) = MONTH( NOW( ) ) GROUP BY date_only HAVING COUNT( * ) >=1";
+        print_r($get_currentDate_sql);
         $month_date_result = mysqli_query($dlink, $get_currentDate_sql);
 
         // Get the number of days in the current month

@@ -272,8 +272,15 @@ function getAllAvailableProduct($dlink)
     $result = mysqli_query($dlink, $get_unique_category_query);
     while ($row = mysqli_fetch_assoc($result)) {
         $prod_cat_html = <<<HTML
-            <h1 class="text-center"> <a href="product.php?categorySelected={$row['prodcat']}"> {$row['prodcat']} </a></h1>;
-            HTML;
+            <h1 class="text-center"> 
+                <a href="admin_products_dashboard.php?categorySelected={$row['prodcat']}"> 
+                    {$row['prodcat']} 
+                </a>
+               
+                <button style='margin-left: 30px; font-size: 25px'>Edit</button>
+                 </h1>;
+                 
+HTML;
         echo $prod_cat_html;
         // gets all products that have the same category as the one being looped in $row
         // example, if current category is dog_food, and the current product being looped

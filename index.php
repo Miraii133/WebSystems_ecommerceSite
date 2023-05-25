@@ -103,7 +103,7 @@ require "login_script.php";
                     $_COOKIE['userType'] == 'admin'
                 ) {
                     echo "<a href='calendar.php' class='nav-item nav-link'>Calendar</a>";
-                    echo "<a href=product.php class='nav-item nav-link'>Products</a>";
+                    echo "<a href='admin_products_dashboard.php' class='nav-item nav-link '>Products</a>";
                     echo "<a href='logout_script.php' class='nav-item nav-link'>Logout</a>";
 
                     // if client is user
