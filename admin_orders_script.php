@@ -107,11 +107,11 @@ function changeProductStatus($dlink)
 
 function displayAllOrders($dlink)
 {
-
     changeStatusMenuQuantity($dlink);
     $get_AllOrders_sql = <<<SQL
     SELECT * FROM products, purchase WHERE products.prodid=purchase.prodid;
 SQL;
+    print_r($get_AllOrders_sql);
 
     // retrieves all pending orders arrays and loops through 
     // all to get Array objects. This in turn allows
@@ -137,7 +137,7 @@ SQL;
         <option value="${AllOrders_rows['status']}" selected> ${AllOrders_rows['status']}</option>
         <option value=accepted>accepted</option>
         <option value=completed>completed</option>
-        <option value=returned/refunded>returned/refunded</option>
+        <option value=refunded>returned/refunded</option>
       </select value>
     </td>
 
@@ -175,6 +175,7 @@ function displayPendingOrders($dlink)
     SELECT * FROM products, purchase WHERE products.prodid=purchase.prodid AND status='pending';
 SQL;
 
+
     // retrieves all pending orders arrays and loops through 
     // all to get Array objects. This in turn allows
     // retrieval of all userid and prodid which
@@ -199,7 +200,7 @@ SQL;
         <option value="${AllOrders_rows['status']}" selected> ${AllOrders_rows['status']}</option>
         <option value=accepted>accepted</option>
         <option value=completed>completed</option>
-        <option value=returned/refunded>returned/refunded</option>
+        <option value=refunded>returned/refunded</option>
       </select value>
 
     <script> 
@@ -261,7 +262,7 @@ SQL;
         <option value="${AcceptedOrders_rows['status']}" selected> ${AcceptedOrders_rows['status']}</option>
         <option value=pending>pending</option>
         <option value=completed>completed</option>
-        <option value=returned/refunded>returned/refunded</option>
+        <option value=refunded>returned/refunded</option>
       </select value>
 
     <script> 
@@ -320,7 +321,7 @@ SQL;
         <option value="${CompletedOrders_rows['status']}" selected> ${CompletedOrders_rows['status']}</option>
         <option value=pending>pending</option>
         <option value=accepted>accepted</option>
-        <option value=returned/refunded>returned/refunded</option>
+        <option value=refunded>returned/refunded</option>
       </select value>
 
     <script> 
@@ -382,7 +383,7 @@ SQL;
         <option value="${CompletedOrders_rows['status']}" selected> ${CompletedOrders_rows['status']}</option>
         <option value=accepted>accepted</option>
         <option value=completed>completed</option>
-        <option value=returned/refunded>returned/refunded</option>
+        <option value=refunded>returned/refunded</option>
       </select value>
 
     <script> 

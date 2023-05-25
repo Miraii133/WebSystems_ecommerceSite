@@ -35,7 +35,7 @@ function changeStatusMenuQuantity($dlink, $user_id)
         SELECT COUNT(prodid) as quantity FROM Purchase WHERE status='completed' AND userid=$user_id;
     SQL;
     $get_refundedQuantity_sql = <<<SQL
-        SELECT COUNT(prodid) as quantity FROM Purchase WHERE status='returned' AND userid=$user_id;
+        SELECT COUNT(prodid) as quantity FROM Purchase WHERE status='refunded' AND userid=$user_id;
     SQL;
     $pending_statusMenuQuantity = mysqli_query($dlink, $get_pendingQuantity_sql);
     $accepted_statusMenuQuantity = mysqli_query($dlink, $get_acceptedQuantity_sql);
@@ -233,7 +233,7 @@ function displayReturned_RefundedOrders($dlink, $user_id)
 {
     changeStatusMenuQuantity($dlink, $user_id);
     $get_AllOrders_sql = <<<SQL
-    SELECT * FROM products, purchase WHERE products.prodid=purchase.prodid AND purchase.userid=$user_id AND status='returned';
+    SELECT * FROM products, purchase WHERE products.prodid=purchase.prodid AND purchase.userid=$user_id AND status='refunded';
 SQL;
 
 

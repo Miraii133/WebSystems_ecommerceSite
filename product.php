@@ -67,7 +67,7 @@
 
 
     <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow-sm py-3 py-lg-0 px-3 px-lg-0 mb-5">
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow-sm py-3 py-lg-0 px-3 px-lg-0">
         <a href="index.php" class="navbar-brand ms-lg-5">
             <h1 class="m-0 text-uppercase text-dark"><i class="bi bi-shop fs-1 text-primary me-3"></i>Pet Shop</h1>
         </a>
@@ -77,31 +77,48 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <?php
-                // adds Welcome message when user is logged in
+
                 if (isset($_COOKIE['email'])) {
                     $email = $_COOKIE['email'];
                     $userType = $_COOKIE['userType'];
                     echo "<h4 class='py-4 ' >Welcome ${userType}, ${email} </h4>";
                 }
                 ?>
-                <a href="index.php" class="nav-item nav-link">Home</a>
-                <a href="product.php" class="nav-item nav-link active">Product</a>
 
+                <a href="index.php" class="nav-item nav-link">Home</a>
                 <?php
-                // shows register and login when not logged in,
-                // shows cart and logout when logged in as only logged in users should
-                // be able to see.
+
+                // if client is not logged in
                 if (!isset($_COOKIE['email'])) {
+                    echo "<a href='product.php' class='nav-item nav-link active'>Products</a>";
                     echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
                     echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
-                } else {
+
+                    // if client is admin
+                } else if (
+                    isset($_COOKIE['userType']) &&
+                    $_COOKIE['userType'] == 'admin'
+                ) {
+
+                    echo "<a href='calendar.php' class='nav-item nav-link'>Calendar</a>";
+                    echo "<a href=# class='nav-item nav-link active'>Products</a>";
+                    echo "<a href='logout_script.php' class='nav-item nav-link'>Logout</a>";
+
+                    // if client is user
+                } else if (
+                    isset($_COOKIE['userType']) &&
+                    $_COOKIE['userType'] == 'user'
+                ) {
+                    echo "<a href='product.php' class='nav-item nav-link active'>Product</a>";
                     echo "<a href='cart.php' class='nav-item nav-link'>Cart</a>";
                     echo "<a href='orders.php' class='nav-item nav-link'>My Orders</a>";
-                    echo "<a href='logout_script.php'  class='nav-item nav-link'>Logout</a>";
+                    //<!-- goes back to login page when logged out -->
+                    echo "<a href='logout_script.php' class='nav-item nav-link'>Logout</a>";
                 }
+
                 ?>
-                <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">
-                    Contact <i class="bi bi-arrow-right"></i></a>
+                <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact
+                    <i class="bi bi-arrow-right"></i></a>
             </div>
         </div>
     </nav>

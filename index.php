@@ -103,7 +103,7 @@ require "login_script.php";
                     $_COOKIE['userType'] == 'admin'
                 ) {
                     echo "<a href='calendar.php' class='nav-item nav-link'>Calendar</a>";
-                    echo "<a href=# class='nav-item nav-link'>!!!</a>";
+                    echo "<a href=product.php class='nav-item nav-link'>Products</a>";
                     echo "<a href='logout_script.php' class='nav-item nav-link'>Logout</a>";
 
                     // if client is user
@@ -111,6 +111,7 @@ require "login_script.php";
                     isset($_COOKIE['userType']) &&
                     $_COOKIE['userType'] == 'user'
                 ) {
+                    echo "<a href='product.php' class='nav-item nav-link'>Product</a>";
                     echo "<a href='cart.php' class='nav-item nav-link'>Cart</a>";
                     echo "<a href='orders.php' class='nav-item nav-link'>My Orders</a>";
                     //<!-- goes back to login page when logged out -->

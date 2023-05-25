@@ -83,17 +83,12 @@
                 }
                 ?>
                 <a href="index.php" class="nav-item nav-link">Home</a>
-                <a href="product.php" class="nav-item nav-link">Product</a>
 
                 <?php
-                if (!isset($_COOKIE['email'])) {
-                    echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
-                    echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
-                } else {
-                    echo "<a href='cart.php' class='nav-item nav-link'>Cart</a>";
-                    echo "<a href='orders.php'  class='nav-item nav-link active'>My Orders</a>";
-                    echo "<a href='logout_script.php'  class='nav-item nav-link'>Logout</a>";
-                }
+                echo "<a href='calendar.php' class='nav-item nav-link'> Calendar </a>";
+                echo "<a href='product.php' class='nav-item nav-link active'>Product</a>";
+                echo "<a href='logout_script.php'  class='nav-item nav-link'>Logout</a>";
+
                 ?>
                 <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact
                     <i class="bi bi-arrow-right"></i></a>
@@ -122,6 +117,7 @@
 
         <?php
         include "admin_orders_script.php"
+
             ?>
     </table>
 

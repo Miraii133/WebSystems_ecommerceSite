@@ -87,13 +87,13 @@ ob_start();
                 }
                 ?>
                 <a href="index.php" class="nav-item nav-link">Home</a>
-                <a href="product.php" class="nav-item nav-link">Product</a>
 
                 <?php
                 if (!isset($_COOKIE['email'])) {
                     echo "<a href='register.php' class='nav-item nav-link'>Register</a>";
                     echo "<a href='login.php' class='nav-item nav-link'>Login</a>";
                 } else {
+                    echo "<a href='product.php' class='nav-item nav-link'>Product</a>";
                     echo "<a href='cart.php' class='nav-item nav-link active'>Cart</a>";
                     echo "<a href='orders.php' class='nav-item nav-link'>My Orders</a>";
                     echo "<a href='logout_script.php'  class='nav-item nav-link'>Logout</a>";
